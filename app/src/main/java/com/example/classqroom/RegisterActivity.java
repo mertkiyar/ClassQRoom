@@ -1,5 +1,6 @@
 package com.example.classqroom;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,12 +15,15 @@ import androidx.appcompat.app.AppCompatActivity;
 public class RegisterActivity extends AppCompatActivity {
     EditText edtName, edtSurname, edtEmail, edtStudentNumber, edtPassword, edtPasswordConf;
     Button btnCancelRegister;
-    DataBaseHelper dataBaseHelper;
+    private DataBaseHelper dataBaseHelper;
 
+    @SuppressLint("SetTextI18n") //TODO KALDIR 2
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        dataBaseHelper = new DataBaseHelper(this);
 
         edtName = findViewById(R.id.edtName);
         edtSurname = findViewById(R.id.edtSurname);
@@ -41,45 +45,46 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-
     public void onClickRegister(View view) {
-        String name = edtName.getText().toString();
-        String surname = edtSurname.getText().toString();
+        String name = edtName.getText().toString().trim();
+        String surname = edtSurname.getText().toString().trim();
         String email = edtEmail.getText().toString().trim();
-        String studentNumber = edtStudentNumber.getText().toString();
-        String password = edtPassword.getText().toString();
-        String passwordConf = edtPasswordConf.getText().toString();
+        String studentNumber = edtStudentNumber.getText().toString().trim();
+        String password = edtPassword.getText().toString().trim();
+        String passwordConf = edtPasswordConf.getText().toString().trim();
+        UserModel userModel;
 
-        if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty() && !studentNumber.isEmpty() && !password.isEmpty() && !passwordConf.isEmpty()) {
-            UserModel userModel;
-
+        if (dataBaseHelper != null) {
             try {
-                if (!name.equals("sad")) {
-                    Log.d("Error $", "Error #4");
-                    if (edtPassword.getText().toString().trim().equals(edtPasswordConf.getText().toString().trim())) {
-                        userModel = new UserModel(-1, edtName.getText().toString(), edtSurname.getText().toString(), email,
-                                Integer.parseInt(edtStudentNumber.getText().toString()), edtPassword.getText().toString());
-                        boolean isSuccessful = dataBaseHelper.addNewUser(userModel);
-                        if (isSuccessful) {
-                            Toast.makeText(this, getString(R.string.registersucces), Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
-                            startActivity(intent);
-                            finish();
-                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty() && !studentNumber.isEmpty() && !password.isEmpty() && !passwordConf.isEmpty()) {
+                    if (password.equals(passwordConf)) {
+                        userModel = new UserModel(-1, name, surname, email, Integer.parseInt(studentNumber), password);
+                        boolean isUserExist = dataBaseHelper.checkUser(userModel.getEmail());
+                        if (!isUserExist) {
+                            boolean isUserAdded = dataBaseHelper.addNewUser(userModel);
+                            if (isUserAdded) {
+                                Toast.makeText(this, getString(R.string.registersucces), Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                                startActivity(intent);
+                                finish();
+                                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            } else {
+                                Toast.makeText(this, getString(R.string.registernotsuccess), Toast.LENGTH_SHORT).show();
+                            }
                         } else {
-                            Toast.makeText(this, getString(R.string.registernotsuccess), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.registeredemail), Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(this, getString(R.string.notsamepassword), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(this, getString(R.string.registeredemail), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.fillblanks), Toast.LENGTH_SHORT).show();
                 }
-            } catch (Exception exp) {
-                Toast.makeText(this, getString(R.string.errorregister), Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Toast.makeText(this, getString(R.string.errorregister) + ": " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(this, getString(R.string.fillblanks), Toast.LENGTH_SHORT).show();
+            Log.e("RegisterActivity", "DataBaseHelper is null");
         }
     }
 }
