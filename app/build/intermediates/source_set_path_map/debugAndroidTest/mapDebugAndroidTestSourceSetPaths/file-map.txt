@@ -1,0 +1,5 @@
+com.example.classqroom.test.app-core-1.6.1-0 /Users/mertkiyar/.gradle/caches/transforms-4/6c2c4a81c4f6de2c26cbd4e053c2f95a/transformed/core-1.6.1/res
+com.example.classqroom.test.app-androidTest-1 /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/build/generated/res/resValues/androidTest/debug
+com.example.classqroom.test.app-mergeDebugAndroidTestResources-2 /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
+com.example.classqroom.test.app-mergeDebugAndroidTestResources-3 /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
+com.example.classqroom.test.app-debugAndroidTest-4 /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources

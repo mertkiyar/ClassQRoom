@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity">
+
+    <TextView
+        android:id="@+id/tvClassQRoom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/app_background"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="36sp"/>
+
+    <EditText
+        android:id="@+id/edtName"
+        android:layout_width="325dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/tvClassQRoom"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:autofillHints="no"
+        android:background="@drawable/edittext_background"
+        android:backgroundTint="@color/edittext"
+        android:hint="@string/name"
+        android:inputType="text|textCapSentences"
+        android:textAllCaps="true"
+        android:textColor="@color/black_white"
+        android:textColorHint="@color/hint" />
+
+    <EditText
+        android:id="@+id/edtSurname"
+        android:layout_width="325dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/edtName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:autofillHints="no"
+        android:background="@drawable/edittext_background"
+        android:backgroundTint="@color/edittext"
+        android:hint="@string/surname"
+        android:inputType="text|textCapSentences"
+        android:textColor="@color/black_white"
+        android:textColorHint="@color/hint" />
+
+    <EditText
+        android:id="@+id/edtEmail"
+        android:layout_width="325dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/edtSurname"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:autofillHints="no"
+        android:background="@drawable/edittext_background"
+        android:backgroundTint="@color/edittext"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/black_white"
+        android:textColorHint="@color/hint" />
+
+    <EditText
+        android:id="@+id/edtStudentNumber"
+        android:layout_width="325dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/edtEmail"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:autofillHints="no"
+        android:background="@drawable/edittext_background"
+        android:backgroundTint="@color/edittext"
+        android:hint="@string/studentnumber"
+        android:inputType="number"
+        android:maxLength="12"
+        android:textColor="@color/black_white"
+        android:textColorHint="@color/hint" />
+
+    <EditText
+        android:id="@+id/edtPassword"
+        android:layout_width="325dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/edtStudentNumber"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:autofillHints="no"
+        android:background="@drawable/edittext_background"
+        android:backgroundTint="@color/edittext"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:textColor="@color/black_white"
+        android:textColorHint="@color/hint" />
+
+    <EditText
+        android:id="@+id/edtPasswordConf"
+        android:layout_width="325dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/edtPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:autofillHints="no"
+        android:background="@drawable/edittext_background"
+        android:backgroundTint="@color/edittext"
+        android:hint="@string/passwordconf"
+        android:inputType="textPassword"
+        android:textColor="@color/black_white"
+        android:textColorHint="@color/hint" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edtPasswordConf"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCancelRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="50dp"
+            android:background="@drawable/cancelbutton_background"
+            android:text="@string/cancel"
+            android:textColor="@color/white"
+            android:textStyle="bold|normal" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/registerbutton_background"
+            android:onClick="onClickRegister"
+            android:text="@string/register"
+            android:textColor="@color/white"
+            android:textStyle="bold|normal" />
+
+    </LinearLayout>
+
+</RelativeLayout>

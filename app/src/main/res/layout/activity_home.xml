@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edtTxtWelcome"
+        android:layout_marginTop="15dp"
+        android:text="@string/welcome"
+        android:fontFamily="@font/agbalumo"
+        android:layout_marginStart="15dp"
+        android:textSize="30sp"
+        android:textColor="@color/black_white"/>
+
+    <ImageView
+        android:id="@+id/imgViewWelcome"
+        android:layout_width="400dp"
+        android:layout_height="300dp"
+        android:layout_below="@id/edtTxtWelcome"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="15dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/imgview"/>
+
+    <GridLayout
+        android:id="@+id/gridButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgViewWelcome"
+        android:layout_marginTop="10dp"
+        android:columnCount="3"
+        android:rowCount="2"
+        android:layout_centerInParent="true">
+
+        <ImageButton
+            android:id="@+id/btnQRCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:background="@drawable/qrcodebutton_background"
+            android:contentDescription="@string/qrcode"
+            android:onClick="onBtnQRCodeClick"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:padding="25dp"
+            android:src="@drawable/qrcode" />
+
+        <ImageButton
+            android:id="@+id/btnNFC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/nfcbutton_background"
+            android:contentDescription="@string/nfc"
+            android:onClick="onBtnNFCClick"
+            android:padding="25dp"
+            android:src="@drawable/nfc" />
+
+        <ImageButton
+            android:id="@+id/btnClassCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="2"
+            android:background="@drawable/classcodebutton_background"
+            android:contentDescription="@string/classcode"
+            android:onClick="onBtnClassCodeClick"
+            android:layout_marginBottom="10dp"
+            android:padding="25dp"
+            android:src="@drawable/classcode" />
+
+        <ImageButton
+            android:id="@+id/btnAttendanceHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:background="@drawable/attendhistory_background"
+            android:contentDescription="@string/attendancehistory"
+            android:onClick="onBtnAttendHistoryClick"
+            android:layout_marginEnd="10dp"
+            android:padding="25dp"
+            android:src="@drawable/history" />
+
+        <ImageButton
+            android:id="@+id/btnProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:background="@drawable/profilebutton_background"
+            android:contentDescription="@string/profile"
+            android:onClick="onBtnProfileClick"
+            android:layout_marginEnd="10dp"
+            android:padding="25dp"
+            android:src="@drawable/profile"/>
+
+        <ImageButton
+            android:id="@+id/btnSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="2"
+            android:background="@drawable/settingsbutton_background"
+            android:contentDescription="@string/settings"
+            android:onClick="onBtnSettingsClick"
+            android:padding="25dp"
+            android:src="@drawable/settings"/>
+
+    </GridLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSupport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gridButtons"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/qrcodebutton_background"
+        android:contentDescription="@string/support"
+        android:onClick="onBtnSupportClick"
+        android:padding="10dp"
+        android:text="@string/support"
+        android:textColor="@color/white" />
+
+</RelativeLayout>

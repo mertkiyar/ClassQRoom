@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">GİRİŞ YAP</string>
+    <string name="register">KAYDOL</string>
+    <string name="cancel">İPTAL</string>
+    <string name="version">Versiyon</string>
+    <string name="name">Ad</string>
+    <string name="surname">Soyad</string>
+    <string name="email">Öğrenci E-Postası</string>
+    <string name="password">Şifre</string>
+    <string name="passwordconf">Tekrar Şifre</string>
+    <string name="forgotpassword">Şifreni mi unuttun?</string>
+    <string name="resetpassword">Şifreyi Sıfırla</string>
+    <string name="studentnumber">Öğrenci Numarası</string>
+    <string name="welcome">Hoşgeldin</string>
+    <string name="qrcode">Karekod</string>
+    <string name="nfc">NFC</string>
+    <string name="classcode">Ders Kodu</string>
+    <string name="attendancehistory">Katılım Geçmişi</string>
+    <string name="settings">Ayarlar</string>
+    <string name="profile">Profil</string>
+    <string name="support">Destek</string>
+    <string name="faq">S.S.S</string>
+    <string name="logoutmessage">Oturumdan çıkmak istediğinden emin misin?</string>
+    <string name="yes">Evet</string>
+    <string name="no">Hayır</string>
+    <string name="fillblanks">Lütfen boşlukları doldurun!</string>
+    <string name="registersucces">Başarıyla kayıt oldun.</string>
+    <string name="notsamepassword">Şifreler birbiriyle uyuşmuyor! Lütfen tekrar dene.</string>
+    <string name="registeredemail">Girdiğin e-posta adresi zaten kayıtlı.</string>
+    <string name="confirm">Onayla</string>
+    <string name="errorregister">Kayıt olurken bir hata oluştu.</string>
+    <string name="registernotsuccess">Kayıt olurken bir hata oluştu.</string>
+</resources>
