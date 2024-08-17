@@ -1,4 +1,4 @@
-#Fri Aug 16 20:04:52 TRT 2024
+#Sat Aug 17 15:12:14 TRT 2024
 base.0=/Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
 base.1=/Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
 base.2=/Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/build/intermediates/dex/debug/mergeProjectDexDebug/5/classes.dex

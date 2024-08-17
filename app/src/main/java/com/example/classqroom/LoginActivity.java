@@ -25,11 +25,16 @@ public class LoginActivity extends AppCompatActivity {
         edtPassLogin = findViewById(R.id.edtPasswordLogin);
 
         btnCancelLogin = findViewById(R.id.btnCancelLogin);
-        btnCancelLogin.setOnClickListener(v -> finish());
+        btnCancelLogin.setOnClickListener(v -> {
+            finish();
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        });
+
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -37,6 +42,8 @@ public class LoginActivity extends AppCompatActivity {
         tvForgotPassword.setOnClickListener(view -> {
             Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
             startActivity(intent);
+            finish();
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
 
         //TODO bu ve alttakini ileride sil. Hızlı giriş için.
@@ -47,10 +54,11 @@ public class LoginActivity extends AppCompatActivity {
     public void onClickLogin(View view) {
         UserModel userModel = new UserModel(edtMailLogin.getText().toString(), edtPassLogin.getText().toString());
         if (!edtMailLogin.getText().toString().isEmpty() && !edtPassLogin.getText().toString().isEmpty()) {
-            Toast.makeText(this, userModel.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, userModel.toString(), Toast.LENGTH_SHORT).show(); //kaldır. SQL sonrasında.
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
-            LoginActivity.this.finish();
+            finish();
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         } else {
             Toast.makeText(this, getString(R.string.fillblanks), Toast.LENGTH_SHORT).show();
         }

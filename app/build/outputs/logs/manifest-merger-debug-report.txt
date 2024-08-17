@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:2:1-65:12
-INJECTED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:2:1-65:12
-INJECTED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:2:1-65:12
-INJECTED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:2:1-65:12
+ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:2:1-44:12
+INJECTED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:2:1-44:12
+INJECTED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:2:1-44:12
+INJECTED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:2:1-44:12
 MERGED from [com.google.android.material:material:1.12.0] /Users/mertkiyar/.gradle/caches/transforms-4/2c93d16ee376fc0ea4a8ec621fb4c981/transformed/material-1.12.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /Users/mertkiyar/.gradle/caches/transforms-4/85e583c1cf56a3ebea40379df7e76655/transformed/constraintlayout-2.1.4/AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat-resources:1.7.0] /Users/mertkiyar/.gradle/caches/transforms-4/a145a483d7908e503c4f40e3a69f2892/transformed/appcompat-resources-1.7.0/AndroidManifest.xml:2:1-7:12
@@ -56,8 +56,8 @@ MERGED from [androidx.annotation:annotation-experimental:1.4.0] /Users/mertkiyar
 	xmlns:android
 		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:2:11-69
 application
-ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:5:5-63:19
-INJECTED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:5:5-63:19
+ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:5:5-43:19
+INJECTED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:5:5-43:19
 MERGED from [com.google.android.material:material:1.12.0] /Users/mertkiyar/.gradle/caches/transforms-4/2c93d16ee376fc0ea4a8ec621fb4c981/transformed/material-1.12.0/AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.12.0] /Users/mertkiyar/.gradle/caches/transforms-4/2c93d16ee376fc0ea4a8ec621fb4c981/transformed/material-1.12.0/AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /Users/mertkiyar/.gradle/caches/transforms-4/85e583c1cf56a3ebea40379df7e76655/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
@@ -113,35 +113,35 @@ ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/Androi
 	android:name
 		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:21:27-74
 activity#com.example.classqroom.RegisterActivity
-ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:24:9-32:20
+ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:24:9-27:20
 	android:exported
 		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:26:13-36
 	android:name
 		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:25:13-45
 activity#com.example.classqroom.LoginActivity
-ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:33:9-41:20
+ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:28:9-31:20
 	android:exported
-		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:35:9-32
+		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:30:13-36
 	android:name
-		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:34:9-38
+		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:29:13-42
 activity#com.example.classqroom.ForgotPasswordActivity
-ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:42:9-50:20
+ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:32:9-35:20
 	android:exported
-		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:44:9-32
+		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:34:13-36
 	android:name
-		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:43:9-47
+		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:33:13-51
 activity#com.example.classqroom.HomeActivity
-ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:51:9-59:20
+ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:36:9-39:20
 	android:exported
-		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:53:13-36
+		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:38:13-36
 	android:name
-		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:52:13-41
+		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:37:13-41
 meta-data#preloaded_fonts
-ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:60:9-62:57
+ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:40:9-42:57
 	android:resource
-		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:62:13-54
+		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:42:13-54
 	android:name
-		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:61:13-43
+		ADDED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml:41:13-43
 uses-sdk
 INJECTED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/mertkiyar/AndroidStudioProjects/ClassQRoom/app/src/main/AndroidManifest.xml

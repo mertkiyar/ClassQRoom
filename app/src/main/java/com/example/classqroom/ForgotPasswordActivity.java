@@ -1,5 +1,6 @@
 package com.example.classqroom;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,11 +19,15 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_forgotpassword);
 
         btnCancelForgotPass = findViewById(R.id.btnCancelForgotPass);
-        btnCancelForgotPass.setOnClickListener(v -> finish());
+        btnCancelForgotPass.setOnClickListener(v -> {
+            finish();
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        });
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
     }
@@ -33,6 +38,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
         if (!edtMailForgotPass.getText().toString().isEmpty() || !edtStudentNumber.getText().toString().isEmpty()) {
             Toast.makeText(this, "Password reset code has been sent! Please check your mail.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         } else {
             Toast.makeText(this, "Please fill all the blanks!", Toast.LENGTH_SHORT).show();
         }

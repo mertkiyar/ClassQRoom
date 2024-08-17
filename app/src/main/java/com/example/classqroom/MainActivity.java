@@ -16,11 +16,13 @@ public class MainActivity extends AppCompatActivity {
     public void onClickLoginMain(View v) {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public void onClickRegisterMain(View view) {
         Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
     }
 }

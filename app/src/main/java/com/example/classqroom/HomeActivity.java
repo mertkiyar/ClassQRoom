@@ -51,10 +51,10 @@ public class HomeActivity extends AppCompatActivity {
             DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
-                        HomeActivity.this.finish();
-                        startActivity(new Intent(HomeActivity.this, MainActivity.class));
+                        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                        finish();
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                         break;
-
                     case DialogInterface.BUTTON_NEGATIVE:
                         break;
                 }

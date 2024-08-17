@@ -29,11 +29,15 @@ public class RegisterActivity extends AppCompatActivity {
         edtPasswordConf = findViewById(R.id.edtPasswordConf);
 
         btnCancelRegister = findViewById(R.id.btnCancelRegister);
-        btnCancelRegister.setOnClickListener(v -> finish());
+        btnCancelRegister.setOnClickListener(v -> {
+            finish();
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        });
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
     }
@@ -60,7 +64,8 @@ public class RegisterActivity extends AppCompatActivity {
                             Toast.makeText(this, getString(R.string.registersucces), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
                             startActivity(intent);
-                            RegisterActivity.this.finish();
+                            finish();
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         } else {
                             Toast.makeText(this, getString(R.string.registernotsuccess), Toast.LENGTH_SHORT).show();
                         }
