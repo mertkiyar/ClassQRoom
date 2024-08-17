@@ -31,4 +31,5 @@
     <string name="confirm">Onayla</string>
     <string name="errorregister">Kayıt olurken bir hata oluştu.</string>
     <string name="registernotsuccess">Kayıt olurken bir hata oluştu.</string>
+    <string name="notregisteredemail">Girdiğin e-posta adresi kayıtlı değil.</string>
 </resources>

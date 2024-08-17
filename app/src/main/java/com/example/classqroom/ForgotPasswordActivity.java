@@ -2,6 +2,7 @@ package com.example.classqroom;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,12 +21,16 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
         btnCancelForgotPass = findViewById(R.id.btnCancelForgotPass);
         btnCancelForgotPass.setOnClickListener(v -> {
+            Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
+            startActivity(intent);
             finish();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
+                Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
+                startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }

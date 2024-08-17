@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -66,5 +67,20 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             if (cursor != null) cursor.close();
         }
         return isAvailable;
+    }
+
+    public boolean authenticateUser(String email, String inputPassword) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        try (Cursor cursor = db.rawQuery("SELECT " + COLUMN_USER_PASSWORD + " FROM " + USER_TABLE + " WHERE " + COLUMN_USER_EMAIL + " = ?", new String[]{email})) {
+
+            if (cursor != null && cursor.moveToFirst()) {
+                String storedPassword = cursor.getString(0);
+                Log.d("RegisterActivity", storedPassword);
+                Log.d("RegisterActivity", inputPassword);
+                return storedPassword.equals(inputPassword);
+            }
+        }
+        return false;
     }
 }

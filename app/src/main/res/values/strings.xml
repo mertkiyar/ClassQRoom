@@ -27,8 +27,9 @@
     <string name="fillblanks">Please fill all the blanks!</string>
     <string name="registersucces">You have successfully registered.</string>
     <string name="notsamepassword">Passwords do not match each other! Please try again.</string>
-    <string name="registeredemail">The email address you entered is already registered</string>
+    <string name="registeredemail">The email address you entered is already registered.</string>
     <string name="confirm">Confirm</string>
     <string name="errorregister">An error occurred during registration.</string>
     <string name="registernotsuccess">An error occurred during registration.</string>
+    <string name="notregisteredemail">The email address you entered is not registered.</string>
 </resources>

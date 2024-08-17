@@ -39,13 +39,14 @@
     <string name="name">Name</string>
     <string name="nfc">NFC</string>
     <string name="no">No</string>
+    <string name="notregisteredemail">The email address you entered is not registered.</string>
     <string name="notsamepassword">Passwords do not match each other! Please try again.</string>
     <string name="password">Password</string>
     <string name="passwordconf">Confirm Password</string>
     <string name="profile">Profile</string>
     <string name="qrcode">QR Code</string>
     <string name="register">REGISTER</string>
-    <string name="registeredemail">The email address you entered is already registered</string>
+    <string name="registeredemail">The email address you entered is already registered.</string>
     <string name="registernotsuccess">An error occurred during registration.</string>
     <string name="registersucces">You have successfully registered.</string>
     <string name="resetpassword">Reset Password</string>

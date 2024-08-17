@@ -94,6 +94,7 @@ string logoutmessage
 string name
 string nfc
 string no
+string notregisteredemail
 string notsamepassword
 string password
 string passwordconf
