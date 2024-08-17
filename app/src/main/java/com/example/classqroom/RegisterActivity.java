@@ -17,7 +17,6 @@ public class RegisterActivity extends AppCompatActivity {
     Button btnCancelRegister;
     private DataBaseHelper dataBaseHelper;
 
-    @SuppressLint("SetTextI18n") //TODO KALDIR 2
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
