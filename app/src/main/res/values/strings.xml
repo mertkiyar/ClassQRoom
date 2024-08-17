@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">ClassQRoom</string>
-    <string name="login">LOGIN</string>
-    <string name="register">REGISTER</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
     <string name="cancel">Cancel</string>
     <string name="version">Version</string>
     <string name="name">Name</string>

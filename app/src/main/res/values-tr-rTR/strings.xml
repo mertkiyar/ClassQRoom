@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="login">GİRİŞ YAP</string>
-    <string name="register">KAYDOL</string>
-    <string name="cancel">İPTAL</string>
+    <string name="login">Giriş Yap</string>
+    <string name="register">Kayıt Ol</string>
+    <string name="cancel">İptal</string>
     <string name="version">Versiyon</string>
     <string name="name">Ad</string>
     <string name="surname">Soyad</string>
