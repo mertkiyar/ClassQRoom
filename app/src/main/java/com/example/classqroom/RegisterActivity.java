@@ -2,6 +2,7 @@ package com.example.classqroom;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +42,77 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
+        });
+
+        edtName.setFilters(new InputFilter[] {
+                (source, start, end, dest, dstart, dend) -> {
+                    for (int i = start; i < end; i++) {
+                        char character = source.charAt(i);
+                        if (!Character.isLetter(character) && !Character.isSpaceChar(character)) {
+                            return "";
+                        }
+                        if (Character.isSpaceChar(character)) {
+                            if (dstart > 0 && Character.isSpaceChar(dest.charAt(dstart - 1))) {
+                                return "";
+                            }
+                        }
+                    }
+                    return null;
+                }
+        });
+        edtSurname.setFilters(new InputFilter[] {
+                (source, start, end, dest, dstart, dend) -> {
+                    for (int i = start; i < end; i++) {
+                        char character = source.charAt(i);
+                        if (!Character.isLetter(character) && !Character.isSpaceChar(character)) {
+                            return "";
+                        }
+                        if (Character.isSpaceChar(character)) {
+                            if (dstart > 0 && Character.isSpaceChar(dest.charAt(dstart - 1))) {
+                                return "";
+                            }
+                        }
+                    }
+                    return null;
+                }
+        });
+        edtEmail.setFilters(new InputFilter[] {
+                (source, start, end, dest, dstart, dend) -> {
+                    for (int i = start; i < end; i++) {
+                        char character = source.charAt(i);
+                        String allowedLettersOrDigits = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                        if (!allowedLettersOrDigits.contains(String.valueOf(character)) && character != '@' && character != '.') {
+                            return "";
+                        }
+                    }
+                    return null;
+                }
+        });
+        edtPassword.setFilters(new InputFilter[] {
+                (source, start, end, dest, dstart, dend) -> {
+                    for (int i = start; i < end; i++) {
+                        char character = source.charAt(i);
+                        String allowedLettersOrDigits = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                        String allowedChars = "~!@#$%^&*()_-+={}[]|:;\"'<,>.?/";
+                        if (!allowedLettersOrDigits.contains(String.valueOf(character)) && !allowedChars.contains(String.valueOf(character))) {
+                            return "";
+                        }
+                    }
+                    return null;
+                }
+        });
+        edtPasswordConf.setFilters(new InputFilter[] {
+                (source, start, end, dest, dstart, dend) -> {
+                    for (int i = start; i < end; i++) {
+                        char character = source.charAt(i);
+                        String allowedLettersOrDigits = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                        String allowedChars = "~!@#$%^&*()_-+={}[]|:;\"'<,>.?/";
+                        if (!allowedLettersOrDigits.contains(String.valueOf(character)) && !allowedChars.contains(String.valueOf(character))) {
+                            return "";
+                        }
+                    }
+                    return null;
+                }
         });
     }
     public void onClickRegister(View view) {

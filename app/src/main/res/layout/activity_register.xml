@@ -29,7 +29,8 @@
         android:background="@drawable/edittext_background"
         android:backgroundTint="@color/edittext"
         android:hint="@string/name"
-        android:inputType="text|textCapSentences"
+        android:inputType="text|textCapSentences|textVisiblePassword"
+        android:maxLength="36"
         android:textAllCaps="true"
         android:textColor="@color/black_white"
         android:textColorHint="@color/hint" />
@@ -45,7 +46,8 @@
         android:background="@drawable/edittext_background"
         android:backgroundTint="@color/edittext"
         android:hint="@string/surname"
-        android:inputType="text|textCapSentences"
+        android:inputType="text|textCapSentences|textVisiblePassword"
+        android:maxLength="36"
         android:textColor="@color/black_white"
         android:textColorHint="@color/hint" />
 
@@ -61,6 +63,7 @@
         android:backgroundTint="@color/edittext"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
+        android:maxLength="48"
         android:textColor="@color/black_white"
         android:textColorHint="@color/hint" />
 
@@ -92,6 +95,7 @@
         android:backgroundTint="@color/edittext"
         android:hint="@string/password"
         android:inputType="textPassword"
+        android:maxLength="24"
         android:textColor="@color/black_white"
         android:textColorHint="@color/hint" />
 
@@ -107,6 +111,7 @@
         android:backgroundTint="@color/edittext"
         android:hint="@string/passwordconf"
         android:inputType="textPassword"
+        android:maxLength="24"
         android:textColor="@color/black_white"
         android:textColorHint="@color/hint" />
 
