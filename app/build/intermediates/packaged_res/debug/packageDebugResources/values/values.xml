@@ -26,7 +26,7 @@
     <color name="white">#FFFFFFFF</color>
     <string name="app_name" translatable="false">ClassQRoom</string>
     <string name="attendancehistory">Attendance History</string>
-    <string name="cancel">CANCEL</string>
+    <string name="cancel">Cancel</string>
     <string name="classcode">Class Code</string>
     <string name="confirm">Confirm</string>
     <string name="email">Student\'s Email</string>
@@ -34,7 +34,7 @@
     <string name="faq">FAQ</string>
     <string name="fillblanks">Please fill all the blanks!</string>
     <string name="forgotpassword">Forgot Password</string>
-    <string name="login">LOGIN</string>
+    <string name="login">Login</string>
     <string name="logoutmessage">Are you sure you want to log out?</string>
     <string name="name">Name</string>
     <string name="nfc">NFC</string>
@@ -45,7 +45,7 @@
     <string name="passwordconf">Confirm Password</string>
     <string name="profile">Profile</string>
     <string name="qrcode">QR Code</string>
-    <string name="register">REGISTER</string>
+    <string name="register">Register</string>
     <string name="registeredemail">The email address you entered is already registered.</string>
     <string name="registernotsuccess">An error occurred during registration.</string>
     <string name="registersucces">You have successfully registered.</string>
@@ -56,6 +56,7 @@
     <string name="surname">Surname</string>
     <string name="version">Version</string>
     <string name="welcome">Welcome</string>
+    <string name="wrongpassword">The password is incorrect, please try again.</string>
     <string name="yes">Yes</string>
     <style name="Base.Theme.ClassQRoom" parent="Theme.Material3.DayNight.NoActionBar">
         

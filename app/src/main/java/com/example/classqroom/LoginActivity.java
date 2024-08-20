@@ -3,7 +3,6 @@ package com.example.classqroom;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -88,11 +87,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (!email.isEmpty() && !password.isEmpty()) {
                     userModel = new UserModel(email, password);
                     boolean isUserExist = dataBaseHelper.checkUser(userModel.getEmail());
-                    Log.d("LoginActivity", userModel.getEmail());
                     if (isUserExist) {
-                        Log.d("LoginActivity", String.valueOf(isUserExist));
                         boolean isCorrect = dataBaseHelper.authenticateUser(userModel.getEmail(), userModel.getPassword());
-                        Log.d("LoginActivity", String.valueOf(isCorrect));
                         if (isCorrect) {
                             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             startActivity(intent);

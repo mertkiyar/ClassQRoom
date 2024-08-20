@@ -4,10 +4,6 @@
         "source": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-main-33:/font/agbalumo.xml"
     },
     {
-        "merged": "com.example.classqroom.app-debug-31:/anim_slide_in_left.xml.flat",
-        "source": "com.example.classqroom.app-main-33:/anim/slide_in_left.xml"
-    },
-    {
         "merged": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-debug-31:/mipmap-xhdpi_ic_launcher_foreground.webp.flat",
         "source": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-main-33:/mipmap-xhdpi/ic_launcher_foreground.webp"
     },
@@ -20,20 +16,16 @@
         "source": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-main-33:/layout/activity_register.xml"
     },
     {
-        "merged": "com.example.classqroom.app-debug-31:/anim_slide_out_right.xml.flat",
-        "source": "com.example.classqroom.app-main-33:/anim/slide_out_right.xml"
-    },
-    {
         "merged": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-debug-31:/drawable-anydpi_ic_settings.xml.flat",
         "source": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-main-33:/drawable-anydpi/ic_settings.xml"
     },
     {
-        "merged": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-debug-31:/drawable-mdpi_ic_settings.png.flat",
-        "source": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-main-33:/drawable-mdpi/ic_settings.png"
-    },
-    {
         "merged": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-debug-31:/mipmap-xxxhdpi_ic_launcher.webp.flat",
         "source": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-main-33:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-debug-31:/drawable-mdpi_ic_settings.png.flat",
+        "source": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-main-33:/drawable-mdpi/ic_settings.png"
     },
     {
         "merged": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-debug-31:/layout_activity_login.xml.flat",
@@ -50,6 +42,10 @@
     {
         "merged": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-debug-31:/mipmap-hdpi_ic_launcher.webp.flat",
         "source": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-main-33:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.classqroom.app-debug-31:/layout_activity_register.xml.flat",
+        "source": "com.example.classqroom.app-main-33:/layout/activity_register.xml"
     },
     {
         "merged": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-debug-31:/layout_activity_signup.xml.flat",
@@ -104,6 +100,10 @@
         "source": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-main-33:/drawable/homebutton_background.xml"
     },
     {
+        "merged": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-debug-31:/anim_slide_in_left.xml.flat",
+        "source": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-main-33:/anim/slide_in_left.xml"
+    },
+    {
         "merged": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-debug-31:/mipmap-hdpi_ic_launcher_foreground.webp.flat",
         "source": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-main-33:/mipmap-hdpi/ic_launcher_foreground.webp"
     },
@@ -156,8 +156,16 @@
         "source": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-main-33:/anim/slide_out_left.xml"
     },
     {
+        "merged": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-debug-31:/anim_slide_out_right.xml.flat",
+        "source": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-main-33:/anim/slide_out_right.xml"
+    },
+    {
         "merged": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-debug-31:/drawable-anydpi-v24_ic_launcher_foreground.xml.flat",
         "source": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-pngs-27:/drawable-anydpi-v24/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.example.classqroom.app-debug-31:/layout_activity_login.xml.flat",
+        "source": "com.example.classqroom.app-main-33:/layout/activity_login.xml"
     },
     {
         "merged": "/Users/mertkiyar/.gradle/daemon/8.7/com.example.classqroom.app-debug-31:/drawable_qrcode.png.flat",

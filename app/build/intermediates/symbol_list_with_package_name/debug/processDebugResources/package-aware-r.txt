@@ -3320,8 +3320,8 @@ id edge
 id edit_query
 id edit_text_id
 id edtEmail
+id edtEmailLogin
 id edtMailForgotPass
-id edtMailLogin
 id edtName
 id edtPassword
 id edtPasswordConf
@@ -4062,6 +4062,7 @@ string support
 string surname
 string version
 string welcome
+string wrongpassword
 string yes
 style AlertDialog_AppCompat
 style AlertDialog_AppCompat_Light

@@ -55,8 +55,8 @@ id btnResetPassword
 id btnSettings
 id btnSupport
 id edtEmail
+id edtEmailLogin
 id edtMailForgotPass
-id edtMailLogin
 id edtName
 id edtPassword
 id edtPasswordConf
@@ -111,6 +111,7 @@ string support
 string surname
 string version
 string welcome
+string wrongpassword
 string yes
 style Base.Theme.ClassQRoom
 style Theme.ClassQRoom

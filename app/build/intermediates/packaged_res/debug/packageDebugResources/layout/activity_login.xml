@@ -23,7 +23,7 @@
         android:background="@drawable/app_background"/>
 
     <EditText
-        android:id="@+id/edtMailLogin"
+        android:id="@+id/edtEmailLogin"
         android:layout_width="325dp"
         android:layout_height="50dp"
         android:layout_below="@id/tvClassQRoom"
@@ -33,6 +33,7 @@
         android:background="@drawable/edittext_background"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
+        android:maxLength="48"
         android:textColor="@color/black_white"
         android:textColorHint="@color/hint"
         android:backgroundTint="@color/edittext" />
@@ -41,13 +42,14 @@
         android:id="@+id/edtPasswordLogin"
         android:layout_width="325dp"
         android:layout_height="50dp"
-        android:layout_below="@id/edtMailLogin"
+        android:layout_below="@id/edtEmailLogin"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:autofillHints="no"
         android:background="@drawable/edittext_background"
         android:hint="@string/password"
         android:inputType="textPassword"
+        android:maxLength="24"
         android:textColor="@color/black_white"
         android:textColorHint="@color/hint"
         android:backgroundTint="@color/edittext" />
