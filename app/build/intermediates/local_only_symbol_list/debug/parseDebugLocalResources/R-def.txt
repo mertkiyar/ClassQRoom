@@ -26,6 +26,7 @@ drawable history
 drawable ic_back
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+drawable ic_logo
 drawable ic_settings
 drawable imgview
 drawable loginbutton_background
@@ -68,6 +69,12 @@ id gridButtons
 id home
 id imgViewWelcome
 id main
+id tfEmail
+id tfName
+id tfPassword
+id tfPasswordConf
+id tfStudentNumber
+id tfSurname
 id tvClassQRoom
 id tvForgotPassword
 id txtViewClassQRoom
@@ -89,6 +96,7 @@ string errorregister
 string faq
 string fillblanks
 string forgotpassword
+string imgviewlogo
 string login
 string logoutmessage
 string name

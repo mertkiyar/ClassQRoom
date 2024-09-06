@@ -51,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         edtEmailLogin.setFilters(new InputFilter[] {
+                new InputFilter.LengthFilter(40),
                 (source, start, end, dest, dstart, dend) -> {
                     for (int i = start; i < end; i++) {
                         char character = source.charAt(i);
@@ -63,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
         });
         edtPasswordLogin.setFilters(new InputFilter[] {
+                new InputFilter.LengthFilter(24),
                 (source, start, end, dest, dstart, dend) -> {
                     for (int i = start; i < end; i++) {
                         char character = source.charAt(i);

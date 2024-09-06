@@ -3034,6 +3034,7 @@ drawable ic_clock_black_24dp
 drawable ic_keyboard_black_24dp
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+drawable ic_logo
 drawable ic_m3_chip_check
 drawable ic_m3_chip_checked_circle
 drawable ic_m3_chip_close
@@ -3617,6 +3618,12 @@ id textinput_helper_text
 id textinput_placeholder
 id textinput_prefix_text
 id textinput_suffix_text
+id tfEmail
+id tfName
+id tfPassword
+id tfPasswordConf
+id tfStudentNumber
+id tfSurname
 id time
 id title
 id titleDividerNoCustom
@@ -3927,6 +3934,7 @@ string fillblanks
 string forgotpassword
 string hide_bottom_view_on_scroll_behavior
 string icon_content_description
+string imgviewlogo
 string item_view_role_description
 string login
 string logoutmessage

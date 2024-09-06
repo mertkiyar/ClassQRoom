@@ -1,5 +1,6 @@
 package com.example.classqroom;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -17,6 +18,7 @@ public class RegisterActivity extends AppCompatActivity {
     Button btnCancelRegister;
     private DataBaseHelper dataBaseHelper;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         edtName.setFilters(new InputFilter[] {
+                new InputFilter.LengthFilter(24), //TODO ileride artırılabilir.
                 (source, start, end, dest, dstart, dend) -> {
                     for (int i = start; i < end; i++) {
                         char character = source.charAt(i);
@@ -61,6 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
         });
         edtSurname.setFilters(new InputFilter[] {
+                new InputFilter.LengthFilter(24),
                 (source, start, end, dest, dstart, dend) -> {
                     for (int i = start; i < end; i++) {
                         char character = source.charAt(i);
@@ -77,6 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
         });
         edtEmail.setFilters(new InputFilter[] {
+                new InputFilter.LengthFilter(40),
                 (source, start, end, dest, dstart, dend) -> {
                     for (int i = start; i < end; i++) {
                         char character = source.charAt(i);
@@ -89,6 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
         });
         edtPassword.setFilters(new InputFilter[] {
+                new InputFilter.LengthFilter(24),
                 (source, start, end, dest, dstart, dend) -> {
                     for (int i = start; i < end; i++) {
                         char character = source.charAt(i);
@@ -102,6 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
         });
         edtPasswordConf.setFilters(new InputFilter[] {
+                new InputFilter.LengthFilter(24),
                 (source, start, end, dest, dstart, dend) -> {
                     for (int i = start; i < end; i++) {
                         char character = source.charAt(i);

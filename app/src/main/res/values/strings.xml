@@ -33,4 +33,5 @@
     <string name="registernotsuccess">An error occurred during registration.</string>
     <string name="notregisteredemail">The email address you entered is not registered.</string>
     <string name="wrongpassword">The password is incorrect, please try again.</string>
+    <string name="imgviewlogo" translatable="false">Logo</string>
 </resources>

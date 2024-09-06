@@ -34,6 +34,7 @@
     <string name="faq">FAQ</string>
     <string name="fillblanks">Please fill all the blanks!</string>
     <string name="forgotpassword">Forgot Password</string>
+    <string name="imgviewlogo" translatable="false">Logo</string>
     <string name="login">Login</string>
     <string name="logoutmessage">Are you sure you want to log out?</string>
     <string name="name">Name</string>

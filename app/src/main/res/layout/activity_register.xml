@@ -1,124 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="50dp"
+    android:background="@color/white"
     tools:context=".RegisterActivity">
 
-    <TextView
+    <ImageView
         android:id="@+id/tvClassQRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:background="@drawable/app_background"
-        android:fontFamily="sans-serif-black"
-        android:text="@string/app_name"
-        android:textColor="@color/white"
-        android:textSize="36sp"/>
+        android:background="@drawable/ic_logo"
+        android:contentDescription="@string/imgviewlogo" />
 
-    <EditText
-        android:id="@+id/edtName"
-        android:layout_width="325dp"
-        android:layout_height="50dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/tvClassQRoom"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:autofillHints="no"
-        android:background="@drawable/edittext_background"
-        android:backgroundTint="@color/edittext"
-        android:hint="@string/name"
-        android:inputType="text|textCapSentences|textVisiblePassword"
-        android:maxLength="36"
-        android:textAllCaps="true"
-        android:textColor="@color/black_white"
-        android:textColorHint="@color/hint" />
+        android:maxWidth="400dp"
+        android:layout_marginTop="50dp">
 
-    <EditText
-        android:id="@+id/edtSurname"
-        android:layout_width="325dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/edtName"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:autofillHints="no"
-        android:background="@drawable/edittext_background"
-        android:backgroundTint="@color/edittext"
-        android:hint="@string/surname"
-        android:inputType="text|textCapSentences|textVisiblePassword"
-        android:maxLength="36"
-        android:textColor="@color/black_white"
-        android:textColorHint="@color/hint" />
+        <EditText
+            android:id="@+id/edtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="no"
+            android:hint="@string/name"
+            android:inputType="textCapCharacters"
+            android:maxWidth="400dp"
+            tools:ignore="TextContrastCheck" />
 
-    <EditText
-        android:id="@+id/edtEmail"
-        android:layout_width="325dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/edtSurname"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:autofillHints="no"
-        android:background="@drawable/edittext_background"
-        android:backgroundTint="@color/edittext"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        android:maxLength="48"
-        android:textColor="@color/black_white"
-        android:textColorHint="@color/hint" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/edtStudentNumber"
-        android:layout_width="325dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/edtEmail"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfSurname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tfName"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:autofillHints="no"
-        android:background="@drawable/edittext_background"
-        android:backgroundTint="@color/edittext"
-        android:hint="@string/studentnumber"
-        android:inputType="number"
-        android:maxLength="12"
-        android:textColor="@color/black_white"
-        android:textColorHint="@color/hint" />
+        android:maxWidth="400dp"
+        android:layout_marginTop="5dp">
 
-    <EditText
-        android:id="@+id/edtPassword"
-        android:layout_width="325dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/edtStudentNumber"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:autofillHints="no"
-        android:background="@drawable/edittext_background"
-        android:backgroundTint="@color/edittext"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        android:maxLength="24"
-        android:textColor="@color/black_white"
-        android:textColorHint="@color/hint" />
+        <EditText
+            android:id="@+id/edtSurname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="no"
+            android:hint="@string/surname"
+            android:inputType="textCapCharacters"
+            android:maxWidth="400dp"
+            tools:ignore="TextContrastCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/edtPasswordConf"
-        android:layout_width="325dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/edtPassword"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tfSurname"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:autofillHints="no"
-        android:background="@drawable/edittext_background"
-        android:backgroundTint="@color/edittext"
-        android:hint="@string/passwordconf"
-        android:inputType="textPassword"
-        android:maxLength="24"
-        android:textColor="@color/black_white"
-        android:textColorHint="@color/hint" />
+        android:maxWidth="400dp"
+        android:layout_marginTop="5dp">
+
+        <EditText
+            android:id="@+id/edtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="no"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:maxWidth="400dp"
+            tools:ignore="TextContrastCheck" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfStudentNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tfEmail"
+        android:layout_centerHorizontal="true"
+        android:maxWidth="400dp"
+        android:layout_marginTop="5dp">
+
+        <EditText
+            android:id="@+id/edtStudentNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="no"
+            android:hint="@string/studentnumber"
+            android:inputType="number"
+            android:maxWidth="400dp"
+            android:maxLength="12"
+            tools:ignore="TextContrastCheck" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tfStudentNumber"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:maxWidth="400dp"
+        android:visibility="gone"
+        app:passwordToggleEnabled="true">
+
+        <EditText
+            android:id="@+id/edtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="no"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:maxWidth="400dp"
+            tools:ignore="TextContrastCheck" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfPasswordConf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tfPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:maxWidth="400dp"
+        android:visibility="gone"
+        app:passwordToggleEnabled="true">
+
+        <EditText
+            android:id="@+id/edtPasswordConf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="no"
+            android:hint="@string/passwordconf"
+            android:inputType="textPassword"
+            android:maxWidth="400dp"
+            tools:ignore="TextContrastCheck" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edtPasswordConf"
+        android:layout_below="@id/tfPasswordConf"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
         android:orientation="horizontal">
