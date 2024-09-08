@@ -34,4 +34,9 @@
     <string name="notregisteredemail">The email address you entered is not registered.</string>
     <string name="wrongpassword">The password is incorrect, please try again.</string>
     <string name="imgviewlogo" translatable="false">Logo</string>
+    <string name="next">Next</string>
+    <!-- Strings related to login -->
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="previous">Previous</string>
+    <string name="setpasswordtext">Please set a password!</string>
 </resources>

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="50dp"
-    android:background="@color/white"
     tools:context=".RegisterActivity">
 
     <ImageView
@@ -16,164 +14,12 @@
         android:background="@drawable/ic_logo"
         android:contentDescription="@string/imgviewlogo" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tfName"
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@id/tvClassQRoom"
-        android:layout_centerHorizontal="true"
-        android:maxWidth="400dp"
-        android:layout_marginTop="50dp">
-
-        <EditText
-            android:id="@+id/edtName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="no"
-            android:hint="@string/name"
-            android:inputType="textCapCharacters"
-            android:maxWidth="400dp"
-            tools:ignore="TextContrastCheck" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tfSurname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tfName"
-        android:layout_centerHorizontal="true"
-        android:maxWidth="400dp"
-        android:layout_marginTop="5dp">
-
-        <EditText
-            android:id="@+id/edtSurname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="no"
-            android:hint="@string/surname"
-            android:inputType="textCapCharacters"
-            android:maxWidth="400dp"
-            tools:ignore="TextContrastCheck" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tfEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tfSurname"
-        android:layout_centerHorizontal="true"
-        android:maxWidth="400dp"
-        android:layout_marginTop="5dp">
-
-        <EditText
-            android:id="@+id/edtEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="no"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:maxWidth="400dp"
-            tools:ignore="TextContrastCheck" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tfStudentNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tfEmail"
-        android:layout_centerHorizontal="true"
-        android:maxWidth="400dp"
-        android:layout_marginTop="5dp">
-
-        <EditText
-            android:id="@+id/edtStudentNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="no"
-            android:hint="@string/studentnumber"
-            android:inputType="number"
-            android:maxWidth="400dp"
-            android:maxLength="12"
-            tools:ignore="TextContrastCheck" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tfPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tfStudentNumber"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:maxWidth="400dp"
-        android:visibility="gone"
-        app:passwordToggleEnabled="true">
-
-        <EditText
-            android:id="@+id/edtPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="no"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:maxWidth="400dp"
-            tools:ignore="TextContrastCheck" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tfPasswordConf"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tfPassword"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:maxWidth="400dp"
-        android:visibility="gone"
-        app:passwordToggleEnabled="true">
-
-        <EditText
-            android:id="@+id/edtPasswordConf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="no"
-            android:hint="@string/passwordconf"
-            android:inputType="textPassword"
-            android:maxWidth="400dp"
-            tools:ignore="TextContrastCheck" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tfPasswordConf"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:orientation="horizontal">
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnCancelRegister"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="50dp"
-            android:background="@drawable/cancelbutton_background"
-            android:text="@string/cancel"
-            android:textColor="@color/white"
-            android:textStyle="bold|normal" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnRegister"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/registerbutton_background"
-            android:onClick="onClickRegister"
-            android:text="@string/register"
-            android:textColor="@color/white"
-            android:textStyle="bold|normal" />
-
-    </LinearLayout>
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

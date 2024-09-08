@@ -40,6 +40,7 @@ drawable registerbutton_background
 drawable settings
 drawable settingsbutton_background
 font agbalumo
+font urbanist
 id btnAttendanceHistory
 id btnCancelForgotPass
 id btnCancelLogin
@@ -48,6 +49,8 @@ id btnClassCode
 id btnLogin
 id btnLoginMain
 id btnNFC
+id btnNext
+id btnPrevious
 id btnProfile
 id btnQRCode
 id btnRegister
@@ -65,6 +68,7 @@ id edtPasswordLogin
 id edtStudentNumber
 id edtSurname
 id edtTxtWelcome
+id frameLayout
 id gridButtons
 id home
 id imgViewWelcome
@@ -83,6 +87,8 @@ layout activity_home
 layout activity_login
 layout activity_main
 layout activity_register
+layout fragment_password
+layout fragment_user_info
 mipmap ic_launcher
 mipmap ic_launcher_foreground
 mipmap ic_launcher_round
@@ -100,12 +106,14 @@ string imgviewlogo
 string login
 string logoutmessage
 string name
+string next
 string nfc
 string no
 string notregisteredemail
 string notsamepassword
 string password
 string passwordconf
+string previous
 string profile
 string qrcode
 string register
@@ -113,6 +121,7 @@ string registeredemail
 string registernotsuccess
 string registersucces
 string resetpassword
+string setpasswordtext
 string settings
 string studentnumber
 string support

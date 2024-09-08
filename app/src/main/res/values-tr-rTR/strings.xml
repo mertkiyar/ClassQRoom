@@ -33,4 +33,7 @@
     <string name="registernotsuccess">Kayıt olurken bir hata oluştu.</string>
     <string name="notregisteredemail">Girdiğin e-posta adresi kayıtlı değil.</string>
     <string name="wrongpassword">Şifre yanlış, lütfen tekrar deneyin.</string>
+    <string name="next">Sonraki</string>
+    <string name="previous">Önceki</string>
+    <string name="setpasswordtext">Lütfen şifre belirleyin!</string>
 </resources>

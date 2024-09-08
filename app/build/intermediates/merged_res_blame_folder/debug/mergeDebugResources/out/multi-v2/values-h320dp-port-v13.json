@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.classqroom.app-mergeDebugResources-29:/values-h320dp-port-v13/values-h320dp-port-v13.xml",
+            "outputFile": "com.example.classqroom.app-mergeDebugResources-32:/values-h320dp-port-v13/values-h320dp-port-v13.xml",
             "map": [
                 {
-                    "source": "/Users/mertkiyar/.gradle/caches/transforms-4/2c93d16ee376fc0ea4a8ec621fb4c981/transformed/material-1.12.0/res/values-h320dp-port-v13/values-h320dp-port-v13.xml",
+                    "source": "/Users/mertkiyar/.gradle/caches/transforms-4/e3745ee1796871ee893f89b8276d622e/transformed/material-1.12.0/res/values-h320dp-port-v13/values-h320dp-port-v13.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
