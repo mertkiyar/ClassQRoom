@@ -6,6 +6,6 @@
 
 Current and future planned features:
 
-*   3 different ways to attend classes.
-*   Everything is customizable
+*   3 different ways to attend classes. (NFC/QR/CODE)
+*   Everything is customizable with modern panels.
 *   It will be added as it is updated.
