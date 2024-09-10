@@ -39,4 +39,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="previous">Previous</string>
     <string name="setpasswordtext">Please set a password!</string>
+    <string name="sentresetcode">Password reset code has been sent! Please check your mail.</string>
 </resources>

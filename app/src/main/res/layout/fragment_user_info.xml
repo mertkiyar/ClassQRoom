@@ -8,8 +8,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tfName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxWidth="400dp">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/edtName"
@@ -18,7 +17,7 @@
             android:autofillHints="no"
             android:hint="@string/name"
             android:inputType="textCapCharacters"
-            android:maxWidth="400dp"
+
             tools:ignore="TextContrastCheck" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -27,7 +26,6 @@
         android:id="@+id/tfSurname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxWidth="400dp"
         android:layout_marginTop="70dp">
 
         <EditText
@@ -37,7 +35,7 @@
             android:autofillHints="no"
             android:hint="@string/surname"
             android:inputType="textCapCharacters"
-            android:maxWidth="400dp"
+
             tools:ignore="TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -45,7 +43,6 @@
         android:id="@+id/tfEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxWidth="400dp"
         android:layout_marginTop="140dp">
 
         <EditText
@@ -55,7 +52,7 @@
             android:autofillHints="no"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
-            android:maxWidth="400dp"
+
             tools:ignore="TextContrastCheck" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -64,7 +61,6 @@
         android:id="@+id/tfStudentNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxWidth="400dp"
         android:layout_marginTop="210dp">
 
         <EditText
@@ -74,7 +70,7 @@
             android:autofillHints="no"
             android:hint="@string/studentnumber"
             android:inputType="number"
-            android:maxWidth="400dp"
+
             android:maxLength="12"
             tools:ignore="TextContrastCheck,DuplicateClickableBoundsCheck" />
 

@@ -13,9 +13,9 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
-    EditText edtEmailLogin, edtPasswordLogin;
+    EditText edtEmail, edtPassword;
     TextView tvForgotPassword;
-    Button btnCancelLogin;
+    Button btnCancel;
     private DataBaseHelper dataBaseHelper;
 
     @Override
@@ -25,11 +25,11 @@ public class LoginActivity extends AppCompatActivity {
 
         dataBaseHelper = new DataBaseHelper(this);
 
-        edtEmailLogin = findViewById(R.id.edtEmailLogin);
-        edtPasswordLogin = findViewById(R.id.edtPasswordLogin);
+        edtEmail = findViewById(R.id.edtEmail);
+        edtPassword = findViewById(R.id.edtPassword);
 
-        btnCancelLogin = findViewById(R.id.btnCancelLogin);
-        btnCancelLogin.setOnClickListener(v -> {
+        btnCancel = findViewById(R.id.btnCancel);
+        btnCancel.setOnClickListener(v -> {
             finish();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
 
-        edtEmailLogin.setFilters(new InputFilter[] {
+        edtEmail.setFilters(new InputFilter[] {
                 new InputFilter.LengthFilter(40),
                 (source, start, end, dest, dstart, dend) -> {
                     for (int i = start; i < end; i++) {
@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                     return null;
                 }
         });
-        edtPasswordLogin.setFilters(new InputFilter[] {
+        edtPassword.setFilters(new InputFilter[] {
                 new InputFilter.LengthFilter(24),
                 (source, start, end, dest, dstart, dend) -> {
                     for (int i = start; i < end; i++) {
@@ -80,8 +80,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onClickLogin(View view) {
-        String email = edtEmailLogin.getText().toString().trim();
-        String password = edtPasswordLogin.getText().toString().trim();
+        String email = edtEmail.getText().toString().trim();
+        String password = edtPassword.getText().toString().trim();
         UserModel userModel;
 
         if (dataBaseHelper != null) {

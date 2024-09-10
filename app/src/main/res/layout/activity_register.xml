@@ -8,7 +8,7 @@
     tools:context=".RegisterActivity">
 
     <ImageView
-        android:id="@+id/tvClassQRoom"
+        android:id="@+id/ivClassQRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_logo"
@@ -18,7 +18,7 @@
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tvClassQRoom"
+        android:layout_below="@id/ivClassQRoom"
         android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"/>
 
