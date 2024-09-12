@@ -3232,8 +3232,7 @@ id bounceBoth
 id bounceEnd
 id bounceStart
 id btnAttendanceHistory
-id btnCancelForgotPass
-id btnCancelLogin
+id btnCancel
 id btnCancelRegister
 id btnClassCode
 id btnLogin
@@ -3324,12 +3323,9 @@ id edge
 id edit_query
 id edit_text_id
 id edtEmail
-id edtEmailLogin
-id edtMailForgotPass
 id edtName
 id edtPassword
 id edtPasswordConf
-id edtPasswordLogin
 id edtStudentNumber
 id edtSurname
 id edtTxtWelcome
@@ -3392,6 +3388,7 @@ id invisible
 id inward
 id italic
 id item_touch_helper_previous_elevation
+id ivClassQRoom
 id jumpToEnd
 id jumpToStart
 id labeled
@@ -3647,9 +3644,7 @@ id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
 id triangle
-id tvClassQRoom
 id tvForgotPassword
-id txtViewClassQRoom
 id unchecked
 id uniform
 id unlabeled
@@ -4069,6 +4064,7 @@ string search_menu_title
 string searchbar_scrolling_view_behavior
 string searchview_clear_text_content_description
 string searchview_navigation_content_description
+string sentresetcode
 string setpasswordtext
 string settings
 string side_sheet_accessibility_pane_title

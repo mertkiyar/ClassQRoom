@@ -42,8 +42,7 @@ drawable settingsbutton_background
 font agbalumo
 font urbanist
 id btnAttendanceHistory
-id btnCancelForgotPass
-id btnCancelLogin
+id btnCancel
 id btnCancelRegister
 id btnClassCode
 id btnLogin
@@ -59,12 +58,9 @@ id btnResetPassword
 id btnSettings
 id btnSupport
 id edtEmail
-id edtEmailLogin
-id edtMailForgotPass
 id edtName
 id edtPassword
 id edtPasswordConf
-id edtPasswordLogin
 id edtStudentNumber
 id edtSurname
 id edtTxtWelcome
@@ -72,6 +68,7 @@ id frameLayout
 id gridButtons
 id home
 id imgViewWelcome
+id ivClassQRoom
 id main
 id tfEmail
 id tfName
@@ -79,9 +76,7 @@ id tfPassword
 id tfPasswordConf
 id tfStudentNumber
 id tfSurname
-id tvClassQRoom
 id tvForgotPassword
-id txtViewClassQRoom
 layout activity_forgotpassword
 layout activity_home
 layout activity_login
@@ -121,6 +116,7 @@ string registeredemail
 string registernotsuccess
 string registersucces
 string resetpassword
+string sentresetcode
 string setpasswordtext
 string settings
 string studentnumber

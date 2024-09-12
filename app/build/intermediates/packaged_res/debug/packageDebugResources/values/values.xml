@@ -53,6 +53,7 @@
     <string name="registernotsuccess">An error occurred during registration.</string>
     <string name="registersucces">You have successfully registered.</string>
     <string name="resetpassword">Reset Password</string>
+    <string name="sentresetcode">Password reset code has been sent! Please check your mail.</string>
     <string name="setpasswordtext">Please set a password!</string>
     <string name="settings">Settings</string>
     <string name="studentnumber">Student\'s Number</string>
