@@ -1,3 +1,0 @@
-com.example.classqroom.test
-style WhiteBackgroundDialogTheme
-style WhiteBackgroundTheme
