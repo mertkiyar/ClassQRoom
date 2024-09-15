@@ -6,26 +6,25 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-public class DataBaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String USER_TABLE = "USER_TABLE";
+    public static final String STUDENT_TABLE = "STUDENT_TABLE";
+    public static final String LECTURER_TABLE = "LECTURER_TABLE";
     public static final String COLUMN_ID = "ID";
-    public static final String COLUMN_USER_NAME = "USER_NAME";
-    public static final String COLUMN_USER_SURNAME = "USER_SURNAME";
     public static final String COLUMN_USER_EMAIL = "USER_EMAIL";
-    public static final String COLUMN_USER_NUMBER = "USER_NUMBER";
     public static final String COLUMN_USER_PASSWORD = "USER_PASSWORD";
+    public static final String COLUMN_USER_TYPE = "USER_TYPE";
 
-    public DataBaseHelper(@Nullable Context context) {
+    public DatabaseHelper(@Nullable Context context) {
         super(context, "users.db", null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTableStatement = "CREATE TABLE " + USER_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_USER_NAME + " TEXT, " + COLUMN_USER_SURNAME + " TEXT, " + COLUMN_USER_EMAIL + " TEXT UNIQUE, " + COLUMN_USER_NUMBER + " INT, " + COLUMN_USER_PASSWORD + " TEXT)";
+        String createTableStatement = "CREATE TABLE " + USER_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_USER_EMAIL + " TEXT UNIQUE, " + COLUMN_USER_PASSWORD + " TEXT, " + COLUMN_USER_TYPE + "TEXT)";
         db.execSQL(createTableStatement);
     }
 
@@ -40,10 +39,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
 
         try {
-            cv.put(COLUMN_USER_NAME, userModel.getName());
-            cv.put(COLUMN_USER_SURNAME, userModel.getSurname());
             cv.put(COLUMN_USER_EMAIL, userModel.getEmail());
-            cv.put(COLUMN_USER_NUMBER, userModel.getStudentNumber());
             cv.put(COLUMN_USER_PASSWORD, userModel.getPassword());
 
             long insert = db.insert(USER_TABLE, null, cv);
@@ -76,8 +72,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
             if (cursor != null && cursor.moveToFirst()) {
                 String storedPassword = cursor.getString(0);
-                Log.d("RegisterActivity", storedPassword);
-                Log.d("RegisterActivity", inputPassword);
                 return storedPassword.equals(inputPassword);
             }
         }

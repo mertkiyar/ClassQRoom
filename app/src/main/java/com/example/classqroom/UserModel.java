@@ -5,19 +5,17 @@ import androidx.annotation.NonNull;
 public class UserModel {
 
     private int id;
-    private String name;
-    private String surname;
-    private int studentNumber;
+    private String uuid;
     private String email;
     private String password;
+    private String type;
 
-    public UserModel(int id, String name, String surname, String email, int studentNumber, String password) {
+    public UserModel(int id, String uuid, String email, String password, String type) {
         this.id = id;
-        this.name = name;
-        this.surname = surname;
+        this.uuid = uuid;
         this.email = email;
-        this.studentNumber = studentNumber;
         this.password = password;
+        this.type = type;
     }
 
     public UserModel(String email, String password) {
@@ -25,16 +23,8 @@ public class UserModel {
         this.password = password;
     }
 
-    public UserModel(String email, int studentNumber) {
-        this.email = email;
-        this.studentNumber = studentNumber;
-    }
-
     public UserModel(String email) {
         this.email = email;
-    }
-
-    public UserModel() {
     }
 
     @NonNull
@@ -42,10 +32,7 @@ public class UserModel {
     public String toString() {
         return "UserModel{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
-                ", studentNumber=" + studentNumber +
                 ", password='" + password + '\'' +
                 '}';
     }
@@ -58,28 +45,12 @@ public class UserModel {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public int getStudentNumber() {
-        return studentNumber;
-    }
-
-    public void setStudentNumber(int studentNumber) {
-        this.studentNumber = studentNumber;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getEmail() {
@@ -96,5 +67,13 @@ public class UserModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

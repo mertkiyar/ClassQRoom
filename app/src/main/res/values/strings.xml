@@ -40,4 +40,15 @@
     <string name="previous">Previous</string>
     <string name="setpasswordtext">Please set a password!</string>
     <string name="sentresetcode">Password reset code has been sent! Please check your mail.</string>
+    <string name="">Elective</string>
+    <string name="compulsorylecture">Compulsory</string>
+    <string name="electivelecture">Elective</string>
+    <string name="acts">ACTS</string>
+    <string name="lecture">Lecture</string>
+    <string name="credit">Credit</string>
+    <string name="lecturer">Lecturer</string>
+    <string name="lecturecode">Lecture Code</string>
+    <string name="department">Department</string>
+    <string name="lecturetype">Lecture Type</string>
+    <string name="lecturename">Lecture Name</string>
 </resources>

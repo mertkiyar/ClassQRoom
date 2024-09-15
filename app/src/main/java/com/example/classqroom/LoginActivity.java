@@ -16,14 +16,14 @@ public class LoginActivity extends AppCompatActivity {
     EditText edtEmail, edtPassword;
     TextView tvForgotPassword;
     Button btnCancel;
-    private DataBaseHelper dataBaseHelper;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        dataBaseHelper = new DataBaseHelper(this);
+        databaseHelper = new DatabaseHelper(this);
 
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
@@ -84,13 +84,13 @@ public class LoginActivity extends AppCompatActivity {
         String password = edtPassword.getText().toString().trim();
         UserModel userModel;
 
-        if (dataBaseHelper != null) {
+        if (databaseHelper != null) {
             try {
                 if (!email.isEmpty() && !password.isEmpty()) {
                     userModel = new UserModel(email, password);
-                    boolean isUserExist = dataBaseHelper.checkUser(userModel.getEmail());
+                    boolean isUserExist = databaseHelper.checkUser(userModel.getEmail());
                     if (isUserExist) {
-                        boolean isCorrect = dataBaseHelper.authenticateUser(userModel.getEmail(), userModel.getPassword());
+                        boolean isCorrect = databaseHelper.authenticateUser(userModel.getEmail(), userModel.getPassword());
                         if (isCorrect) {
                             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             startActivity(intent);

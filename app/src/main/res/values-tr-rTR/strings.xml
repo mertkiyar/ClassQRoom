@@ -37,4 +37,14 @@
     <string name="previous">Önceki</string>
     <string name="setpasswordtext">Lütfen bir şifre belirleyin!</string>
     <string name="sentresetcode">Şifre sıfırlama kodu gönderildi! E-Posta\'nı kontrol et.</string>
+    <string name="compulsorylecture">Zorunlu</string>
+    <string name="electivelecture">Seçmeli</string>
+    <string name="acts">AKTS</string>
+    <string name="lecture">Ders</string>
+    <string name="credit">Kredi</string>
+    <string name="lecturer">Öğretmen</string>
+    <string name="lecturecode">Ders Kodu</string>
+    <string name="department">Bölüm</string>
+    <string name="lecturetype">Ders Tipi</string>
+    <string name="lecturename">Ders Adı</string>
 </resources>

@@ -12,14 +12,14 @@ import androidx.fragment.app.FragmentManager;
 public class RegisterActivity extends AppCompatActivity implements UserInfoFragment.OnNextClickListener, PasswordFragment.OnRegisterClickListener {
 
     private FragmentManager fragmentManager;
-    private DataBaseHelper dataBaseHelper;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        dataBaseHelper = new DataBaseHelper(this);
+        databaseHelper = new DatabaseHelper(this);
         fragmentManager = getSupportFragmentManager();
 
         if (savedInstanceState == null) {
@@ -74,8 +74,8 @@ public class RegisterActivity extends AppCompatActivity implements UserInfoFragm
     public void onNextClicked(String name, String surname, String email, String studentNumber) {
         UserModel userModel;
         if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty() && !studentNumber.isEmpty()) {
-            userModel = new UserModel(-1, name, surname, email, Integer.parseInt(studentNumber), null);
-            boolean isUserExist = dataBaseHelper.checkUser(userModel.getEmail());
+            userModel = new UserModel(email);
+            boolean isUserExist = databaseHelper.checkUser(userModel.getEmail());
             if (!isUserExist) {
                 showPasswordFragment(name, surname, email, studentNumber);
             } else {
@@ -90,12 +90,12 @@ public class RegisterActivity extends AppCompatActivity implements UserInfoFragm
     public void onRegisterClicked(String name, String surname, String email, String studentNumber, String password, String passwordConf) {
         UserModel userModel;
 
-        if (dataBaseHelper != null) {
+        if (databaseHelper != null) {
             try {
                 if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty() && !studentNumber.isEmpty() && !password.isEmpty() && !passwordConf.isEmpty()) {
                     if (password.equals(passwordConf)) {
-                        userModel = new UserModel(-1, name, surname, email, Integer.parseInt(studentNumber), password);
-                        boolean isUserAdded = dataBaseHelper.addNewUser(userModel);
+                        userModel = new UserModel(-1, "name", email, password, "Student");
+                        boolean isUserAdded = databaseHelper.addNewUser(userModel);
                         if (isUserAdded) {
                             Toast.makeText(this, getString(R.string.registersucces), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
@@ -115,7 +115,7 @@ public class RegisterActivity extends AppCompatActivity implements UserInfoFragm
                 Toast.makeText(this, getString(R.string.errorregister) + ": " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         } else {
-            Log.e("RegisterActivity", "DataBaseHelper is null");
+            Log.e("RegisterActivity", "databaseHelper is null");
         }
     }
 }
