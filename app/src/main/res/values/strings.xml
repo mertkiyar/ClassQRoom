@@ -35,12 +35,9 @@
     <string name="wrongpassword">The password is incorrect, please try again.</string>
     <string name="imgviewlogo" translatable="false">Logo</string>
     <string name="next">Next</string>
-    <!-- Strings related to login -->
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="previous">Previous</string>
     <string name="setpasswordtext">Please set a password!</string>
     <string name="sentresetcode">Password reset code has been sent! Please check your mail.</string>
-    <string name="">Elective</string>
     <string name="compulsorylecture">Compulsory</string>
     <string name="electivelecture">Elective</string>
     <string name="acts">ACTS</string>
