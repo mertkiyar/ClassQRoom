@@ -12,7 +12,7 @@
     <string name="forgotpassword">Şifreni mi unuttun?</string>
     <string name="resetpassword">Şifreyi Sıfırla</string>
     <string name="studentnumber">Öğrenci Numarası</string>
-    <string name="welcome">Hoşgeldin</string>
+    <string name="welcome">Hoşgeldin, %1$s!</string>
     <string name="qrcode">Karekod</string>
     <string name="nfc">NFC</string>
     <string name="classcode">Ders Kodu</string>
@@ -47,4 +47,7 @@
     <string name="department">Bölüm</string>
     <string name="lecturetype">Ders Tipi</string>
     <string name="lecturename">Ders Adı</string>
+    <string name="qrcodescannermsg">Lütfen derse katılmak için Karekodu okutun!</string>
+    <string name="scanqrcodebutton">Karekodu Tara</string>
+    <string name="backtohome">Geri Dön</string>
 </resources>

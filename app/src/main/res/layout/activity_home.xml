@@ -7,10 +7,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/edtTxtWelcome"
+        android:id="@+id/tvWelcome"
         android:layout_marginTop="15dp"
         android:text="@string/welcome"
-        android:fontFamily="@font/agbalumo"
+        android:fontFamily="@font/urbanist"
         android:layout_marginStart="15dp"
         android:textSize="30sp"
         android:textColor="@color/black_white"/>
@@ -19,7 +19,7 @@
         android:id="@+id/imgViewWelcome"
         android:layout_width="400dp"
         android:layout_height="300dp"
-        android:layout_below="@id/edtTxtWelcome"
+        android:layout_below="@id/tvWelcome"
         android:layout_centerInParent="true"
         android:layout_marginTop="15dp"
         android:importantForAccessibility="no"

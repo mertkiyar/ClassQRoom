@@ -12,7 +12,7 @@
     <string name="forgotpassword">Forgot Password</string>
     <string name="resetpassword">Reset Password</string>
     <string name="studentnumber">Student\'s Number</string>
-    <string name="welcome">Welcome</string>
+    <string name="welcome">Welcome, %1$s!</string>
     <string name="qrcode">QR Code</string>
     <string name="nfc">NFC</string>
     <string name="classcode">Class Code</string>
@@ -48,4 +48,7 @@
     <string name="department">Department</string>
     <string name="lecturetype">Lecture Type</string>
     <string name="lecturename">Lecture Name</string>
+    <string name="qrcodescannermsg">Please scan the QR Code to join the class!</string>
+    <string name="scanqrcodebutton">Scan the QR Code</string>
+    <string name="backtohome">Back</string>
 </resources>

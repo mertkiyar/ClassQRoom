@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -15,10 +16,20 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        try (DatabaseHelper db = new DatabaseHelper(this)) {
+            String userEmail = getIntent().getStringExtra("USER_EMAIL");
+            TextView tvWelcome = findViewById(R.id.tvWelcome);
+            String nameFromDb = db.getUserName(userEmail);
+            tvWelcome.setText(getString(R.string.welcome, nameFromDb));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void onBtnQRCodeClick(View view) {
-        //TODO burası otomatik açılan bir pencere olacak. Kamera açılıp okutulduktan sonra katılınınan ders(popup) görünecek.
+        Intent intent = new Intent(HomeActivity.this, QRCodeScannerActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public void onBtnNFCClick(View view) {

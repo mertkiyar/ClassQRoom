@@ -9,6 +9,8 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import java.util.UUID;
+
 public class RegisterActivity extends AppCompatActivity implements UserInfoFragment.OnNextClickListener, PasswordFragment.OnRegisterClickListener {
 
     private FragmentManager fragmentManager;
@@ -85,20 +87,27 @@ public class RegisterActivity extends AppCompatActivity implements UserInfoFragm
             Toast.makeText(this, getString(R.string.fillblanks), Toast.LENGTH_SHORT).show();
         }
     }
+    public String generateUUID() {
+        return UUID.randomUUID().toString();
+    }
 
     @Override
     public void onRegisterClicked(String name, String surname, String email, String studentNumber, String password, String passwordConf) {
         UserModel userModel;
-
+        StudentModel studentModel;
+        String uuid = generateUUID();
         if (databaseHelper != null) {
             try {
                 if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty() && !studentNumber.isEmpty() && !password.isEmpty() && !passwordConf.isEmpty()) {
                     if (password.equals(passwordConf)) {
-                        userModel = new UserModel(-1, "name", email, password, "Student");
+                        userModel = new UserModel(uuid, name, surname, email, password, "Student");
+                        studentModel = new StudentModel(uuid, studentNumber, "Computer Engineering", "1");
                         boolean isUserAdded = databaseHelper.addNewUser(userModel);
-                        if (isUserAdded) {
+                        boolean isStudentAdded = databaseHelper.addNewStudent(studentModel);
+                        if (isUserAdded && isStudentAdded) {
                             Toast.makeText(this, getString(R.string.registersucces), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                            intent.putExtra("USER_EMAIL", email);
                             startActivity(intent);
                             finish();
                             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);

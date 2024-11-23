@@ -93,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                         boolean isCorrect = databaseHelper.authenticateUser(userModel.getEmail(), userModel.getPassword());
                         if (isCorrect) {
                             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                            intent.putExtra("USER_EMAIL", email);
                             startActivity(intent);
                             finish();
                             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);

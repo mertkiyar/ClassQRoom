@@ -1,18 +1,17 @@
 package com.example.classqroom;
 
-import androidx.annotation.NonNull;
-
 public class UserModel {
-
-    private int id;
     private String uuid;
+    private String name;
+    private String surname;
     private String email;
     private String password;
     private String type;
 
-    public UserModel(int id, String uuid, String email, String password, String type) {
-        this.id = id;
+    public UserModel(String uuid, String name, String surname, String email, String password, String type) {
         this.uuid = uuid;
+        this.name = name;
+        this.surname = surname;
         this.email = email;
         this.password = password;
         this.type = type;
@@ -27,30 +26,28 @@ public class UserModel {
         this.email = email;
     }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return "UserModel{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getUuid() {
         return uuid;
     }
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public String getEmail() {
