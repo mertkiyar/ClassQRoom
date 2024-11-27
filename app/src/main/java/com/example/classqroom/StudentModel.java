@@ -1,44 +1,42 @@
 package com.example.classqroom;
 
+import java.util.UUID;
+
 public class StudentModel {
-    private String uuid;
-    private String number;
-    private String department;
+    private UUID uuid;
+    private String studentNumber;
+    private int studentDepartmentId;
     private String grade;
 
-    public StudentModel(String uuid, String number, String department, String grade) {
+    public StudentModel(UUID uuid, String studentNumber, int studentDepartmentId, String grade) {
         this.uuid = uuid;
-        this.number = number;
-        this.department = department;
+        this.studentNumber = studentNumber;
+        this.studentDepartmentId = studentDepartmentId;
         this.grade = grade;
     }
 
-    public StudentModel(String stdEmail, String number) {
-        this.number = number;
-    }
-
-    public String getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
 
-    public void setUuid(String uuid) {
+    public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
 
-    public String getNumber() {
-        return number;
+    public String getStudentNumber() {
+        return studentNumber;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setStudentNumber(String studentNumber) {
+        this.studentNumber = studentNumber;
     }
 
-    public String getDepartment() {
-        return department;
+    public int getStudentDepartmentId() {
+        return studentDepartmentId;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
+    public void setStudentDepartmentId(int studentDepartmentId) {
+        this.studentDepartmentId = studentDepartmentId;
     }
 
     public String getGrade() {

@@ -17,9 +17,7 @@
             android:autofillHints="no"
             android:hint="@string/name"
             android:inputType="textCapCharacters"
-
             tools:ignore="TextContrastCheck" />
-
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -35,7 +33,6 @@
             android:autofillHints="no"
             android:hint="@string/surname"
             android:inputType="textCapCharacters"
-
             tools:ignore="TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -52,9 +49,7 @@
             android:autofillHints="no"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
-
             tools:ignore="TextContrastCheck" />
-
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -70,10 +65,8 @@
             android:autofillHints="no"
             android:hint="@string/studentnumber"
             android:inputType="number"
-
             android:maxLength="12"
             tools:ignore="TextContrastCheck,DuplicateClickableBoundsCheck" />
-
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
@@ -99,11 +92,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/loginbutton_background"
-        android:onClick="onClickNext"
         android:text="@string/next"
         android:paddingHorizontal="20dp"
         android:textColor="@color/white"
         android:textStyle="bold|normal" />
     </LinearLayout>
-
 </FrameLayout>

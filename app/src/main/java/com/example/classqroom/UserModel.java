@@ -1,14 +1,16 @@
 package com.example.classqroom;
 
+import java.util.UUID;
+
 public class UserModel {
-    private String uuid;
+    private UUID uuid;
     private String name;
     private String surname;
     private String email;
     private String password;
     private String type;
 
-    public UserModel(String uuid, String name, String surname, String email, String password, String type) {
+    public UserModel(UUID uuid, String name, String surname, String email, String password, String type) {
         this.uuid = uuid;
         this.name = name;
         this.surname = surname;
@@ -26,11 +28,11 @@ public class UserModel {
         this.email = email;
     }
 
-    public String getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
 
-    public void setUuid(String uuid) {
+    public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
 

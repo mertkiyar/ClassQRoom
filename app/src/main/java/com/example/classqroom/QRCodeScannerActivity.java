@@ -76,7 +76,7 @@ public class QRCodeScannerActivity extends AppCompatActivity {
             ));
         } else {
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            vibrator.vibrate(new long[]{0, 100, 50, 100}, -1); // Titreşim deseni
+            vibrator.vibrate(new long[]{0, 100, 50, 100}, -1);
         }
     }
 }

@@ -12,7 +12,7 @@
     <string name="forgotpassword">Forgot Password</string>
     <string name="resetpassword">Reset Password</string>
     <string name="studentnumber">Student\'s Number</string>
-    <string name="welcome">Welcome, %1$s!</string>
+    <string name="welcome">Welcome, %1$s</string>
     <string name="qrcode">QR Code</string>
     <string name="nfc">NFC</string>
     <string name="classcode">Class Code</string>
@@ -51,4 +51,9 @@
     <string name="qrcodescannermsg">Please scan the QR Code to join the class!</string>
     <string name="scanqrcodebutton">Scan the QR Code</string>
     <string name="backtohome">Back</string>
+    <string name="second">%1$d seconds</string>
+    <string name="minute">%1$d minutes</string>
+    <string name="isfilterstudents">Show late students</string>
+    <string name="autoapprove">Automatically approve late students</string>
+    <string name="errorlogin">An error occurred during login.</string>
 </resources>

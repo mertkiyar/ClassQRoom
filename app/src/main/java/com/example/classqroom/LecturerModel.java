@@ -1,37 +1,29 @@
 package com.example.classqroom;
 
-public class LecturerModel {
-    private String uuid;
-    private String department;
-    private String lecture;
+import java.util.UUID;
 
-    public LecturerModel(String uuid, String department, String lecture) {
+public class LecturerModel {
+    private UUID uuid;
+    private int lecturerDepartmentId;
+
+    public LecturerModel(UUID uuid, int lecturerDepartmentId) {
         this.uuid = uuid;
-        this.department = department;
-        this.lecture = lecture;
+        this.lecturerDepartmentId = lecturerDepartmentId;
     }
 
-    public String getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
 
-    public void setUuid(String uuid) {
+    public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
 
-    public String getDepartment() {
-        return department;
+    public int getLecturerDepartmentId() {
+        return lecturerDepartmentId;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    public String getLecture() {
-        return lecture;
-    }
-
-    public void setLecture(String lecture) {
-        this.lecture = lecture;
+    public void setLecturerDepartmentId(int lecturerDepartmentId) {
+        this.lecturerDepartmentId = lecturerDepartmentId;
     }
 }

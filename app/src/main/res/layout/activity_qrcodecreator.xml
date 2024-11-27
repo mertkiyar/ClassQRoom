@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="50dp"
-    tools:context=".RegisterActivity">
+    android:layout_height="match_parent">
+<!-- TODO 2 fragment buraya gelecek: lectureinfo ve lecturesettings.-->
 
     <ImageView
         android:id="@+id/ivClassQRoom"
@@ -15,7 +12,7 @@
         android:contentDescription="@string/imgviewlogo" />
 
     <FrameLayout
-        android:id="@+id/flRegister"
+        android:id="@+id/flQRCodeCreator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/ivClassQRoom"

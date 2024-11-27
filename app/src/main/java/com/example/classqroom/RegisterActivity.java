@@ -38,7 +38,6 @@ public class RegisterActivity extends AppCompatActivity implements UserInfoFragm
                 }
             }
         });
-
     }
 
     private void showUserInfoFragment() {
@@ -52,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity implements UserInfoFragm
                         R.anim.slide_in_left,
                         R.anim.slide_out_right
                 )
-                .replace(R.id.frameLayout, userInfoFragment)
+                .replace(R.id.flRegister, userInfoFragment)
                 .commit();
     }
 
@@ -67,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity implements UserInfoFragm
                         R.anim.slide_in_left,
                         R.anim.slide_out_right
                 )
-                .replace(R.id.frameLayout, passwordFragment)
+                .replace(R.id.flRegister, passwordFragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -87,21 +86,21 @@ public class RegisterActivity extends AppCompatActivity implements UserInfoFragm
             Toast.makeText(this, getString(R.string.fillblanks), Toast.LENGTH_SHORT).show();
         }
     }
-    public String generateUUID() {
-        return UUID.randomUUID().toString();
+    public UUID generateUUID() {
+        return UUID.randomUUID();
     }
 
     @Override
     public void onRegisterClicked(String name, String surname, String email, String studentNumber, String password, String passwordConf) {
         UserModel userModel;
         StudentModel studentModel;
-        String uuid = generateUUID();
+        UUID uuid = generateUUID();
         if (databaseHelper != null) {
             try {
                 if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty() && !studentNumber.isEmpty() && !password.isEmpty() && !passwordConf.isEmpty()) {
                     if (password.equals(passwordConf)) {
-                        userModel = new UserModel(uuid, name, surname, email, password, "Student");
-                        studentModel = new StudentModel(uuid, studentNumber, "Computer Engineering", "1");
+                        userModel = new UserModel(uuid, name, surname, email, databaseHelper.hashPassword(password), "Student");
+                        studentModel = new StudentModel(uuid, studentNumber, 0, "1");
                         boolean isUserAdded = databaseHelper.addNewUser(userModel);
                         boolean isStudentAdded = databaseHelper.addNewStudent(studentModel);
                         if (isUserAdded && isStudentAdded) {

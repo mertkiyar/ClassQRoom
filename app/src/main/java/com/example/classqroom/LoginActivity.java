@@ -92,11 +92,20 @@ public class LoginActivity extends AppCompatActivity {
                     if (isUserExist) {
                         boolean isCorrect = databaseHelper.authenticateUser(userModel.getEmail(), userModel.getPassword());
                         if (isCorrect) {
-                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                            intent.putExtra("USER_EMAIL", email);
-                            startActivity(intent);
-                            finish();
-                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            String type = databaseHelper.getUserType(userModel.getEmail());
+                            if (type.equals("Student")) {
+                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                intent.putExtra("USER_EMAIL", email);
+                                startActivity(intent);
+                                finish();
+                                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            } else if(type.equals("Lecturer")) {
+                                Intent intent = new Intent(LoginActivity.this, HomeForLecturerActivity.class);
+                                intent.putExtra("USER_EMAIL", email);
+                                startActivity(intent);
+                                finish();
+                                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            }
                         } else {
                             Toast.makeText(this, getString(R.string.wrongpassword), Toast.LENGTH_SHORT).show();
                         }
@@ -107,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(this, getString(R.string.fillblanks), Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
-                Toast.makeText(this, getString(R.string.errorregister) + ": " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.errorlogin) + ": " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }

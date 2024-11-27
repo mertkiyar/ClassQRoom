@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".LectureInfoFragment">
+
+    <Spinner
+        android:id="@+id/spinLectureName"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <Spinner
+        android:id="@+id/spinSection"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="80dp"/>
+
+    <SeekBar
+        android:id="@+id/sbNumberOfLecture"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:max="4"
+        android:progress="1"
+        android:layout_marginTop="160dp"/>
+
+    <Spinner
+        android:id="@+id/spinJoinType"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="240dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="340dp"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCancelRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="50dp"
+            android:background="@drawable/cancelbutton_background"
+            android:text="@string/cancel"
+            android:paddingHorizontal="20dp"
+            android:textColor="@color/white"
+            android:textStyle="bold|normal"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/loginbutton_background"
+            android:text="@string/next"
+            android:paddingHorizontal="20dp"
+            android:textColor="@color/white"
+            android:textStyle="bold|normal" />
+    </LinearLayout>
+</FrameLayout>

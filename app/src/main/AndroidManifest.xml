@@ -42,7 +42,15 @@
             android:exported="true">
         </activity>
         <activity
+            android:name=".HomeForLecturerActivity"
+            android:exported="true">
+        </activity>
+        <activity
             android:name=".QRCodeScannerActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".QRCodeCreatorActivity"
             android:exported="true">
         </activity>
         <activity
