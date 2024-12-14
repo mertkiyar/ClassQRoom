@@ -3,24 +3,24 @@ package com.example.classqroom;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
-public class QRCodeCreatorActivity extends AppCompatActivity {
+public class QRCodeCreatorActivity extends AppCompatActivity implements LectureInfoFragment.OnNextClickLectureListener, LectureSettingsFragment.OnStartLectureClickListener {
+
     private FragmentManager fragmentManager;
-    private DatabaseHelper databaseHelper;
+    DatabaseHelper databaseHelper;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcodecreator);
 
-        fragmentManager = getSupportFragmentManager();
         databaseHelper = new DatabaseHelper(this);
+        fragmentManager = getSupportFragmentManager();
 
         if (savedInstanceState == null) {
-            //TODO
+            showLectureInfoFragment();
         }
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
@@ -38,7 +38,7 @@ public class QRCodeCreatorActivity extends AppCompatActivity {
 
     private void showLectureInfoFragment() {
         LectureInfoFragment lectureInfoFragment = new LectureInfoFragment();
-//        lectureInfoFragment.setOnNextClickListener(this);
+        lectureInfoFragment.setOnNextClickLectureListener(this);
 
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(
@@ -51,9 +51,46 @@ public class QRCodeCreatorActivity extends AppCompatActivity {
                 .commit();
     }
 
-    //TODO showLectureSettingsFragment();
+    private void showLectureSettingsFragment(String lectureName, String lectureSection, int numberOfLecture, String lectureJoinType) {
+        LectureSettingsFragment lectureSettingsFragment = new LectureSettingsFragment(lectureName, lectureSection, numberOfLecture, lectureJoinType);
+        lectureSettingsFragment.setOnStartLectureClickListener(this);
 
-    public void onNextClicked(){
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(
+                        R.anim.slide_in_right,
+                        R.anim.slide_out_left,
+                        R.anim.slide_in_left,
+                        R.anim.slide_out_right
+                )
+                .replace(R.id.flQRCodeCreator, lectureSettingsFragment)
+                .addToBackStack(null)
+                .commit();
+    }
 
+    @Override
+    public void onNextClickedLecture(String lectureName, String lectureSection, int numberOfLecture, String lectureJoinType) {
+        if (!lectureName.isEmpty() && !lectureSection.isEmpty() && numberOfLecture > 0 && !lectureJoinType.isEmpty()) {
+            showLectureSettingsFragment(lectureName, lectureSection, numberOfLecture, lectureJoinType);
+        }
+    }
+
+    @Override
+    public void onStartLectureClick(String lectureName, String lectureSection, int numberOfLecture, String lectureJoinType, String renewTime, int scanningpercent, boolean isShowLateStudents, boolean isConfirmAutoLateStudents) {
+        if (!lectureName.isEmpty() && !lectureSection.isEmpty() && numberOfLecture > 0 && !lectureJoinType.isEmpty() && !renewTime.isEmpty() && scanningpercent > 0) {
+            String lectureCode = databaseHelper.getLectureCode(lectureName);
+            String section = lectureSection.toUpperCase();
+            int sectionInteger = sectionToNumber(section);
+
+        }
+    }
+
+    int sectionToNumber(String section) {
+        if (section.contains("1")) {
+            return 1;
+        }else if (section.contains("2")) {
+            return 2;
+        }else {
+            return -1;
+        }
     }
 }

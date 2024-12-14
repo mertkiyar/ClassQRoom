@@ -56,4 +56,5 @@
     <string name="isfilterstudents">Show late students</string>
     <string name="autoapprove">Automatically approve late students</string>
     <string name="errorlogin">An error occurred during login.</string>
+    <string name="startlecture">Start Lecture</string>
 </resources>

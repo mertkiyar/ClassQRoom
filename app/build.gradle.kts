@@ -4,11 +4,12 @@ plugins {
 
 android {
     namespace = "com.example.classqroom"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.classqroom"
-        minSdk = 23
+        minSdk = 26
+        //noinspection OldTargetApi
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"

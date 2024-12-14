@@ -27,6 +27,7 @@ public class RegisterActivity extends AppCompatActivity implements UserInfoFragm
         if (savedInstanceState == null) {
             showUserInfoFragment();
         }
+
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -99,8 +100,9 @@ public class RegisterActivity extends AppCompatActivity implements UserInfoFragm
             try {
                 if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty() && !studentNumber.isEmpty() && !password.isEmpty() && !passwordConf.isEmpty()) {
                     if (password.equals(passwordConf)) {
-                        userModel = new UserModel(uuid, name, surname, email, databaseHelper.hashPassword(password), "Student");
-                        studentModel = new StudentModel(uuid, studentNumber, 0, "1");
+                        userModel = new UserModel(uuid, name, surname, email, databaseHelper.hashPassword(password), 0, "Student");
+                        //TODO department verisini düzenle.
+                        studentModel = new StudentModel(uuid, studentNumber, 1, false);
                         boolean isUserAdded = databaseHelper.addNewUser(userModel);
                         boolean isStudentAdded = databaseHelper.addNewStudent(studentModel);
                         if (isUserAdded && isStudentAdded) {

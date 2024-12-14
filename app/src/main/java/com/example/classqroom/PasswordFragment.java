@@ -59,6 +59,7 @@ public class PasswordFragment extends Fragment {
                 }
             }
         });
+
         btnRegister.setOnClickListener(v -> {
             String password = edtPassword.getText().toString().trim();
             String passwordConf = edtPasswordConf.getText().toString().trim();
@@ -67,6 +68,7 @@ public class PasswordFragment extends Fragment {
                 onRegisterClickListener.onRegisterClicked(name, surname, email, studentNumber, password, passwordConf);
             }
         });
+
         edtPassword.setFilters(new InputFilter[] {
                 new InputFilter.LengthFilter(24),
                 (source, start, end, dest, dstart, dend) -> {
@@ -81,6 +83,7 @@ public class PasswordFragment extends Fragment {
                     return null;
                 }
         });
+
         edtPasswordConf.setFilters(new InputFilter[] {
                 new InputFilter.LengthFilter(24),
                 (source, start, end, dest, dstart, dend) -> {

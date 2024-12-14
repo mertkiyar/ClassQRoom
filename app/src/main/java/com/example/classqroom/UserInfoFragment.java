@@ -54,7 +54,7 @@ public class UserInfoFragment extends Fragment {
             }
         });
         edtName.setFilters(new InputFilter[] {
-                new InputFilter.LengthFilter(24), //TODO ileride artırılabilir.
+                new InputFilter.LengthFilter(24),
                 (source, start, end, dest, dstart, dend) -> {
                     for (int i = start; i < end; i++) {
                         char character = source.charAt(i);

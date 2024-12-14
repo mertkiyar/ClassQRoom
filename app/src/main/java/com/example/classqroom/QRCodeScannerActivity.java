@@ -18,15 +18,6 @@ import android.content.Context;
 
 public class QRCodeScannerActivity extends AppCompatActivity {
 
-    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(
-            new ScanContract(),
-            result -> {
-                if (result.getContents() != null) {
-                    vibrate();
-                    Toast.makeText(this, "QR code: " + result.getContents(), Toast.LENGTH_LONG).show();
-                }
-            });
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +51,7 @@ public class QRCodeScannerActivity extends AppCompatActivity {
         options.setOrientationLocked(false);
         barcodeLauncher.launch(options);
     }
+
     private void vibrate() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
             VibratorManager vibratorManager = (VibratorManager) getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
@@ -68,15 +60,15 @@ public class QRCodeScannerActivity extends AppCompatActivity {
                     new long[]{0, 100, 50, 100},
                     -1
             ));
-        } else if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            vibrator.vibrate(VibrationEffect.createWaveform(
-                    new long[]{0, 100, 50, 100},
-                    -1
-            ));
-        } else {
-            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            vibrator.vibrate(new long[]{0, 100, 50, 100}, -1);
         }
     }
+
+    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(
+            new ScanContract(),
+            result -> {
+                if (result.getContents() != null) {
+                    vibrate();
+                    Toast.makeText(this, "QR code: " + result.getContents(), Toast.LENGTH_LONG).show();
+                }
+            });
 }

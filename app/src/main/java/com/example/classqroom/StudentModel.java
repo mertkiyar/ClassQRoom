@@ -5,14 +5,15 @@ import java.util.UUID;
 public class StudentModel {
     private UUID uuid;
     private String studentNumber;
-    private int studentDepartmentId;
-    private String grade;
+    private int grade;
+    private boolean isInCampus;
 
-    public StudentModel(UUID uuid, String studentNumber, int studentDepartmentId, String grade) {
+    public StudentModel(UUID uuid, String studentNumber, int grade, boolean isInCampus) {
         this.uuid = uuid;
         this.studentNumber = studentNumber;
-        this.studentDepartmentId = studentDepartmentId;
         this.grade = grade;
+        this.isInCampus = false;
+
     }
 
     public UUID getUuid() {
@@ -31,19 +32,19 @@ public class StudentModel {
         this.studentNumber = studentNumber;
     }
 
-    public int getStudentDepartmentId() {
-        return studentDepartmentId;
-    }
-
-    public void setStudentDepartmentId(int studentDepartmentId) {
-        this.studentDepartmentId = studentDepartmentId;
-    }
-
-    public String getGrade() {
+    public int getGrade() {
         return grade;
     }
 
-    public void setGrade(String grade) {
+    public void setGrade(int grade) {
         this.grade = grade;
+    }
+
+    public boolean getIsInCampus() {
+        return isInCampus;
+    }
+
+    public void setIsInCampus(boolean isinCampus) {
+        this.isInCampus = isinCampus;
     }
 }

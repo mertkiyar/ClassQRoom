@@ -4,11 +4,9 @@ import java.util.UUID;
 
 public class LecturerModel {
     private UUID uuid;
-    private int lecturerDepartmentId;
 
-    public LecturerModel(UUID uuid, int lecturerDepartmentId) {
+    public LecturerModel(UUID uuid) {
         this.uuid = uuid;
-        this.lecturerDepartmentId = lecturerDepartmentId;
     }
 
     public UUID getUuid() {
@@ -17,13 +15,5 @@ public class LecturerModel {
 
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
-    }
-
-    public int getLecturerDepartmentId() {
-        return lecturerDepartmentId;
-    }
-
-    public void setLecturerDepartmentId(int lecturerDepartmentId) {
-        this.lecturerDepartmentId = lecturerDepartmentId;
     }
 }

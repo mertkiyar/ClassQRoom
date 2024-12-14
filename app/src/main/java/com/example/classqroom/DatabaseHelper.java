@@ -18,15 +18,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_SURNAME = "SURNAME";
     public static final String COLUMN_EMAIL = "EMAIL";
     public static final String COLUMN_PASSWORD = "PASSWORD";
+    public static final String COLUMN_USER_DEPARTMENT_ID = "USER_DEPARTMENT_ID";
     public static final String COLUMN_USER_TYPE = "USER_TYPE";
 
     public static final String STUDENT_TABLE = "STUDENT_TABLE";
     public static final String COLUMN_STUDENT_NUMBER = "STUDENT_NUMBER";
-    public static final String COLUMN_STUDENT_DEPARTMENT_ID = "STUDENT_DEPARTMENT_ID";
     public static final String COLUMN_STUDENT_GRADE = "STUDENT_GRADE";
+    public static final String COLUMN_STUDENT_IS_IN_CAMPUS = "STUDENT_IS_IN_CAMPUS";
 
     public static final String LECTURER_TABLE = "LECTURER_TABLE";
-    public static final String COLUMN_LECTURER_DEPARTMENT_ID = "LECTURER_DEPARTMENT_ID";
 
     public static final String DEPARTMENT_TABLE = "DEPARTMENT_TABLE";
     public static final String COLUMN_DEPARTMENT_ID = "DEPARTMENT_ID";
@@ -44,6 +44,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_LECTURE_ACTS = "LECTURE_ACTS";
     public static final String COLUMN_LECTURE_CREDIT = "LECTURE_CREDIT";
 
+    public static final String ATTENDANCE_TABLE = "ATTENDANCE_TABLE";
+    public static final String COLUMN_ATTENDANCE_ID = "ATTENDANCE_ID";
+    public static final String COLUMN_ATTENDANCE_STUDENT_ID = "ATTENDANCE_STUDENT_ID";
+    public static final String COLUMN_ATTENDANCE_QR_ID = "ATTENDANCE_QR_ID";
+    public static final String COLUMN_ATTENDANCE_LECTURE_ID = "ATTENDANCE_LECTURE_ID";
+    public static final String COLUMN_ATTENDANCE_STATUS = "ATTENDANCE_STATUS";
+    public static final String COLUMN_ATTENDANCE_SCANNED_AT = "ATTENDANCE_SCANNED_AT";
+
+
     public DatabaseHelper(@Nullable Context context) {
         super(context, "users.db", null, 1);
     }
@@ -56,23 +65,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_SURNAME + " TEXT, "
                 + COLUMN_EMAIL + " TEXT UNIQUE, "
                 + COLUMN_PASSWORD + " TEXT, "
-                + COLUMN_USER_TYPE + " TEXT)";
+                + COLUMN_USER_DEPARTMENT_ID + " INT, "
+                + COLUMN_USER_TYPE + " TEXT, "
+                + "FOREIGN KEY(" + COLUMN_USER_DEPARTMENT_ID + ") REFERENCES " + DEPARTMENT_TABLE + "(" + COLUMN_DEPARTMENT_ID + "))";
         db.execSQL(createUserTableStatement);
 
         String createStudentTableStatement = "CREATE TABLE " + STUDENT_TABLE + " ("
                 + COLUMN_UUID + " TEXT PRIMARY KEY UNIQUE, "
                 + COLUMN_STUDENT_NUMBER + " TEXT UNIQUE, "
-                + COLUMN_STUDENT_DEPARTMENT_ID + " INT, "
                 + COLUMN_STUDENT_GRADE + " TEXT, "
-                + "FOREIGN KEY(" + COLUMN_UUID + ") REFERENCES " + USER_TABLE + "(" + COLUMN_UUID + "), "
-                + "FOREIGN KEY(" + COLUMN_STUDENT_DEPARTMENT_ID + ") REFERENCES " + DEPARTMENT_TABLE + "(" + COLUMN_DEPARTMENT_ID + "))";
+                + COLUMN_STUDENT_IS_IN_CAMPUS + " TEXT, "
+                + "FOREIGN KEY(" + COLUMN_UUID + ") REFERENCES " + USER_TABLE + "(" + COLUMN_UUID + "))";
         db.execSQL(createStudentTableStatement);
 
         String createLecturerTableStatement = "CREATE TABLE " + LECTURER_TABLE + " ("
                 + COLUMN_UUID + " TEXT PRIMARY KEY UNIQUE, "
-                + COLUMN_LECTURER_DEPARTMENT_ID + " INT, "
-                + "FOREIGN KEY(" + COLUMN_UUID + ") REFERENCES " + USER_TABLE + "(" + COLUMN_UUID + "), "
-                + "FOREIGN KEY(" + COLUMN_LECTURER_DEPARTMENT_ID + ") REFERENCES " + DEPARTMENT_TABLE + "(" + COLUMN_DEPARTMENT_ID + "))";
+                + "FOREIGN KEY(" + COLUMN_UUID + ") REFERENCES " + USER_TABLE + "(" + COLUMN_UUID + "))";
         db.execSQL(createLecturerTableStatement);
 
         String createDepartmentTableStatement = "CREATE TABLE " + DEPARTMENT_TABLE + " ("
@@ -93,6 +101,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_LECTURE_CREDIT + " INT, "
                 + "FOREIGN KEY(" + COLUMN_LECTURE_DEPARTMENT_ID + ") REFERENCES " + DEPARTMENT_TABLE + "(" + COLUMN_DEPARTMENT_ID + "))";
         db.execSQL(createLectureTableStatement);
+
+        String createAttendanceTableStatement = "CREATE TABLE " + ATTENDANCE_TABLE + " ("
+                + COLUMN_ATTENDANCE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_ATTENDANCE_STUDENT_ID + " TEXT, "
+                + COLUMN_ATTENDANCE_QR_ID + " INTEGER, "
+                + COLUMN_ATTENDANCE_LECTURE_ID + " TEXT, "
+                + COLUMN_ATTENDANCE_STATUS + " TEXT, "
+                + COLUMN_ATTENDANCE_SCANNED_AT + " TEXT, "
+                + "FOREIGN KEY(" + COLUMN_ATTENDANCE_STUDENT_ID + ") REFERENCES " + STUDENT_TABLE + "(" + COLUMN_STUDENT_NUMBER + "), "
+                + "FOREIGN KEY(" + COLUMN_ATTENDANCE_LECTURE_ID + ") REFERENCES " + LECTURE_TABLE + "(" + COLUMN_LECTURE_ID + "))";
+        db.execSQL(createAttendanceTableStatement);
     }
 
     @Override
@@ -103,6 +122,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + LECTURER_TABLE);
             db.execSQL("DROP TABLE IF EXISTS " + DEPARTMENT_TABLE);
             db.execSQL("DROP TABLE IF EXISTS " + LECTURE_TABLE);
+            db.execSQL("DROP TABLE IF EXISTS " + ATTENDANCE_TABLE);
             onCreate(db);
         }
     }
@@ -116,6 +136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_SURNAME, userModel.getSurname());
         cv.put(COLUMN_EMAIL, userModel.getEmail());
         cv.put(COLUMN_PASSWORD, userModel.getPassword());
+        cv.put(COLUMN_USER_DEPARTMENT_ID, String.valueOf(userModel.getDepartmentId()));
         cv.put(COLUMN_USER_TYPE, userModel.getType());
 
         long insert = db.insert(USER_TABLE, null, cv);
@@ -128,7 +149,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cv.put(COLUMN_UUID, studentModel.getUuid().toString());
         cv.put(COLUMN_STUDENT_NUMBER, studentModel.getStudentNumber());
-        cv.put(COLUMN_STUDENT_DEPARTMENT_ID, studentModel.getStudentDepartmentId());
         cv.put(COLUMN_STUDENT_GRADE, studentModel.getGrade());
 
         long insert = db.insert(STUDENT_TABLE, null, cv);
@@ -140,7 +160,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
 
         cv.put(COLUMN_UUID, lecturerModel.getUuid().toString());
-        cv.put(COLUMN_LECTURER_DEPARTMENT_ID, lecturerModel.getLecturerDepartmentId());
 
         long insert = db.insert(LECTURER_TABLE, null, cv);
         return insert != -1;
@@ -163,7 +182,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_LECTURE_ID, lectureModel.getLectureId());
         cv.put(COLUMN_LECTURE_NAME, lectureModel.getLectureName());
         cv.put(COLUMN_LECTURE_CODE, lectureModel.getLectureCode());
-        cv.put(COLUMN_LECTURE_LECTURER, lectureModel.getLecturer());
+        cv.put(COLUMN_LECTURE_LECTURER, lectureModel.getLecturer().toString());
         cv.put(COLUMN_LECTURE_LANGUAGE, lectureModel.getLectureLanguage());
         cv.put(COLUMN_LECTURE_DEPARTMENT_ID, lectureModel.getLectureDepartmentId());
         cv.put(COLUMN_LECTURE_TYPE, lectureModel.getLectureType());
@@ -180,7 +199,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try (Cursor cursor = db.rawQuery(
                 "SELECT 1 FROM " + USER_TABLE + " WHERE " + COLUMN_EMAIL + " = ?",
                 new String[]{email})) {
-            return cursor != null && cursor.moveToFirst();
+            return cursor.moveToFirst();
         }
     }
 
@@ -191,7 +210,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "SELECT " + COLUMN_PASSWORD + " FROM " + USER_TABLE + " WHERE " + COLUMN_EMAIL + " = ?",
                 new String[]{email})) {
 
-            if (cursor != null && cursor.moveToFirst()) {
+            if (cursor.moveToFirst()) {
                 String storedPasswordHash = cursor.getString(0);
                 return storedPasswordHash.equals(hashPassword(inputPassword));
             }
@@ -221,7 +240,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "SELECT " + COLUMN_NAME + " FROM " + USER_TABLE + " WHERE " + COLUMN_EMAIL + " = ?",
                 new String[]{email})) {
 
-            if (cursor != null && cursor.moveToFirst()) {
+            if (cursor.moveToFirst()) {
                 return cursor.getString(0);
             }
         }
@@ -235,10 +254,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "SELECT " + COLUMN_USER_TYPE + " FROM " + USER_TABLE + " WHERE " + COLUMN_EMAIL + " = ?",
                 new String[]{email})) {
 
-            if (cursor != null && cursor.moveToFirst()) {
+            if (cursor.moveToFirst()) {
                 return cursor.getString(0);
             }
         }
         return null;
+    }
+
+    public String getLectureCode(String lectureName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String lectureCode = null;
+
+        String query = "SELECT " + COLUMN_LECTURE_CODE + " FROM " + LECTURE_TABLE + " WHERE " + COLUMN_LECTURE_NAME + " = ?";
+        try (Cursor cursor = db.rawQuery(query, new String[]{lectureName})) {
+            if (cursor.moveToFirst()) {
+                lectureCode = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_LECTURE_CODE));
+            }
+        }
+        return lectureCode;
     }
 }

@@ -8,14 +8,16 @@ public class UserModel {
     private String surname;
     private String email;
     private String password;
+    private int departmentId;
     private String type;
 
-    public UserModel(UUID uuid, String name, String surname, String email, String password, String type) {
+    public UserModel(UUID uuid, String name, String surname, String email, String password, int departmentId, String type) {
         this.uuid = uuid;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.password = password;
+        this.departmentId = departmentId;
         this.type = type;
     }
 
@@ -66,6 +68,14 @@ public class UserModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
     }
 
     public String getType() {
