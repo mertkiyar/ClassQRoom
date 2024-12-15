@@ -18,14 +18,14 @@ public class PasswordFragment extends Fragment {
     private final String name;
     private final String surname;
     private final String email;
-    private final String studentNumber;
+    private final int studentNumber;
     private OnRegisterClickListener onRegisterClickListener;
 
     public interface OnRegisterClickListener {
-        void onRegisterClicked(String name, String surname, String email, String studentNumber, String password, String passwordConf);
+        void onRegisterClicked(String name, String surname, String email, int studentNumber, String password, String passwordConf);
     }
 
-    public PasswordFragment(String name, String surname, String email, String studentNumber) {
+    public PasswordFragment(String name, String surname, String email, int studentNumber) {
         this.name = name;
         this.surname = surname;
         this.email = email;

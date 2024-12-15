@@ -4,11 +4,11 @@ import java.util.UUID;
 
 public class StudentModel {
     private UUID uuid;
-    private String studentNumber;
+    private int studentNumber;
     private int grade;
     private boolean isInCampus;
 
-    public StudentModel(UUID uuid, String studentNumber, int grade, boolean isInCampus) {
+    public StudentModel(UUID uuid, int studentNumber, int grade, boolean isInCampus) {
         this.uuid = uuid;
         this.studentNumber = studentNumber;
         this.grade = grade;
@@ -24,11 +24,11 @@ public class StudentModel {
         this.uuid = uuid;
     }
 
-    public String getStudentNumber() {
+    public int getStudentNumber() {
         return studentNumber;
     }
 
-    public void setStudentNumber(String studentNumber) {
+    public void setStudentNumber(int studentNumber) {
         this.studentNumber = studentNumber;
     }
 

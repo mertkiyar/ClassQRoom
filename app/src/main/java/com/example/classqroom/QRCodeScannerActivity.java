@@ -2,6 +2,7 @@ package com.example.classqroom;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -17,12 +18,19 @@ import android.os.VibratorManager;
 import android.content.Context;
 
 public class QRCodeScannerActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String userUUID = getIntent().getStringExtra("USER_UUID");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcodescanner);
 
+        try (DatabaseHelper db = new DatabaseHelper(this)) {
+            TextView tvWelcome = findViewById(R.id.tvWelcome);
+            String nameFromDb = db.getUserNameFromUUID(userUUID);
+            tvWelcome.setText(getString(R.string.welcome, nameFromDb));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         Button btnScan = findViewById(R.id.btnScan);
         btnScan.setOnClickListener(v -> startScan());
 

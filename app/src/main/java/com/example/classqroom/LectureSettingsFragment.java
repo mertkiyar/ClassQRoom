@@ -1,6 +1,7 @@
 package com.example.classqroom;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ public class LectureSettingsFragment extends Fragment {
     private final int numberOfLecture;
     private final String lectureJoinType;
     private OnStartLectureClickListener onStartLectureClickListener;
+    private DatabaseHelper databaseHelper;
 
     public interface OnStartLectureClickListener {
         void onStartLectureClick(String lectureName, String lectureSection, int numberOfLecture, String lectureJoinType, String creationTime, int usingLimit, boolean isShowLateStudents, boolean isConfirmAutoLateStudents);
@@ -40,6 +42,17 @@ public class LectureSettingsFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        databaseHelper = new DatabaseHelper(this.getContext());
+
+        String userUUID = null;
+        if (getArguments() != null) {
+            userUUID = getArguments().getString("USER_UUID");
+        }
+
+        if (userUUID == null) {
+            Log.e("LectureSettingsFragment", "USER_UUID is null");
+            return;
+        }
 
         SeekBar sbQRRenewTime = view.findViewById(R.id.sbQRRenewTime);
         SeekBar sbQRScanningMaxPercentagePerQR = view.findViewById(R.id.sbQRScanningMaxPercentagePerQR);

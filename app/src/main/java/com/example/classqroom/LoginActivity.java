@@ -12,6 +12,8 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.UUID;
+
 public class LoginActivity extends AppCompatActivity {
     EditText edtEmail, edtPassword;
     TextView tvForgotPassword;
@@ -95,13 +97,17 @@ public class LoginActivity extends AppCompatActivity {
                             String type = databaseHelper.getUserType(userModel.getEmail());
                             if (type.equals("Student")) {
                                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                intent.putExtra("USER_EMAIL", email);
+                                UUID uuid = databaseHelper.getUuid(email);
+                                intent.putExtra("USER_UUID", uuid.toString());
+                                intent.putExtra("USER_TYPE", "Student");
                                 startActivity(intent);
                                 finish();
                                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                            } else if(type.equals("Lecturer")) {
-                                Intent intent = new Intent(LoginActivity.this, HomeForLecturerActivity.class);
-                                intent.putExtra("USER_EMAIL", email);
+                            } else if (type.equals("Lecturer")) {
+                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                UUID uuid = databaseHelper.getUuid(email);
+                                intent.putExtra("USER_UUID", uuid.toString());
+                                intent.putExtra("USER_TYPE", "Lecturer");
                                 startActivity(intent);
                                 finish();
                                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);

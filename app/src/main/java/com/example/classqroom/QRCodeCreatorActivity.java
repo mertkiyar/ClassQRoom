@@ -7,14 +7,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 public class QRCodeCreatorActivity extends AppCompatActivity implements LectureInfoFragment.OnNextClickLectureListener, LectureSettingsFragment.OnStartLectureClickListener {
-
     private FragmentManager fragmentManager;
-    DatabaseHelper databaseHelper;
+    private DatabaseHelper databaseHelper;
+    private String userUUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcodecreator);
+
+        try (DatabaseHelper db = new DatabaseHelper(this)) {
+            userUUID = getIntent().getStringExtra("USER_UUID");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
         databaseHelper = new DatabaseHelper(this);
         fragmentManager = getSupportFragmentManager();
@@ -39,7 +45,9 @@ public class QRCodeCreatorActivity extends AppCompatActivity implements LectureI
     private void showLectureInfoFragment() {
         LectureInfoFragment lectureInfoFragment = new LectureInfoFragment();
         lectureInfoFragment.setOnNextClickLectureListener(this);
-
+        Bundle args = new Bundle();
+        args.putString("USER_UUID", userUUID);
+        lectureInfoFragment.setArguments(args);
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(
                         R.anim.slide_in_right,
@@ -54,7 +62,9 @@ public class QRCodeCreatorActivity extends AppCompatActivity implements LectureI
     private void showLectureSettingsFragment(String lectureName, String lectureSection, int numberOfLecture, String lectureJoinType) {
         LectureSettingsFragment lectureSettingsFragment = new LectureSettingsFragment(lectureName, lectureSection, numberOfLecture, lectureJoinType);
         lectureSettingsFragment.setOnStartLectureClickListener(this);
-
+        Bundle args = new Bundle();
+        args.putString("USER_UUID", userUUID);
+        lectureSettingsFragment.setArguments(args);
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(
                         R.anim.slide_in_right,

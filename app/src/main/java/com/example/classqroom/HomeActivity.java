@@ -6,54 +6,95 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class HomeActivity extends AppCompatActivity {
+    private String userType;
+    private String userUUID;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        userType = getIntent().getStringExtra("USER_TYPE");
+
+        if (userType != null && userType.equals("Lecturer")) {
+            setContentView(R.layout.activity_homeforlecturer);
+        } else if (userType != null && userType.equals("Student")) {
+            setContentView(R.layout.activity_home);
+        } else if (userType != null && userType.equals("Admin")){
+            setContentView(R.layout.activity_homeforadmin);
+        } else {
+            setContentView(R.layout.activity_home);
+        }
+
         try (DatabaseHelper db = new DatabaseHelper(this)) {
-            String userEmail = getIntent().getStringExtra("USER_EMAIL");
+            userUUID = getIntent().getStringExtra("USER_UUID");
             TextView tvWelcome = findViewById(R.id.tvWelcome);
-            String nameFromDb = db.getUserName(userEmail);
+            String nameFromDb = db.getUserNameFromUUID(userUUID);
             tvWelcome.setText(getString(R.string.welcome, nameFromDb));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
+//        if (departmentId == 0) {
+//TODO              departmentId burada popup ile seçilecek. RegisterActivity deki değer 0 olarak ayarlandı.
+//        }
     }
 
     public void onBtnQRCodeClick(View view) {
-        Intent intent = new Intent(HomeActivity.this, QRCodeScannerActivity.class);
+        Intent intent;
+        if (userType != null && userType.equals("Lecturer")) {
+            intent = new Intent(HomeActivity.this, QRCodeCreatorActivity.class);
+        } else if (userType != null && userType.equals("Student")) {
+            intent = new Intent(HomeActivity.this, QRCodeScannerActivity.class);
+        } else if (userType != null && userType.equals("Admin")){
+            intent = new Intent(HomeActivity.this, QRCodeScannerActivity.class);
+        } else {
+            intent = new Intent(HomeActivity.this, QRCodeScannerActivity.class);
+        }
+        intent.putExtra("USER_UUID", userUUID);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public void onBtnNFCClick(View view) {
-        //TODO
+        Toast.makeText(this, "NFC Clicked", Toast.LENGTH_SHORT).show();
     }
 
     public void onBtnClassCodeClick(View view) {
-        //TODO
+        Intent intent;
+        if (userType != null && userType.equals("Lecturer")) {
+            intent = new Intent(HomeActivity.this, QRCodeCreatorActivity.class);
+        } else if (userType != null && userType.equals("Student")) {
+            intent = new Intent(HomeActivity.this, QRCodeScannerActivity.class);
+        } else if (userType != null && userType.equals("Admin")){
+            intent = new Intent(HomeActivity.this, QRCodeScannerActivity.class);
+        } else {
+            intent = new Intent(HomeActivity.this, QRCodeScannerActivity.class);
+        }
+        intent.putExtra("USER_UUID", userUUID);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public void onBtnAttendHistoryClick(View view) {
-        //TODO
+        Toast.makeText(this, "Attend History Clicked", Toast.LENGTH_SHORT).show();
     }
 
     public void onBtnProfileClick(View view) {
-        //TODO
+        Toast.makeText(this, "Profile Clicked", Toast.LENGTH_SHORT).show();
     }
 
     public void onBtnSettingsClick(View view) {
-        //TODO
+        Toast.makeText(this, "Settings Clicked", Toast.LENGTH_SHORT).show();
     }
 
     public void onBtnSupportClick(View view) {
-        //TODO
+        Toast.makeText(this, "Support Clicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override

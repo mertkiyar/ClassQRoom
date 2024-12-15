@@ -1,9 +1,11 @@
 package com.example.classqroom;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -12,9 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class LectureInfoFragment extends Fragment {
+import java.util.List;
 
+public class LectureInfoFragment extends Fragment {
     private OnNextClickLectureListener onNextClickLectureListener;
+    private DatabaseHelper databaseHelper;
 
     public interface OnNextClickLectureListener {
         void onNextClickedLecture(String lectureName, String lectureSection, int numberOfLecture, String lectureJoinType);
@@ -28,8 +32,25 @@ public class LectureInfoFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        databaseHelper = new DatabaseHelper(this.getContext());
+
+        String userUUID = null;
+        if (getArguments() != null) {
+            userUUID = getArguments().getString("USER_UUID");
+        }
+
+        if (userUUID == null) {
+            Log.e("LectureInfoFragment", "USER_UUID is null");
+            return;
+        }
 
         Spinner spinLectureName = view.findViewById(R.id.spinLectureName);
+        List<String> lectures = databaseHelper.getLecturesOfLecturer(userUUID);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, lectures);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinLectureName.setAdapter(adapter);
+        spinLectureName.setSelection(0);
+
         Spinner spinLectureSection = view.findViewById(R.id.spinLectureSection);
         SeekBar sbNumberOfLecture = view.findViewById(R.id.sbNumberOfLecture);
         Spinner spinLectureJoinType = view.findViewById(R.id.spinLectureJoinType);

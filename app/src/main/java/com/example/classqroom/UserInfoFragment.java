@@ -17,7 +17,7 @@ public class UserInfoFragment extends Fragment {
     private OnNextClickListener onNextClickListener;
 
     public interface OnNextClickListener {
-        void onNextClicked(String name, String surname, String email, String studentNumber);
+        void onNextClicked(String name, String surname, String email, int studentNumber);
     }
 
     @Nullable
@@ -33,6 +33,7 @@ public class UserInfoFragment extends Fragment {
         EditText edtName = view.findViewById(R.id.edtName);
         EditText edtSurname = view.findViewById(R.id.edtSurname);
         EditText edtEmail = view.findViewById(R.id.edtEmail);
+        EditText edtStudentNumber = view.findViewById(R.id.edtStudentNumber);
         Button btnCancelRegister = view.findViewById(R.id.btnCancelRegister);
         Button btnNext = view.findViewById(R.id.btnNext);
 
@@ -47,7 +48,7 @@ public class UserInfoFragment extends Fragment {
             String name = edtName.getText().toString().trim();
             String surname = edtSurname.getText().toString().trim();
             String email = edtEmail.getText().toString().trim();
-            String studentNumber = ((EditText) view.findViewById(R.id.edtStudentNumber)).getText().toString().trim();
+            int studentNumber = Integer.parseInt(edtStudentNumber.getText().toString().trim());
 
             if (onNextClickListener != null) {
                 onNextClickListener.onNextClicked(name, surname, email, studentNumber);

@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import androidx.annotation.Nullable;
 
@@ -37,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_LECTURE_ID = "LECTURE_ID";
     public static final String COLUMN_LECTURE_NAME = "LECTURE_NAME";
     public static final String COLUMN_LECTURE_CODE = "LECTURE_CODE";
-    public static final String COLUMN_LECTURE_LECTURER = "LECTURE_LECTURER";
+    public static final String COLUMN_LECTURE_LECTURER_UUID = "LECTURE_LECTURER_UUID";
     public static final String COLUMN_LECTURE_LANGUAGE = "LECTURE_LANGUAGE";
     public static final String COLUMN_LECTURE_DEPARTMENT_ID = "LECTURE_DEPARTMENT";
     public static final String COLUMN_LECTURE_TYPE = "LECTURE_TYPE";
@@ -74,7 +77,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_UUID + " TEXT PRIMARY KEY UNIQUE, "
                 + COLUMN_STUDENT_NUMBER + " TEXT UNIQUE, "
                 + COLUMN_STUDENT_GRADE + " TEXT, "
-                + COLUMN_STUDENT_IS_IN_CAMPUS + " TEXT, "
+                + COLUMN_STUDENT_IS_IN_CAMPUS + " BOOLEAN, "
                 + "FOREIGN KEY(" + COLUMN_UUID + ") REFERENCES " + USER_TABLE + "(" + COLUMN_UUID + "))";
         db.execSQL(createStudentTableStatement);
 
@@ -93,7 +96,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_LECTURE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_LECTURE_NAME + " TEXT UNIQUE, "
                 + COLUMN_LECTURE_CODE + " TEXT UNIQUE, "
-                + COLUMN_LECTURE_LECTURER + " TEXT, "
+                + COLUMN_LECTURE_LECTURER_UUID + " TEXT, "
                 + COLUMN_LECTURE_LANGUAGE + " TEXT, "
                 + COLUMN_LECTURE_DEPARTMENT_ID + " INT, "
                 + COLUMN_LECTURE_TYPE + " TEXT, "
@@ -150,6 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_UUID, studentModel.getUuid().toString());
         cv.put(COLUMN_STUDENT_NUMBER, studentModel.getStudentNumber());
         cv.put(COLUMN_STUDENT_GRADE, studentModel.getGrade());
+        cv.put(COLUMN_STUDENT_IS_IN_CAMPUS, String.valueOf(studentModel.getIsInCampus()));
 
         long insert = db.insert(STUDENT_TABLE, null, cv);
         return insert != -1;
@@ -182,7 +186,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_LECTURE_ID, lectureModel.getLectureId());
         cv.put(COLUMN_LECTURE_NAME, lectureModel.getLectureName());
         cv.put(COLUMN_LECTURE_CODE, lectureModel.getLectureCode());
-        cv.put(COLUMN_LECTURE_LECTURER, lectureModel.getLecturer().toString());
+        cv.put(COLUMN_LECTURE_LECTURER_UUID, lectureModel.getLecturerUUID().toString());
         cv.put(COLUMN_LECTURE_LANGUAGE, lectureModel.getLectureLanguage());
         cv.put(COLUMN_LECTURE_DEPARTMENT_ID, lectureModel.getLectureDepartmentId());
         cv.put(COLUMN_LECTURE_TYPE, lectureModel.getLectureType());
@@ -233,15 +237,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public String getUserName(String email) {
+    public String getUserNameFromUUID(String uuid) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         try (Cursor cursor = db.rawQuery(
-                "SELECT " + COLUMN_NAME + " FROM " + USER_TABLE + " WHERE " + COLUMN_EMAIL + " = ?",
-                new String[]{email})) {
+                "SELECT " + COLUMN_NAME + " FROM " + USER_TABLE + " WHERE " + COLUMN_UUID + " = ?",
+                new String[]{uuid})) {
 
             if (cursor.moveToFirst()) {
                 return cursor.getString(0);
+            }
+        }
+        return null;
+    }
+
+    public UUID getUuid(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        try (Cursor cursor = db.rawQuery(
+                "SELECT " + COLUMN_UUID + " FROM " + USER_TABLE + " WHERE " + COLUMN_EMAIL + " = ?",
+                new String[]{email})) {
+
+            if (cursor.moveToFirst()) {
+                String uuidString = cursor.getString(0);
+                return UUID.fromString(uuidString);
             }
         }
         return null;
@@ -272,5 +291,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
         return lectureCode;
+    }
+
+    public List<String> getLecturesOfLecturer(String uuid) {
+        List<String> lectures = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT " + COLUMN_LECTURE_NAME + " FROM " + LECTURE_TABLE + " WHERE " + COLUMN_LECTURE_LECTURER_UUID + " = ?";
+        try (Cursor cursor = db.rawQuery(query, new String[]{uuid})) {
+            if (cursor.moveToFirst()) {
+                do {
+                    lectures.add(cursor.getString(0));
+                } while (cursor.moveToNext());
+            }
+        }
+        return lectures;
     }
 }

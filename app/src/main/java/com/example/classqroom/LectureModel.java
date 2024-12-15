@@ -62,11 +62,11 @@ public class LectureModel {
         this.lectureCode = lectureCode;
     }
 
-    public UUID getLecturer() {
+    public UUID getLecturerUUID() {
         return lecturerUUID;
     }
 
-    public void setLecturer(UUID lectureruuid) {
+    public void setLecturerUUID(UUID lectureruuid) {
         this.lecturerUUID = lectureruuid;
     }
 
