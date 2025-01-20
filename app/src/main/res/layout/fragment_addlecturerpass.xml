@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.mrtkyr.classqroom.fragment.PasswordFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:layout_width="wrap_content"
@@ -52,6 +51,22 @@
             tools:ignore="TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/tvGeneratePassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/generatepassword"
+        android:textSize="14sp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="230dp"
+        android:textColor="@color/blue"
+        android:textStyle="bold"
+        android:padding="15dp"
+        android:focusable="true"
+        android:clickable="true">
+    </TextView>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,11 +87,11 @@
             android:textStyle="bold|normal" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnRegister"
+            android:id="@+id/btnAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/registerbutton_background"
-            android:text="@string/register"
+            android:text="@string/add"
             android:paddingHorizontal="20dp"
             android:textColor="@color/white"
             android:textStyle="bold|normal" />

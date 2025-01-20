@@ -18,7 +18,7 @@
         tools:ignore="LockedOrientationActivity"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name="com.mrtkyr.classqroom.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,33 +26,41 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegisterActivity"
-            android:exported="true">
-        </activity>
+            android:name="com.mrtkyr.classqroom.main.RegisterActivity"
+            android:exported="true"/>
         <activity
-            android:name=".LoginActivity"
-            android:exported="true">
-        </activity>
+            android:name="com.mrtkyr.classqroom.main.LoginActivity"
+            android:exported="true"/>
         <activity
-            android:name=".ForgotPasswordActivity"
-            android:exported="true">
-        </activity>
+            android:name="com.mrtkyr.classqroom.main.ForgotPasswordActivity"
+            android:exported="true"/>
         <activity
-            android:name=".HomeActivity"
-            android:exported="true">
-        </activity>
+            android:name=".main.HomeActivity"
+            android:exported="true"/>
         <activity
-            android:name=".HomeForLecturerActivity"
-            android:exported="true">
-        </activity>
+            android:name="com.mrtkyr.classqroom.student.QRCodeScannerActivity"
+            android:exported="true"/>
         <activity
-            android:name=".QRCodeScannerActivity"
-            android:exported="true">
-        </activity>
+            android:name="com.mrtkyr.classqroom.lecturer.QRCodeCreatorActivity"
+            android:exported="true"/>
         <activity
-            android:name=".QRCodeCreatorActivity"
-            android:exported="true">
-        </activity>
+            android:name=".admin.DepartmentsActivity"
+            android:exported="true"/>
+        <activity
+            android:name="com.mrtkyr.classqroom.admin.AddDepartmentActivity"
+            android:exported="true"/>
+        <activity
+            android:name="com.mrtkyr.classqroom.admin.LecturesActivity"
+            android:exported="true"/>
+        <activity
+            android:name="com.mrtkyr.classqroom.admin.AddLectureActivity"
+            android:exported="true"/>
+        <activity
+            android:name="com.mrtkyr.classqroom.admin.LecturersActivity"
+            android:exported="true"/>
+        <activity
+            android:name="com.mrtkyr.classqroom.admin.AddLecturerActivity"
+            android:exported="true"/>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"

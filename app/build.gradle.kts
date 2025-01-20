@@ -3,14 +3,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.classqroom"
+    namespace = "com.mrtkyr.classqroom"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.classqroom"
+        applicationId = "com.mrtkyr.classqroom"
         minSdk = 26
-        //noinspection OldTargetApi
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -27,8 +26,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_20
+        targetCompatibility = JavaVersion.VERSION_20
     }
     buildFeatures {
         viewBinding = true

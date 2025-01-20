@@ -47,54 +47,49 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints="no"
-            android:hint="@string/stdemail"
+            android:hint="@string/lecemail"
             android:inputType="textEmailAddress"
             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tfStudentNumber"
+    <Spinner
+        android:id="@+id/spinDepartment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="210dp">
+        android:layout_height="55dp"
+        android:layout_marginTop="210dp"/>
 
-        <EditText
-            android:id="@+id/edtStudentNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="no"
-            android:hint="@string/studentnumber"
-            android:inputType="number"
-            android:maxLength="12"
-            tools:ignore="TextContrastCheck,DuplicateClickableBoundsCheck" />
-    </com.google.android.material.textfield.TextInputLayout>
+    <Spinner
+        android:id="@+id/spinTitle"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="280dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="320dp"
+        android:layout_marginTop="370dp"
         android:orientation="horizontal"
         android:gravity="center_horizontal">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnCancelRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="50dp"
-        android:background="@drawable/cancelbutton_background"
-        android:text="@string/cancel"
-        android:paddingHorizontal="20dp"
-        android:textColor="@color/white"
-        android:textStyle="bold|normal"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="50dp"
+            android:background="@drawable/cancelbutton_background"
+            android:text="@string/cancel"
+            android:paddingHorizontal="20dp"
+            android:textColor="@color/white"
+            android:textStyle="bold|normal"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnNext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/loginbutton_background"
-        android:text="@string/next"
-        android:paddingHorizontal="20dp"
-        android:textColor="@color/white"
-        android:textStyle="bold|normal" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/loginbutton_background"
+            android:text="@string/next"
+            android:paddingHorizontal="20dp"
+            android:textColor="@color/white"
+            android:textStyle="bold|normal" />
     </LinearLayout>
 </FrameLayout>
