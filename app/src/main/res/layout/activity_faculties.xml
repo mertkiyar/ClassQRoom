@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="25dp">
 
     <SearchView
-        android:id="@+id/searchViewDepartments"
+        android:id="@+id/searchViewFaculties"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:queryHint="@string/search"
         android:background="@color/gray"
-        android:inputType="text" />
+        android:inputType="text"/>
 
     <TextView
-        android:id="@+id/tvDepartment"
+        android:id="@+id/tvFaculty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/alldepartments"
+        android:text="@string/allfaculties"
         android:textSize="24sp"
-        android:layout_below="@id/searchViewDepartments"
+        android:layout_below="@id/searchViewFaculties"
         android:textStyle="bold"
         android:padding="10dp"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="20dp"/>
 
     <TableLayout
-        android:id="@+id/tableLayoutDepartmentsHeader"
+        android:id="@+id/tableLayoutFacultiesHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvDepartment"
+        android:layout_below="@id/tvFaculty"
         android:background="@drawable/table_background_top"
-        android:stretchColumns="2">
+        android:stretchColumns="1">
 
         <TableRow
             android:background="@drawable/table_background_top"
@@ -44,18 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:gravity="center"
-                android:text="@string/departmentname"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                tools:ignore="TextContrastCheck" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:text="@string/language"
+                android:text="@string/facultyname"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -64,33 +53,33 @@
     </TableLayout>
 
     <ScrollView
-        android:id="@+id/scrollViewDepartments"
+        android:id="@+id/scrollViewFaculties"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/lyButtons"
         android:background="@drawable/table_background_end"
         android:paddingHorizontal="6dp"
         android:paddingBottom="6dp"
-        android:layout_below="@id/tableLayoutDepartmentsHeader"
+        android:layout_below="@id/tableLayoutFacultiesHeader"
         android:fillViewport="true">
 
         <TableLayout
-            android:id="@+id/tableLayoutDepartments"
+            android:id="@+id/tableLayoutFaculties"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/table_background_end"
             android:orientation="horizontal"
-            android:stretchColumns="2"/>
+            android:stretchColumns="1"/>
     </ScrollView>
 
     <TextView
-        android:id="@+id/tvTotalDepartments"
+        android:id="@+id/tvTotalFaculties"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/scrollViewDepartments"
+        android:layout_below="@id/scrollViewFaculties"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="@string/nodepartment"/>
+        android:text="@string/nofaculty"/>
 
     <LinearLayout
         android:id="@+id/lyButtons"
@@ -111,10 +100,10 @@
             tools:ignore="ButtonStyle" />
 
         <Button
-            android:id="@+id/btnAddDepartment"
+            android:id="@+id/btnAddFaculty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onClickAddDepartment"
+            android:onClick="onClickAddFaculty"
             android:text="@string/addnew"
             tools:ignore="ButtonStyle" />
     </LinearLayout>

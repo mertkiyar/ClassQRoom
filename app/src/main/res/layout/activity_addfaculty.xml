@@ -1,61 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:padding="50dp">
 
     <TextView
-        android:id="@+id/tfDepartmentText"
+        android:id="@+id/tfFacultyText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:paddingVertical="20dp"
-        android:text="@string/addnewdepartment"
+        android:text="@string/addnewfaculty"
         android:textSize="24sp"
         android:textStyle="normal"
         android:fontFamily="@font/urbanist"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tfDepartmentName"
+        android:id="@+id/tfFacultyName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-        android:layout_below="@id/tfDepartmentText">
+        android:layout_below="@id/tfFacultyText">
 
         <EditText
-            android:id="@+id/edtDepartmentName"
+            android:id="@+id/edtFacultyName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/departmentname"
+            android:hint="@string/facultyname"
             android:importantForAutofill="no"
             android:inputType="textCapWords"
             android:maxWidth="400dp"
             android:maxLength="48"
             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
-
     </com.google.android.material.textfield.TextInputLayout>
-
-    <Spinner
-        android:id="@+id/spinDepartmentLanguage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tfDepartmentName"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
-        android:maxWidth="400dp"
-        android:minHeight="48dp"/>
-
-    <Spinner
-        android:id="@+id/spinDepartmentFaculty"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/spinDepartmentLanguage"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
-        android:maxWidth="400dp"
-        android:minHeight="48dp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -63,7 +42,7 @@
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:layout_below="@id/spinDepartmentFaculty">
+        android:layout_below="@id/tfFacultyName">
 
         <Button
             android:id="@+id/btnCancel"
@@ -73,11 +52,11 @@
             android:text="@string/cancel"
             tools:ignore="ButtonStyle" />
         <Button
-            android:id="@+id/btnAddDepartment"
+            android:id="@+id/btnAddFaculty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/addnew"
-            android:onClick="onClickAddDepartment"
+            android:onClick="onClickAddFaculty"
             tools:ignore="ButtonStyle" />
     </LinearLayout>
 </RelativeLayout>

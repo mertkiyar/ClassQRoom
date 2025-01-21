@@ -2,7 +2,6 @@ package com.mrtkyr.classqroom.admin;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,13 +14,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.mrtkyr.classqroom.DatabaseHelper;
 import com.mrtkyr.classqroom.R;
 import com.mrtkyr.classqroom.model.DepartmentModel;
+import com.mrtkyr.classqroom.model.FacultyModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddDepartmentActivity extends AppCompatActivity {
-    private EditText edtDepartmentName;
-    private Spinner spinDepartmentLanguage;
-    Button btnAddDepartment, btnCancelDepartment;
-    private boolean isSelectedDepartmentLanguage = false;
     private DatabaseHelper databaseHelper;
+    private EditText edtDepartmentName;
+    private Spinner spinDepartmentLanguage, spinDepartmentFaculty;
+    Button btnAddDepartment, btnCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +34,9 @@ public class AddDepartmentActivity extends AppCompatActivity {
         String userUUID = getIntent().getStringExtra("USER_UUID");
         edtDepartmentName = findViewById(R.id.edtDepartmentName);
         spinDepartmentLanguage = findViewById(R.id.spinDepartmentLanguage);
+        spinDepartmentFaculty = findViewById(R.id.spinDepartmentFaculty);
+        btnCancel = findViewById(R.id.btnCancel);
         btnAddDepartment = findViewById(R.id.btnAddDepartment);
-        btnCancelDepartment = findViewById(R.id.btnCancelDepartment);
 
         String[] languages = new String[] {
                 getString(R.string.selectlang), getString(R.string.english), getString(R.string.turkish),
@@ -45,21 +48,19 @@ public class AddDepartmentActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, languages);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinDepartmentLanguage.setAdapter(adapter);
-        spinDepartmentLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    String selectedItem = parent.getItemAtPosition(position).toString();
-                    isSelectedDepartmentLanguage = true;
-                }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+        List<FacultyModel> faculties = databaseHelper.getAllFaculties();
+        List<String> facultyNames = new ArrayList<>();
+        facultyNames.add(getString(R.string.selectfaculty));
+        for (FacultyModel faculty : faculties) {
+            facultyNames.add(faculty.getFacultyName());
+        }
 
-        btnCancelDepartment.setOnClickListener(v -> {
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, facultyNames);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinDepartmentFaculty.setAdapter(adapter1);
+
+        btnCancel.setOnClickListener(v -> {
             finish();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
@@ -76,14 +77,15 @@ public class AddDepartmentActivity extends AppCompatActivity {
     public void onClickAddDepartment(View view) {
         String departmentName = edtDepartmentName.getText().toString().trim();
         String departmentLanguage = spinDepartmentLanguage.getSelectedItem().toString();
+        String departmentFaculty = spinDepartmentFaculty.getSelectedItem().toString();
         DepartmentModel departmentModel;
 
         if (databaseHelper != null) {
             try {
-                if (!departmentName.isEmpty() && isSelectedDepartmentLanguage) {
+                if (!departmentName.isEmpty() && !departmentLanguage.equals(getString(R.string.selectlang)) && !departmentFaculty.equals(getString(R.string.selectfaculty))) {
                     boolean isExist = databaseHelper.checkDepartment(departmentName, departmentLanguage);
                     if (!isExist) {
-                        departmentModel = new DepartmentModel(departmentName, departmentLanguage);
+                        departmentModel = new DepartmentModel(departmentName, departmentLanguage, databaseHelper.getFacultyIdByName(departmentFaculty));
                         boolean isAdded = databaseHelper.addNewDepartment(departmentModel);
                         if (isAdded) {
                             setResult(RESULT_OK);

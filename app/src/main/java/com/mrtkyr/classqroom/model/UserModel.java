@@ -1,9 +1,7 @@
 package com.mrtkyr.classqroom.model;
 
-import java.util.UUID;
-
 public class UserModel {
-    private UUID uuid;
+    private String uuid;
     private String name;
     private String surname;
     private String email;
@@ -13,7 +11,7 @@ public class UserModel {
     private String creationTime;
     private String lastLogin;
 
-    public UserModel(UUID uuid, String name, String surname, String email, String password, int departmentId, String type, String creationTime, String lastLogin) {
+    public UserModel(String uuid, String name, String surname, String email, String password, int departmentId, String type, String creationTime, String lastLogin) {
         this.uuid = uuid;
         this.name = name;
         this.surname = surname;
@@ -34,11 +32,11 @@ public class UserModel {
         this.email = email;
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 

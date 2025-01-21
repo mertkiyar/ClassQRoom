@@ -9,8 +9,8 @@ import androidx.fragment.app.FragmentManager;
 
 import com.mrtkyr.classqroom.DatabaseHelper;
 import com.mrtkyr.classqroom.R;
-import com.mrtkyr.classqroom.fragment.AddLecturerInfoFragment;
-import com.mrtkyr.classqroom.fragment.AddLecturerPassFragment;
+import com.mrtkyr.classqroom.fragment.admin.AddLecturerInfoFragment;
+import com.mrtkyr.classqroom.fragment.admin.AddLecturerPassFragment;
 import com.mrtkyr.classqroom.model.LecturerModel;
 import com.mrtkyr.classqroom.model.UserModel;
 import com.mrtkyr.classqroom.main.RegisterActivity;
@@ -97,7 +97,8 @@ public class AddLecturerActivity extends AppCompatActivity implements AddLecture
     public void onAddClicked(String name, String surname, String email, String department, String title, String password, String passwordConf) {
         UserModel userModel;
         LecturerModel lecturerModel;
-        UUID uuid = RegisterActivity.generateUUID();
+        UUID createduuid = RegisterActivity.generateUUID();
+        String uuid = createduuid.toString();
         if (databaseHelper != null) {
             try {
                 if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty() && !department.isEmpty() && !password.isEmpty() && !passwordConf.isEmpty()) {
@@ -109,6 +110,7 @@ public class AddLecturerActivity extends AppCompatActivity implements AddLecture
                         boolean isUserAdded = databaseHelper.addNewUser(userModel);
                         boolean isLecturerAdded = databaseHelper.addNewLecturer(lecturerModel);
                         if (isUserAdded && isLecturerAdded) {
+                            setResult(RESULT_OK);
                             Toast.makeText(this, getString(R.string.addlecturersucces), Toast.LENGTH_SHORT).show();
                             finish();
                             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);

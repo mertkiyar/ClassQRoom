@@ -8,8 +8,8 @@ import androidx.fragment.app.FragmentManager;
 
 import com.mrtkyr.classqroom.DatabaseHelper;
 import com.mrtkyr.classqroom.R;
-import com.mrtkyr.classqroom.fragment.LectureInfoFragment;
-import com.mrtkyr.classqroom.fragment.LectureSettingsFragment;
+import com.mrtkyr.classqroom.fragment.lecturer.LectureInfoFragment;
+import com.mrtkyr.classqroom.fragment.lecturer.LectureSettingsFragment;
 
 public class QRCodeCreatorActivity extends AppCompatActivity implements LectureInfoFragment.OnNextClickLectureListener, LectureSettingsFragment.OnStartLectureClickListener {
     private FragmentManager fragmentManager;

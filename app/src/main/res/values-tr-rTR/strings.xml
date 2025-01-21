@@ -29,7 +29,7 @@
     <string name="notsamepassword">Şifreler birbiriyle uyuşmuyor! Lütfen tekrar dene.</string>
     <string name="registeredemail">Girdiğin e-posta adresi zaten kayıtlı.</string>
     <string name="confirm">Onayla</string>
-    <string name="errorregister">Kayıt olurken bir hata oluştu.</string>
+    <string name="errorregister">Kayıt olurken bir hata oluştu!</string>
     <string name="registernotsuccess">Kayıt olurken bir hata oluştu.</string>
     <string name="notregisteredemail">Girdiğin e-posta adresi kayıtlı değil.</string>
     <string name="wrongpassword">Şifre yanlış, lütfen tekrar deneyin.</string>
@@ -54,11 +54,11 @@
     <string name="minute">%1$d dakika</string>
     <string name="isfilterstudents">Geç kalan öğrencileri göster</string>
     <string name="autoapprove">Geç kalan öğrencileri otomatik onayla</string>
-    <string name="errorlogin">Giriş yaparken bir hata oluştu.</string>
+    <string name="errorlogin">Giriş yaparken bir hata oluştu!</string>
     <string name="startlecture">Dersi Başlat</string>
     <string name="departmentname">Bölüm Adı</string>
     <string name="departmentlanguage">Bölüm Dili</string>
-    <string name="addnewdepartment">Sisteme yeni bir bölüm ekle!</string>
+    <string name="addnewdepartment">Sisteme yeni bir Bölüm ekle!</string>
     <string name="add">Ekle</string>
     <string name="erroradddepartment">Bölüm eklenirken bir hata oluştu!</string>
     <string name="usernotfound">Kullanıcı bulunamadı!</string>
@@ -96,4 +96,20 @@
     <string name="doctor">Dr.</string>
     <string name="instructor">Okutman</string>
     <string name="researchasst">Arş. Gör.</string>
+    <string name="edit">Düzenle</string>
+    <string name="delete">Sil</string>
+    <string name="nodepartment">Listelenecek bir bölüm yok.</string>
+    <string name="totaldepartments">Toplam da %1$s bölüm var.</string>
+    <string name="alllecturers">Tüm Öğretim Görevlileri</string>
+    <string name="nolecturers">Listenecek bir öğretim görevlisi yok.</string>
+    <string name="totallecturers">Toplam da %1$s öğretim görevlisi var.</string>
+    <string name="addnewfaculty">Sisteme yeni bir Fakülte ekle!</string>
+    <string name="facultyname">Fakülte Adı</string>
+    <string name="erroraddfaculty">Fakülte eklenirken bir hata oluştu!</string>
+    <string name="faculty">Fakülte</string>
+    <string name="facultyalreadyexist">Bu fakülte zaten eklenmiş!</string>
+    <string name="allfaculties">Tüm Fakülteler</string>
+    <string name="nofaculty">Listelenecek bir fakülte yok.</string>
+    <string name="totalfaculties">Toplam da %1$s fakülte var.</string>
+    <string name="selectfaculty">Fakülte Seç</string>
 </resources>

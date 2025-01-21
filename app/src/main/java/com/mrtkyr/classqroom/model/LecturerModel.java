@@ -1,28 +1,28 @@
 package com.mrtkyr.classqroom.model;
 
-import java.util.UUID;
 
 public class LecturerModel {
-    private UUID uuid;
+    private String uuid;
     private String title;
     private int departmentId;
     private boolean inLecture;
 
-    public LecturerModel(UUID uuid, String title, int departmentId, boolean inLecture) {
+    public LecturerModel(String uuid, String title, int departmentId, boolean inLecture) {
         this.uuid = uuid;
+        this.title = title;
         this.departmentId = departmentId;
         this.inLecture = inLecture;
     }
 
-    public LecturerModel(UUID uuid) {
+    public LecturerModel(String uuid) {
         this.uuid = uuid;
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 

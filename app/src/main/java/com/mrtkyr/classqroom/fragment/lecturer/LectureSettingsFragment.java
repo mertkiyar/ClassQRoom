@@ -1,4 +1,4 @@
-package com.mrtkyr.classqroom.fragment;
+package com.mrtkyr.classqroom.fragment.lecturer;
 
 import android.os.Bundle;
 import android.util.Log;

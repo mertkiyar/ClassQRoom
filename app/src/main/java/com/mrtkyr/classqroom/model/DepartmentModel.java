@@ -4,15 +4,18 @@ public class DepartmentModel {
     private int departmentId;
     private String departmentName;
     private String departmentLanguage;
+    private int departmentFacultyId;
 
-    public DepartmentModel(String departmentName, String departmentLanguage) {
+    public DepartmentModel(String departmentName, String departmentLanguage, int departmentFacultyId) {
         this.departmentName = departmentName;
         this.departmentLanguage = departmentLanguage;
+        this.departmentFacultyId = departmentFacultyId;
     }
-    public DepartmentModel(int departmentId, String departmentName, String departmentLanguage) {
+    public DepartmentModel(int departmentId, String departmentName, String departmentLanguage, int departmentFacultyId) {
         this.departmentId = departmentId;
         this.departmentName = departmentName;
         this.departmentLanguage = departmentLanguage;
+        this.departmentFacultyId = departmentFacultyId;
     }
 
     public int getDepartmentId() {
@@ -37,5 +40,13 @@ public class DepartmentModel {
 
     public void setDepartmentLanguage(String departmentLanguage) {
         this.departmentLanguage = departmentLanguage;
+    }
+
+    public int getDepartmentFacultyId() {
+        return departmentFacultyId;
+    }
+
+    public void setDepartmentFacultyId(int departmentFacultyId) {
+        this.departmentFacultyId = departmentFacultyId;
     }
 }

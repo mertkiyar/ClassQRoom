@@ -13,8 +13,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mrtkyr.classqroom.DatabaseHelper;
-import com.mrtkyr.classqroom.admin.AddLecturerActivity;
 import com.mrtkyr.classqroom.admin.DepartmentsActivity;
+import com.mrtkyr.classqroom.admin.FacultiesActivity;
+import com.mrtkyr.classqroom.admin.LecturersActivity;
 import com.mrtkyr.classqroom.lecturer.QRCodeCreatorActivity;
 import com.mrtkyr.classqroom.student.QRCodeScannerActivity;
 import com.mrtkyr.classqroom.R;
@@ -77,7 +78,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void onBtnNFCClick(View view) {
-        Intent intent = new Intent(this, AddLecturerActivity.class);
+        Intent intent = new Intent(this, LecturersActivity.class);
         intent.putExtra("USER_UUID", userUUID);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -95,7 +96,10 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void onBtnAttendHistoryClick(View view) {
-        Toast.makeText(this, "Attend History Clicked", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, FacultiesActivity.class);
+        intent.putExtra("USER_UUID", userUUID);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public void onBtnProfileClick(View view) {

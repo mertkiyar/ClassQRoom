@@ -10,9 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.mrtkyr.classqroom.DatabaseHelper;
-import com.mrtkyr.classqroom.fragment.PasswordFragment;
+import com.mrtkyr.classqroom.fragment.student.PasswordFragment;
 import com.mrtkyr.classqroom.R;
-import com.mrtkyr.classqroom.fragment.UserInfoFragment;
+import com.mrtkyr.classqroom.fragment.student.UserInfoFragment;
 import com.mrtkyr.classqroom.model.StudentModel;
 import com.mrtkyr.classqroom.model.UserModel;
 
@@ -103,7 +103,8 @@ public class RegisterActivity extends AppCompatActivity implements UserInfoFragm
     public void onRegisterClicked(String name, String surname, String email, int studentNumber, String password, String passwordConf) {
         UserModel userModel;
         StudentModel studentModel;
-        UUID uuid = generateUUID();
+        UUID createduuid = generateUUID();
+        String uuid = createduuid.toString();
         if (databaseHelper != null) {
             try {
                 if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty() && studentNumber != -1  && !password.isEmpty() && !passwordConf.isEmpty()) {
@@ -115,13 +116,13 @@ public class RegisterActivity extends AppCompatActivity implements UserInfoFragm
                         //delit for testing purpose after test delete it.
                         if (email.equals("admin@mrtkyr.com")) {
                             userModel = new UserModel(uuid, name, surname, email, databaseHelper.hashPassword(password), -1, "Admin", dateTimeFormatted, dateTimeFormatted);
-                        } //end point for delit.
+                        }
                         boolean isUserAdded = databaseHelper.addNewUser(userModel);
                         boolean isStudentAdded = databaseHelper.addNewStudent(studentModel);
                         if (isUserAdded && isStudentAdded) {
                             Toast.makeText(this, getString(R.string.registersucces), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(this, HomeActivity.class);
-                            intent.putExtra("USER_UUID", uuid.toString());
+                            intent.putExtra("USER_UUID", uuid);
                             startActivity(intent);
                             finish();
                             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);

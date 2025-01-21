@@ -1,6 +1,7 @@
 package com.mrtkyr.classqroom.main;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.mrtkyr.classqroom.DatabaseHelper;
 import com.mrtkyr.classqroom.R;
 import com.mrtkyr.classqroom.model.UserModel;
@@ -100,7 +102,6 @@ public class LoginActivity extends AppCompatActivity {
                             String type = databaseHelper.getUserType(userModel.getEmail());
                             Intent intent = new Intent(this, HomeActivity.class);
                             UUID uuid = databaseHelper.getUuid(email);
-                            databaseHelper.deleteLecturer("c142a283-b568-4e1e-9d5f-5bf0086cc3ec");
                             boolean isCorrectType = false;
                             String[] allowedTypes = new String[]{"Student", "Lecturer", "Admin"};
                             for (String types : allowedTypes) {
@@ -122,6 +123,8 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(this, getString(R.string.notregisteredemail), Toast.LENGTH_SHORT).show();
                     }
+                } else if (email.isEmpty() && !password.isEmpty()) {
+                    edtEmail.setError(getString(R.string.fillblanks));
                 } else {
                     Toast.makeText(this, getString(R.string.fillblanks), Toast.LENGTH_SHORT).show();
                 }

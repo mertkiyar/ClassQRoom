@@ -1,4 +1,4 @@
-package com.mrtkyr.classqroom.fragment;
+package com.mrtkyr.classqroom.fragment.admin;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -80,6 +80,7 @@ public class AddLecturerInfoFragment extends Fragment {
             public void afterTextChanged(Editable s) {
             }
         });
+
         btnCancel.setOnClickListener(v -> {
             if (getActivity() != null) {
                 getActivity().finish();

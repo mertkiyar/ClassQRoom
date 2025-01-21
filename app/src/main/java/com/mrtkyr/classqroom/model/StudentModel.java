@@ -1,14 +1,12 @@
 package com.mrtkyr.classqroom.model;
 
-import java.util.UUID;
-
 public class StudentModel {
-    private UUID uuid;
+    private String uuid;
     private int studentNumber;
     private int grade;
     private boolean isInCampus;
 
-    public StudentModel(UUID uuid, int studentNumber, int grade, boolean isInCampus) {
+    public StudentModel(String uuid, int studentNumber, int grade, boolean isInCampus) {
         this.uuid = uuid;
         this.studentNumber = studentNumber;
         this.grade = grade;
@@ -16,11 +14,11 @@ public class StudentModel {
 
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 

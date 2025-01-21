@@ -29,7 +29,7 @@
     <string name="notsamepassword">Passwords do not match each other! Please try again.</string>
     <string name="registeredemail">The email address you entered is already registered.</string>
     <string name="confirm">Confirm</string>
-    <string name="errorregister">An error occurred during registration.</string>
+    <string name="errorregister">An error occurred during registration!</string>
     <string name="registernotsuccess">An error occurred during registration.</string>
     <string name="notregisteredemail">The email address you entered is not registered.</string>
     <string name="wrongpassword">The password is incorrect, please try again.</string>
@@ -55,7 +55,7 @@
     <string name="minute">%1$d minutes</string>
     <string name="isfilterstudents">Show late students</string>
     <string name="autoapprove">Automatically approve late students</string>
-    <string name="errorlogin">An error occurred during login.</string>
+    <string name="errorlogin">An error occurred during login!</string>
     <string name="startlecture">Start Lecture</string>
     <string name="departmentname">Dapartment Name</string>
     <string name="departmentlanguage">Department Language</string>
@@ -87,7 +87,7 @@
     <string name="email">Email</string>
     <string name="generatepassword">Generate Password!</string>
     <string name="selectdepartment">Select Department</string>
-    <string name="addlecturersucces">A Lecturer created succesfully</string>
+    <string name="addlecturersucces">A Lecturer created successfully</string>
     <string name="erroraddlecturer">An error occurred while adding a Lecturer!</string>
     <string name="error">An error occurred! Try again later.</string>
     <string name="selecttitle">Select Title</string>
@@ -97,4 +97,20 @@
     <string name="doctor">Dr.</string>
     <string name="instructor">Instructor</string>
     <string name="researchasst">Res. Asst.</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="nodepartment">There are no departments to list.</string>
+    <string name="totaldepartments">There are %1$s(s) departments in total.</string>
+    <string name="alllecturers">All Lecturers</string>
+    <string name="nolecturers">The are no lecturers to list.</string>
+    <string name="totallecturers">There are %1$s(s) lecturers in total.</string>
+    <string name="addnewfaculty">Add a new Faculty to the System!</string>
+    <string name="faculty">Faculty</string>
+    <string name="facultyname">Faculty Name</string>
+    <string name="erroraddfaculty">An error occurred while adding a Faculty!</string>
+    <string name="facultyalreadyexist">This faculty already exist!</string>
+    <string name="allfaculties">All Faculties</string>
+    <string name="nofaculty">There are no faculty to list.</string>
+    <string name="totalfaculties">There are %1$s(s) faculties in total.</string>
+    <string name="selectfaculty">Select Faculty</string>
 </resources>

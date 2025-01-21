@@ -2,7 +2,6 @@ package com.mrtkyr.classqroom.admin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -21,47 +20,47 @@ import androidx.core.content.ContextCompat;
 
 import com.mrtkyr.classqroom.DatabaseHelper;
 import com.mrtkyr.classqroom.R;
-import com.mrtkyr.classqroom.model.DepartmentModel;
+import com.mrtkyr.classqroom.model.FacultyModel;
 
 import java.util.List;
 
-public class DepartmentsActivity extends AppCompatActivity {
+public class FacultiesActivity extends AppCompatActivity {
     private String userUUID;
     private DatabaseHelper databaseHelper;
-    private TableLayout tableLayoutDepartments;
-    private ActivityResultLauncher<Intent> addDepartmentLauncher;
+    private TableLayout tableLayoutFaculties;
+    private ActivityResultLauncher<Intent> addFacultyLauncher;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_departments);
+        setContentView(R.layout.activity_faculties);
 
         userUUID = getIntent().getStringExtra("USER_UUID");
         databaseHelper = new DatabaseHelper(this);
-        SearchView searchView = findViewById(R.id.searchViewDepartments);
-        tableLayoutDepartments = findViewById(R.id.tableLayoutDepartments);
-        TextView tvTotalDepartments = findViewById(R.id.tvTotalDepartments);
+        SearchView searchView = findViewById(R.id.searchViewFaculties);
+        tableLayoutFaculties = findViewById(R.id.tableLayoutFaculties);
+        TextView tvTotalFaculties = findViewById(R.id.tvTotalFaculties);
         Button btnCancel = findViewById(R.id.btnCancel);
-        Button btnAddDepartment = findViewById(R.id.btnAddDepartment);
+        Button btnAddFaculty = findViewById(R.id.btnAddFaculty);
 
         btnCancel.setOnClickListener(v -> {
             finish();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
 
-        btnAddDepartment.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AddDepartmentActivity.class);
+        btnAddFaculty.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AddFacultyActivity.class);
             intent.putExtra("USER_UUID", userUUID);
-            addDepartmentLauncher.launch(intent);
+            addFacultyLauncher.launch(intent);
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
 
-        addDepartmentLauncher = registerForActivityResult(
+        addFacultyLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
-                        tableLayoutDepartments.removeAllViews();
-                        displayDepartments();
+                        tableLayoutFaculties.removeAllViews();
+                        displayFaculties();
                     }
                 }
         );
@@ -74,7 +73,7 @@ public class DepartmentsActivity extends AppCompatActivity {
             }
         });
 
-        displayDepartments();
+        displayFaculties();
     }
 
     @Override
@@ -86,40 +85,40 @@ public class DepartmentsActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-//    private void editDepartment(DepartmentModel department) {
-//        Intent intent = new Intent(this, EditDepartmentActivity.class);
-//        intent.putExtra("DEPARTMENT_ID", department.getDepartmentId());
-//        startActivity(intent);
-//    } BURADA POPUP MENÜ AÇILACAK ŞEKİLDE DÜZENLE! lecturesactivity facultiesactivity
 
-    private void deleteDepartment(DepartmentModel department) {
-        databaseHelper.deleteDepartment(department.getDepartmentId());
-        tableLayoutDepartments.removeAllViews();
-        displayDepartments();
+//    private void editFaculty(FacultyModel faculty) {
+//        Intent intent = new Intent(this, EditFacultyActivity.class);
+//        intent.putExtra("FACULTY_ID", faculty.getFacultyId());
+//        startActivity(intent);
+//    }
+
+    private void deleteFaculty(FacultyModel faculty) {
+        databaseHelper.deleteFaculty(faculty.getFacultyId());
+        tableLayoutFaculties.removeAllViews();
+        displayFaculties();
     }
 
-    public void displayDepartments() {
-        List<DepartmentModel> departments = databaseHelper.getAllDepartments();
-        int countDepartments = 0;
-        for (DepartmentModel department : departments) {
-            countDepartments++;
+    public void displayFaculties() {
+        List<FacultyModel> faculties = databaseHelper.getAllFaculties();
+        int countFaculties = 0;
+        for (FacultyModel faculty : faculties) {
+            countFaculties++;
             TableRow row = new TableRow(this);
             row.setLayoutParams(new TableRow.LayoutParams(
                     TableRow.LayoutParams.MATCH_PARENT,
                     TableRow.LayoutParams.WRAP_CONTENT
             ));
 
-            TextView tvDepartmentName = new TextView(this);
-            tvDepartmentName.setText(department.getDepartmentName());
-            tvDepartmentName.setGravity(Gravity.CENTER);
-            tvDepartmentName.setPadding(12,16,12,16);
-            tvDepartmentName.setTextSize(16);
-            tvDepartmentName.setTextColor(ContextCompat.getColor(this, R.color.white));
-            tvDepartmentName.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
-            tvDepartmentName.setLayoutParams(new TableRow.LayoutParams(
-                    0, TableRow.LayoutParams.MATCH_PARENT, 3
+            TextView tvFacultyName = new TextView(this);
+            tvFacultyName.setText(faculty.getFacultyName());
+            tvFacultyName.setPadding(12,16,12,16);
+            tvFacultyName.setTextSize(16);
+            tvFacultyName.setTextColor(ContextCompat.getColor(this, R.color.white));
+            tvFacultyName.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
+            tvFacultyName.setLayoutParams(new TableRow.LayoutParams(
+                    0, TableRow.LayoutParams.MATCH_PARENT, 1
             ));
-            row.addView(tvDepartmentName);
+            row.addView(tvFacultyName);
 
             View line = new View(this);
             line.setLayoutParams(new TableRow.LayoutParams(
@@ -127,21 +126,10 @@ public class DepartmentsActivity extends AppCompatActivity {
             ));
 
             line.setBackgroundColor(ContextCompat.getColor(this, R.color.darkgray));
-            TextView tvDepartmentLanguage = new TextView(this);
-            tvDepartmentLanguage.setText(department.getDepartmentLanguage());
-            tvDepartmentLanguage.setGravity(Gravity.CENTER);
-            tvDepartmentLanguage.setPadding(12,16,12,16);
-            tvDepartmentLanguage.setTextSize(16);
-            tvDepartmentLanguage.setTextColor(ContextCompat.getColor(this, R.color.white));
-            tvDepartmentLanguage.setBackgroundColor(ContextCompat.getColor(this, R.color.gray));
-            tvDepartmentLanguage.setLayoutParams(new TableRow.LayoutParams(
-                    0, TableRow.LayoutParams.MATCH_PARENT, 2
-            ));
-            row.addView(tvDepartmentLanguage);
 
-            row.setOnClickListener(v -> {
-                for (int i = 0; i < tableLayoutDepartments.getChildCount(); i++) {
-                    View child = tableLayoutDepartments.getChildAt(i);
+            row.setOnClickListener( v -> {
+                for (int i = 0; i < tableLayoutFaculties.getChildCount(); i++) {
+                    View child = tableLayoutFaculties.getChildAt(i);
                     child.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
                 }
                 row.setBackgroundColor(ContextCompat.getColor(this, R.color.blue));
@@ -156,7 +144,7 @@ public class DepartmentsActivity extends AppCompatActivity {
 //                        editDepartment(department);
                         return true;
                     } else if (item.getItemId() == R.id.menu_delete) {
-                        deleteDepartment(department);
+                        deleteFaculty(faculty);
                         return true;
                     }
                     return false;
@@ -165,10 +153,10 @@ public class DepartmentsActivity extends AppCompatActivity {
                 popupMenu.show();
                 return true;
             });
-            tableLayoutDepartments.addView(row);
-            tableLayoutDepartments.addView(line);
-            TextView tvTotalDepartments = findViewById(R.id.tvTotalDepartments);
-            tvTotalDepartments.setText(getString(R.string.totaldepartments, String.valueOf(countDepartments)));
+            tableLayoutFaculties.addView(row);
+            tableLayoutFaculties.addView(line);
+            TextView tvTotalFaculties = findViewById(R.id.tvTotalFaculties);
+            tvTotalFaculties.setText(getString(R.string.totalfaculties, String.valueOf(countFaculties)));
         }
     }
 }
