@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.mrtkyr.classqroom.DatabaseHelper;
 import com.mrtkyr.classqroom.R;
 
 public class LectureSettingsFragment extends Fragment {
@@ -23,7 +22,6 @@ public class LectureSettingsFragment extends Fragment {
     private final int numberOfLecture;
     private final String lectureJoinType;
     private OnStartLectureClickListener onStartLectureClickListener;
-    private DatabaseHelper databaseHelper;
 
     public interface OnStartLectureClickListener {
         void onStartLectureClick(String lectureName, String lectureSection, int numberOfLecture, String lectureJoinType, String creationTime, int usingLimit, boolean isShowLateStudents, boolean isConfirmAutoLateStudents);
@@ -44,7 +42,6 @@ public class LectureSettingsFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        databaseHelper = new DatabaseHelper(this.getContext());
 
         String userUUID = null;
         if (getArguments() != null) {

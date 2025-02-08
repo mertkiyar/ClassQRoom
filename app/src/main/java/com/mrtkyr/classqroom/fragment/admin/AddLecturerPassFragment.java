@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-
 public class AddLecturerPassFragment extends Fragment {
     private final String name;
     private final String surname;
@@ -30,9 +29,11 @@ public class AddLecturerPassFragment extends Fragment {
     private final String department;
     private final String title;
     private OnAddClickListener onAddClickListener;
+    private final Random random = new Random();
 
     public interface OnAddClickListener {
-        void onAddClicked(String string, String s, String name, String surname, String email, String department, String title);
+        void onAddClicked(String name, String surname, String email, String department,
+                          String title, String password, String passwordConf);
     }
 
     public AddLecturerPassFragment(String name, String surname, String email, String department, String title) {
@@ -42,6 +43,7 @@ public class AddLecturerPassFragment extends Fragment {
         this.department = department;
         this.title = title;
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -94,7 +96,8 @@ public class AddLecturerPassFragment extends Fragment {
                         char character = source.charAt(i);
                         String allowedLettersOrDigits = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
                         String allowedChars = "~!@#$%^&*()_-+={}[]|:;\"'<,>.?/";
-                        if (!allowedLettersOrDigits.contains(String.valueOf(character)) && !allowedChars.contains(String.valueOf(character))) {
+                        if (!allowedLettersOrDigits.contains(String.valueOf(character))
+                                && !allowedChars.contains(String.valueOf(character))) {
                             return "";
                         }
                     }
@@ -109,7 +112,8 @@ public class AddLecturerPassFragment extends Fragment {
                         char character = source.charAt(i);
                         String allowedLettersOrDigits = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
                         String allowedChars = "~!@#$%^&*()_-+={}[]|:;\"'<,>.?/";
-                        if (!allowedLettersOrDigits.contains(String.valueOf(character)) && !allowedChars.contains(String.valueOf(character))) {
+                        if (!allowedLettersOrDigits.contains(String.valueOf(character))
+                                && !allowedChars.contains(String.valueOf(character))) {
                             return "";
                         }
                     }
@@ -121,8 +125,6 @@ public class AddLecturerPassFragment extends Fragment {
     public void setOnAddClickListener(OnAddClickListener listener) {
         this.onAddClickListener = listener;
     }
-
-    private final Random random = new Random();
 
     private String generateRandomPassword() {
         String upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

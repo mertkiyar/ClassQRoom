@@ -90,7 +90,7 @@ public class DepartmentsActivity extends AppCompatActivity {
 //        Intent intent = new Intent(this, EditDepartmentActivity.class);
 //        intent.putExtra("DEPARTMENT_ID", department.getDepartmentId());
 //        startActivity(intent);
-//    } BURADA POPUP MENÜ AÇILACAK ŞEKİLDE DÜZENLE! lecturesactivity facultiesactivity
+//    } BURADA POPUP MENÜ AÇILACAK ŞEKİLDE DÜZENLE! lecturesactivity facultiesactivity lecturesactivity(eklenmedi)
 
     private void deleteDepartment(DepartmentModel department) {
         databaseHelper.deleteDepartment(department.getDepartmentId());
@@ -100,9 +100,7 @@ public class DepartmentsActivity extends AppCompatActivity {
 
     public void displayDepartments() {
         List<DepartmentModel> departments = databaseHelper.getAllDepartments();
-        int countDepartments = 0;
         for (DepartmentModel department : departments) {
-            countDepartments++;
             TableRow row = new TableRow(this);
             row.setLayoutParams(new TableRow.LayoutParams(
                     TableRow.LayoutParams.MATCH_PARENT,
@@ -167,8 +165,16 @@ public class DepartmentsActivity extends AppCompatActivity {
             });
             tableLayoutDepartments.addView(row);
             tableLayoutDepartments.addView(line);
-            TextView tvTotalDepartments = findViewById(R.id.tvTotalDepartments);
-            tvTotalDepartments.setText(getString(R.string.totaldepartments, String.valueOf(countDepartments)));
+        }
+        updateTotalLecturers();
+    }
+    private void updateTotalLecturers() {
+        TextView tvTotalDepartments = findViewById(R.id.tvTotalDepartments);
+        int totalDepartments = databaseHelper.getAllDepartments().size();
+        if (totalDepartments > 0) {
+            tvTotalDepartments.setText(getString(R.string.totaldepartments, String.valueOf(totalDepartments)));
+        } else {
+            tvTotalDepartments.setText(getString(R.string.nodepartment));
         }
     }
 }

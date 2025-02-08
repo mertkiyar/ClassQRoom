@@ -1,9 +1,7 @@
 package com.mrtkyr.classqroom.admin;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -70,7 +68,6 @@ public class LecturersActivity extends AppCompatActivity {
                 }
         );
 
-
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -100,9 +97,7 @@ public class LecturersActivity extends AppCompatActivity {
 
     public void displayLecturers() {
         List<LecturerModel> lecturers = databaseHelper.getAllLecturers();
-        int countLecturers = 0;
         for (LecturerModel lecturer : lecturers) {
-            countLecturers++;
             TableRow row = new TableRow(this);
             row.setLayoutParams(new TableRow.LayoutParams(
                     TableRow.LayoutParams.MATCH_PARENT,
@@ -110,8 +105,7 @@ public class LecturersActivity extends AppCompatActivity {
             ));
 
             TextView tvLecturerFullName = new TextView(this);
-            String titleWithName = lecturer.getTitle() + " " + databaseHelper.getLecturerFullName(lecturer.getUuid());
-//            tvLecturerFullName.setText(databaseHelper.getLecturerFullName(lecturer.getUuid()));
+            String titleWithName = databaseHelper.getLecturerFullName(lecturer.getUuid());
             tvLecturerFullName.setText(titleWithName);
             tvLecturerFullName.setGravity(Gravity.CENTER);
             tvLecturerFullName.setPadding(12,16,12,16);
@@ -169,9 +163,17 @@ public class LecturersActivity extends AppCompatActivity {
             });
             tableLayoutLecturers.addView(row);
             tableLayoutLecturers.addView(line);
+        }
+        updateTotalLecturers();
+    }
 
-            TextView tvTotalLecturers = findViewById(R.id.tvTotalLecturers);
-            tvTotalLecturers.setText(getString(R.string.totallecturers, String.valueOf(countLecturers)));
+    private void updateTotalLecturers() {
+        TextView tvTotalLecturers = findViewById(R.id.tvTotalLecturers);
+        int totalLecturers = databaseHelper.getAllLecturers().size();
+        if (totalLecturers > 0) {
+            tvTotalLecturers.setText(getString(R.string.totallecturers, String.valueOf(totalLecturers)));
+        } else {
+            tvTotalLecturers.setText(getString(R.string.nolecturer));
         }
     }
 }

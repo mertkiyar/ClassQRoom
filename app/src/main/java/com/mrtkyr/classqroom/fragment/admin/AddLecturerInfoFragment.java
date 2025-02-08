@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.mrtkyr.classqroom.DatabaseHelper;
@@ -27,7 +28,7 @@ import java.util.List;
 
 public class AddLecturerInfoFragment extends Fragment {
     private OnNextClickListener onNextClickListener;
-    private DatabaseHelper databaseHelper;
+    private Spinner spinDepartment;
 
     public interface OnNextClickListener {
         void onNextClicked(String name, String surname, String email, String department, String title);
@@ -46,7 +47,7 @@ public class AddLecturerInfoFragment extends Fragment {
         EditText edtName = view.findViewById(R.id.edtName);
         EditText edtSurname = view.findViewById(R.id.edtSurname);
         EditText edtEmail = view.findViewById(R.id.edtEmail);
-        Spinner spinDepartment = view.findViewById(R.id.spinDepartment);
+        spinDepartment = view.findViewById(R.id.spinDepartment);
         Spinner spinTitle = view.findViewById(R.id.spinTitle);
         Button btnCancel = view.findViewById(R.id.btnCancel);
         Button btnNext = view.findViewById(R.id.btnNext);
@@ -191,36 +192,57 @@ public class AddLecturerInfoFragment extends Fragment {
                     return null;
                 }
         });
-        databaseHelper = new DatabaseHelper(getContext());
-        List<DepartmentModel> departments = databaseHelper.getAllDepartments();
-        List<String> departmentNames = new ArrayList<>();
-        departmentNames.add(getString(R.string.selectdepartment));
-        for (DepartmentModel department : departments) {
-            departmentNames.add(department.getDepartmentName());
-        }
 
-        if (getContext() != null) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, departmentNames);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinDepartment.setAdapter(adapter);
-        } else {
-            Toast.makeText(getContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
-            return;
-        }
+        try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())){
+            List<DepartmentModel> departments = databaseHelper.getAllDepartments();
+            List<String> departmentNames = new ArrayList<>();
+            departmentNames.add(getString(R.string.selectdepartment));
+            for (DepartmentModel department : departments) {
+                departmentNames.add(department.getDepartmentName());
+            }
+            if (departments.isEmpty()) {
+                spinDepartment.setEnabled(false);
 
-        String[] titles = new String[] {
-                getString(R.string.selecttitle), getString(R.string.instructor), getString(R.string.researchasst),
-                getString(R.string.lecturer), getString(R.string.doctor), getString(R.string.asstprof),
-                getString(R.string.assocprof), getString(R.string.profdr)
-        };
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                builder.setTitle(getString(R.string.confirm))
+                        .setMessage(getString(R.string.firstdepartment))
+                        .setPositiveButton(getString(R.string.ok), (dialog, which) -> {
+                            if (requireActivity().getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                                requireActivity().getSupportFragmentManager().popBackStack();
+                            } else {
+                                requireActivity().finish();
+                                requireActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                            }
+                        })
+                        .show();
+            }
 
-        if (getContext() != null) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, titles);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinTitle.setAdapter(adapter);
-        } else {
-            Toast.makeText(getContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
-            return;
+            if (getContext() != null) {
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, departmentNames);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinDepartment.setAdapter(adapter);
+            } else {
+                Toast.makeText(getContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String[] titles = new String[] {
+                    getString(R.string.selecttitle), getString(R.string.instructor), getString(R.string.researchasst),
+                    getString(R.string.lecturer), getString(R.string.doctor), getString(R.string.asstprof),
+                    getString(R.string.assocprof), getString(R.string.profdr)
+            };
+
+            if (getContext() != null) {
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, titles);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinTitle.setAdapter(adapter);
+            } else {
+                Toast.makeText(getContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
         spinTitle.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -255,8 +277,8 @@ public class AddLecturerInfoFragment extends Fragment {
     }
 
     private String convertToEnglishLetters(String input) {
-        String[] turkishLetters = {"Ç", "Ş", "Ğ", "Ü", "Ö", "İ", "ç", "ş", "ğ", "ü", "ö", "ı"};
-        String[] englishLetters = {"C", "S", "G", "U", "O", "I", "c", "s", "g", "u", "o", "i"};
+        String[] turkishLetters = {"Ç", "Ş", "Ğ", "Ü", "Ö", "İ", "ç", "ş", "ğ", "ü", "ö", "ı", " "};
+        String[] englishLetters = {"C", "S", "G", "U", "O", "I", "c", "s", "g", "u", "o", "i", ""};
 
         for (int i = 0; i < turkishLetters.length; i++) {
             input = input.replace(turkishLetters[i], englishLetters[i]);

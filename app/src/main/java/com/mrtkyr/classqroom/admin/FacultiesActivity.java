@@ -100,9 +100,8 @@ public class FacultiesActivity extends AppCompatActivity {
 
     public void displayFaculties() {
         List<FacultyModel> faculties = databaseHelper.getAllFaculties();
-        int countFaculties = 0;
+
         for (FacultyModel faculty : faculties) {
-            countFaculties++;
             TableRow row = new TableRow(this);
             row.setLayoutParams(new TableRow.LayoutParams(
                     TableRow.LayoutParams.MATCH_PARENT,
@@ -156,7 +155,21 @@ public class FacultiesActivity extends AppCompatActivity {
             tableLayoutFaculties.addView(row);
             tableLayoutFaculties.addView(line);
             TextView tvTotalFaculties = findViewById(R.id.tvTotalFaculties);
-            tvTotalFaculties.setText(getString(R.string.totalfaculties, String.valueOf(countFaculties)));
+            if (!faculties.isEmpty()) {
+                tvTotalFaculties.setText(getString(R.string.totalfaculties, String.valueOf(faculties.size())));
+            } else {
+                tvTotalFaculties.setText(getString(R.string.nofaculty));
+            }
+        }
+        updateTotalFaculties();
+    }
+    private void updateTotalFaculties() {
+        TextView tvTotalFaculties = findViewById(R.id.tvTotalFaculties);
+        int totalFaculties = databaseHelper.getAllFaculties().size();
+        if (totalFaculties > 0) {
+            tvTotalFaculties.setText(getString(R.string.totalfaculties, String.valueOf(totalFaculties)));
+        } else {
+            tvTotalFaculties.setText(getString(R.string.nofaculty));
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.mrtkyr.classqroom.main;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.View;
@@ -13,11 +12,9 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.textfield.TextInputLayout;
 import com.mrtkyr.classqroom.DatabaseHelper;
 import com.mrtkyr.classqroom.R;
 import com.mrtkyr.classqroom.model.UserModel;
-import java.util.UUID;
 
 public class LoginActivity extends AppCompatActivity {
     EditText edtEmail, edtPassword;
@@ -101,13 +98,13 @@ public class LoginActivity extends AppCompatActivity {
                         if (isCorrect) {
                             String type = databaseHelper.getUserType(userModel.getEmail());
                             Intent intent = new Intent(this, HomeActivity.class);
-                            UUID uuid = databaseHelper.getUuid(email);
+                            String uuid = databaseHelper.getUuid(email);
                             boolean isCorrectType = false;
                             String[] allowedTypes = new String[]{"Student", "Lecturer", "Admin"};
                             for (String types : allowedTypes) {
                                 if (types.equals(type)) {
                                     isCorrectType = true;
-                                    intent.putExtra("USER_UUID", uuid.toString());
+                                    intent.putExtra("USER_UUID", uuid);
                                     intent.putExtra("USER_TYPE", type);
                                     startActivity(intent);
                                     finish();

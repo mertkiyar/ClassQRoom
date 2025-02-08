@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -14,7 +13,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import androidx.annotation.Nullable;
 
@@ -54,6 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DEPARTMENT_TABLE = "DEPARTMENT_TABLE";
     public static final String COLUMN_DEPARTMENT_ID = "ID";
     public static final String COLUMN_DEPARTMENT_NAME = "NAME";
+    public static final String COLUMN_DEPARTMENT_CODE = "CODE";
     public static final String COLUMN_DEPARTMENT_LANGUAGE = "LANGUAGE";
     public static final String COLUMN_DEPARTMENT_FACULTY_ID = "FACULTY_ID";
 
@@ -64,7 +63,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_LECTURE_LECTURER_UUID = "LECTURER_UUID";
     public static final String COLUMN_LECTURE_LANGUAGE = "LANGUAGE";
     public static final String COLUMN_LECTURE_DEPARTMENT_ID = "DEPARTMENT";
-    public static final String COLUMN_LECTURE_TYPE = "TYPE";
+    public static final String COLUMN_LECTURE_IS_ONLINE = "IS_ONLINE";
+    public static final String COLUMN_LECTURE_IS_COMPULSORY = "IS_COMPULSORY";
     public static final String COLUMN_LECTURE_ACTS = "ACTS";
     public static final String COLUMN_LECTURE_CREDIT = "CREDIT";
 
@@ -114,12 +114,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String createFacultyTableStatement = "CREATE TABLE " + FACULTY_TABLE + " ("
                 + COLUMN_FACULTY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COLUMN_FACULTY_NAME + " TEXT)";
+                + COLUMN_FACULTY_NAME + " TEXT UNIQUE)";
         db.execSQL(createFacultyTableStatement);
 
         String createDepartmentTableStatement = "CREATE TABLE " + DEPARTMENT_TABLE + " ("
                 + COLUMN_DEPARTMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_DEPARTMENT_NAME + " TEXT, "
+                + COLUMN_DEPARTMENT_CODE + " TEXT UNIQUE, "
                 + COLUMN_DEPARTMENT_LANGUAGE + " TEXT, "
                 + COLUMN_DEPARTMENT_FACULTY_ID + " INTEGER, "
                 + "FOREIGN KEY(" + COLUMN_DEPARTMENT_FACULTY_ID + ") REFERENCES " + FACULTY_TABLE + "(" + COLUMN_FACULTY_ID + "))";
@@ -127,14 +128,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String createLectureTableStatement = "CREATE TABLE " + LECTURE_TABLE + " ("
                 + COLUMN_LECTURE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COLUMN_LECTURE_NAME + " TEXT UNIQUE, "
-                + COLUMN_LECTURE_CODE + " TEXT UNIQUE, "
+                + COLUMN_LECTURE_NAME + " TEXT, "
+                + COLUMN_LECTURE_CODE + " TEXT, "
                 + COLUMN_LECTURE_LECTURER_UUID + " TEXT, "
                 + COLUMN_LECTURE_LANGUAGE + " TEXT, "
                 + COLUMN_LECTURE_DEPARTMENT_ID + " INTEGER, "
-                + COLUMN_LECTURE_TYPE + " TEXT, "
+                + COLUMN_LECTURE_IS_ONLINE + " BOOLEAN, "
+                + COLUMN_LECTURE_IS_COMPULSORY + " BOOLEAN, "
                 + COLUMN_LECTURE_ACTS + " INTEGER, "
                 + COLUMN_LECTURE_CREDIT + " INTEGER, "
+                + "FOREIGN KEY(" + COLUMN_LECTURE_LECTURER_UUID + ") REFERENCES " + LECTURER_TABLE + "(" + COLUMN_UUID + "),"
                 + "FOREIGN KEY(" + COLUMN_LECTURE_DEPARTMENT_ID + ") REFERENCES " + DEPARTMENT_TABLE + "(" + COLUMN_DEPARTMENT_ID + "))";
         db.execSQL(createLectureTableStatement);
 
@@ -226,6 +229,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
 
         cv.put(COLUMN_DEPARTMENT_NAME, departmentModel.getDepartmentName());
+        cv.put(COLUMN_DEPARTMENT_CODE, departmentModel.getDepartmentCode());
         cv.put(COLUMN_DEPARTMENT_LANGUAGE, departmentModel.getDepartmentLanguage());
         cv.put(COLUMN_DEPARTMENT_FACULTY_ID, departmentModel.getDepartmentFacultyId());
 
@@ -240,13 +244,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        cv.put(COLUMN_LECTURE_ID, lectureModel.getLectureId());
         cv.put(COLUMN_LECTURE_NAME, lectureModel.getLectureName());
         cv.put(COLUMN_LECTURE_CODE, lectureModel.getLectureCode());
-        cv.put(COLUMN_LECTURE_LECTURER_UUID, lectureModel.getLecturerUUID().toString());
+        cv.put(COLUMN_LECTURE_LECTURER_UUID, lectureModel.getLecturerUUID());
         cv.put(COLUMN_LECTURE_LANGUAGE, lectureModel.getLectureLanguage());
         cv.put(COLUMN_LECTURE_DEPARTMENT_ID, lectureModel.getLectureDepartmentId());
-        cv.put(COLUMN_LECTURE_TYPE, lectureModel.getLectureType());
+        cv.put(COLUMN_LECTURE_IS_ONLINE, String.valueOf(lectureModel.isOnline()));
+        cv.put(COLUMN_LECTURE_IS_COMPULSORY, String.valueOf(lectureModel.isCompulsory()));
         cv.put(COLUMN_LECTURE_ACTS, lectureModel.getActs());
         cv.put(COLUMN_LECTURE_CREDIT, lectureModel.getCredit());
 
@@ -264,12 +268,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean checkDepartment(String departmentName, String departmentLanguage) {
+    public boolean checkLectureByName(String lectureName) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         try (Cursor cursor = db.rawQuery(
-                "SELECT 1 FROM " + DEPARTMENT_TABLE + " WHERE " + COLUMN_DEPARTMENT_NAME + " = ? AND " + COLUMN_DEPARTMENT_LANGUAGE + " = ?",
-                new String[]{departmentName, departmentLanguage})) {
+                "SELECT 1 FROM " + LECTURE_TABLE + " WHERE " + COLUMN_LECTURE_NAME + " = ?",
+                new String[]{lectureName})) {
+            return cursor.moveToFirst();
+        }
+    }
+
+    public boolean checkLectureByCode(String lectureCode) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        try (Cursor cursor = db.rawQuery(
+                "SELECT 1 FROM " + LECTURE_TABLE + " WHERE " + COLUMN_LECTURE_CODE + " = ?",
+                new String[]{lectureCode})) {
+            return cursor.moveToFirst();
+        }
+    }
+
+    public boolean checkDepartment(String departmentName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        try (Cursor cursor = db.rawQuery(
+                "SELECT 1 FROM " + DEPARTMENT_TABLE + " WHERE " + COLUMN_DEPARTMENT_NAME + " = ?",
+                new String[]{departmentName})) {
             return cursor.moveToFirst();
         }
     }
@@ -346,7 +370,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    public UUID getUuid(String email) {
+    public String getUuid(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         try (Cursor cursor = db.rawQuery(
@@ -354,8 +378,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{email})) {
 
             if (cursor.moveToFirst()) {
-                String uuidString = cursor.getString(0);
-                return UUID.fromString(uuidString);
+                return cursor.getString(0);
             }
         }
         return null;
@@ -388,6 +411,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return lectureCode;
     }
 
+    public String getLectureCodeFromDepartments(String departmentName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String lectureCode = null;
+
+        String query = "SELECT " + COLUMN_DEPARTMENT_CODE + " FROM " + DEPARTMENT_TABLE + " WHERE " + COLUMN_DEPARTMENT_NAME + " = ?";
+        try (Cursor cursor = db.rawQuery(query, new String[]{departmentName})) {
+            if (cursor.moveToFirst()) {
+                lectureCode = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_LECTURE_CODE));
+            }
+        }
+        return lectureCode;
+    }
+
     public List<String> getLecturesOfLecturer(String uuid) {
         List<String> lectures = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -409,7 +445,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(
                 DEPARTMENT_TABLE,
-                new String[]{COLUMN_DEPARTMENT_ID, COLUMN_DEPARTMENT_NAME, COLUMN_DEPARTMENT_LANGUAGE, COLUMN_DEPARTMENT_FACULTY_ID},
+                new String[]{COLUMN_DEPARTMENT_ID, COLUMN_DEPARTMENT_NAME, COLUMN_DEPARTMENT_CODE, COLUMN_DEPARTMENT_LANGUAGE, COLUMN_DEPARTMENT_FACULTY_ID},
                 null, null, null, null, null
         );
 
@@ -417,21 +453,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             do {
                 int idColumnIndex = cursor.getColumnIndex(COLUMN_DEPARTMENT_ID);
                 int nameColumnIndex = cursor.getColumnIndex(COLUMN_DEPARTMENT_NAME);
+                int codeColumnIndex = cursor.getColumnIndex(COLUMN_DEPARTMENT_CODE);
                 int languageColumnIndex = cursor.getColumnIndex(COLUMN_DEPARTMENT_LANGUAGE);
                 int facultyColumnIndex = cursor.getColumnIndex(COLUMN_DEPARTMENT_FACULTY_ID);
 
-                if (idColumnIndex != -1 && nameColumnIndex != -1 && languageColumnIndex != -1) {
+                if (idColumnIndex != -1 && nameColumnIndex != -1 && codeColumnIndex != -1 && languageColumnIndex != -1) {
                     int id = cursor.getInt(idColumnIndex);
                     String name = cursor.getString(nameColumnIndex);
+                    String code = cursor.getString(codeColumnIndex);
                     String language = cursor.getString(languageColumnIndex);
                     int facultyId = cursor.getInt(facultyColumnIndex);
-                    DepartmentModel department = new DepartmentModel(id, name, language, facultyId);
+                    DepartmentModel department = new DepartmentModel(id, name, code, language, facultyId);
                     departmentList.add(department);
                 }
 
             } while (cursor.moveToNext());
             cursor.close();
         }
+        return departmentList;
+    }
+
+    public List<DepartmentModel> getDepartmentsByFacultyId(int facultyId) {
+        List<DepartmentModel> departmentList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                DEPARTMENT_TABLE,
+                new String[]{COLUMN_DEPARTMENT_ID, COLUMN_DEPARTMENT_NAME, COLUMN_DEPARTMENT_CODE, COLUMN_DEPARTMENT_LANGUAGE, COLUMN_DEPARTMENT_FACULTY_ID},
+                COLUMN_DEPARTMENT_FACULTY_ID + " = ?",
+                new String[]{String.valueOf(facultyId)},
+                null, null, null
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                int idColumnIndex = cursor.getColumnIndex(COLUMN_DEPARTMENT_ID);
+                int nameColumnIndex = cursor.getColumnIndex(COLUMN_DEPARTMENT_NAME);
+                int codeColumnIndex = cursor.getColumnIndex(COLUMN_DEPARTMENT_CODE);
+                int languageColumnIndex = cursor.getColumnIndex(COLUMN_DEPARTMENT_LANGUAGE);
+                int facultyColumnIndex = cursor.getColumnIndex(COLUMN_DEPARTMENT_FACULTY_ID);
+
+                if (idColumnIndex != -1 && nameColumnIndex != -1 && codeColumnIndex != -1 && languageColumnIndex != -1) {
+                    int id = cursor.getInt(idColumnIndex);
+                    String name = cursor.getString(nameColumnIndex);
+                    String code = cursor.getString(codeColumnIndex);
+                    String language = cursor.getString(languageColumnIndex);
+                    int faculty = cursor.getInt(facultyColumnIndex);
+                    DepartmentModel department = new DepartmentModel(id, name, code, language, faculty);
+                    departmentList.add(department);
+                }
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
         return departmentList;
     }
 
@@ -506,7 +580,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public int getUserDepartmentId(String uuid) {
+    public int getUserDepartmentIdFromUUID(String uuid) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT " + COLUMN_USER_DEPARTMENT_ID + " FROM " + USER_TABLE+ " WHERE " + COLUMN_UUID + " = ?", new String[]{uuid});
         if (cursor.moveToFirst()) {
@@ -573,12 +647,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public String getLecturerFullName(String uuid) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + COLUMN_NAME + ", " + COLUMN_SURNAME + " FROM " + USER_TABLE + " WHERE " + COLUMN_UUID + " = ?" , new String[]{uuid});
+        String query = "SELECT u." + COLUMN_NAME + ", u." + COLUMN_SURNAME + ", l." + COLUMN_LECTURER_TITLE
+                + " FROM " + USER_TABLE + " u "
+                + "JOIN " + LECTURER_TABLE + " l ON u." + COLUMN_UUID + " = l." + COLUMN_UUID
+                + " WHERE u." + COLUMN_UUID + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{uuid});
         if (cursor.moveToFirst()) {
             String name = cursor.getString(0);
             String surname = cursor.getString(1);
+            String title = cursor.getString(2);
             cursor.close();
-            return name + " " + surname;
+            return title + " " + name + " " + surname;
         }
         return null;
     }
@@ -597,24 +677,117 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 int titleColumnIndex = cursor.getColumnIndex(COLUMN_LECTURER_TITLE);
                 int departmentIdColumnIndex = cursor.getColumnIndex(COLUMN_LECTURER_DEPARTMENT_ID);
                 int inLectureColumnIndex = cursor.getColumnIndex(COLUMN_LECTURER_IN_LECTURE);
-                Log.d("Lecturer", "Column indices obtained");
-                Log.d("Lecturer", "uuidColumnIndex: " + uuidColumnIndex);
-                Log.d("Lecturer", "titleColumnIndex: " + titleColumnIndex);
-                Log.d("Lecturer", "departmentIdColumnIndex: " + departmentIdColumnIndex);
-                Log.d("Lecturer", "inLectureColumnIndex: " + inLectureColumnIndex);
                 if (uuidColumnIndex != -1 && titleColumnIndex != -1 && departmentIdColumnIndex != -1 && inLectureColumnIndex != -1) {
-                    Log.d("Lecturer", "if statement entered");
                     String uuid = cursor.getString(uuidColumnIndex);
                     String title = cursor.getString(titleColumnIndex);
                     int departmentId = cursor.getInt(departmentIdColumnIndex);
                     boolean inLecture = cursor.getInt(inLectureColumnIndex) == 1;
                     LecturerModel lecturer = new LecturerModel(uuid, title, departmentId, inLecture);
                     lecturerList.add(lecturer);
-                    Log.d("Lecturer", "Lecturer added: " + lecturer);
                 }
             } while (cursor.moveToNext());
             cursor.close();
         }
         return lecturerList;
+    }
+
+    public List<LecturerModel> getLecturersByDepartmentId(int departmentId) {
+        List<LecturerModel> lecturerList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                LECTURER_TABLE,
+                new String[]{COLUMN_UUID, COLUMN_LECTURER_TITLE, COLUMN_LECTURER_DEPARTMENT_ID, COLUMN_LECTURER_IN_LECTURE},
+                COLUMN_LECTURER_DEPARTMENT_ID + " = ?",
+                new String[]{String.valueOf(departmentId)},
+                null, null, null, null
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                int uuidColumnIndex = cursor.getColumnIndex(COLUMN_UUID);
+                int titleColumnIndex = cursor.getColumnIndex(COLUMN_LECTURER_TITLE);
+                int departmentIdColumnIndex = cursor.getColumnIndex(COLUMN_LECTURER_DEPARTMENT_ID);
+                int inLectureColumnIndex = cursor.getColumnIndex(COLUMN_LECTURER_IN_LECTURE);
+
+                if (uuidColumnIndex != -1 && titleColumnIndex != -1 && departmentIdColumnIndex != -1 && inLectureColumnIndex != -1) {
+                    String uuid = cursor.getString(uuidColumnIndex);
+                    String title = cursor.getString(titleColumnIndex);
+                    int depId = cursor.getInt(departmentIdColumnIndex);
+                    boolean inLecture = cursor.getInt(inLectureColumnIndex) == 1;
+
+                    LecturerModel lecturer = new LecturerModel(uuid, title, depId, inLecture);
+                    lecturerList.add(lecturer);
+                }
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return lecturerList;
+    }
+
+    public List<LectureModel> getAllLectures() {
+        List<LectureModel> lectureList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                LECTURE_TABLE,
+                new String[]{
+                        COLUMN_LECTURE_ID, COLUMN_LECTURE_NAME, COLUMN_LECTURE_CODE, COLUMN_LECTURE_LECTURER_UUID, COLUMN_LECTURE_LANGUAGE,
+                        COLUMN_LECTURE_DEPARTMENT_ID, COLUMN_LECTURE_IS_ONLINE, COLUMN_LECTURE_IS_COMPULSORY, COLUMN_LECTURE_ACTS, COLUMN_LECTURE_CREDIT
+                },
+                null, null, null, null, null
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                int idColumnIndex = cursor.getColumnIndex(COLUMN_LECTURE_ID);
+                int nameColumnIndex = cursor.getColumnIndex(COLUMN_LECTURE_NAME);
+                int codeColumnIndex = cursor.getColumnIndex(COLUMN_LECTURE_CODE);
+                int lecturerUUIDColumnIndex = cursor.getColumnIndex(COLUMN_LECTURE_LECTURER_UUID);
+                int languageColumnIndex = cursor.getColumnIndex(COLUMN_LECTURE_LANGUAGE);
+                int departmentIdColumnIndex = cursor.getColumnIndex(COLUMN_LECTURE_DEPARTMENT_ID);
+                int isOnlineColumnIndex = cursor.getColumnIndex(COLUMN_LECTURE_IS_ONLINE);
+                int isCompulsoryColumnIndex = cursor.getColumnIndex(COLUMN_LECTURE_IS_COMPULSORY);
+                int actsColumnIndex = cursor.getColumnIndex(COLUMN_LECTURE_ACTS);
+                int creditColumnIndex = cursor.getColumnIndex(COLUMN_LECTURE_CREDIT);
+
+                if (idColumnIndex != -1 && nameColumnIndex != -1 && codeColumnIndex != -1 &&
+                        lecturerUUIDColumnIndex != -1 && languageColumnIndex != -1 &&
+                        departmentIdColumnIndex != -1 && isOnlineColumnIndex != -1 &&
+                        isCompulsoryColumnIndex != -1 && actsColumnIndex != -1 && creditColumnIndex != -1) {
+
+                    int id = cursor.getInt(idColumnIndex);
+                    String name = cursor.getString(nameColumnIndex);
+                    String code = cursor.getString(codeColumnIndex);
+                    String lecturerUUID = cursor.getString(lecturerUUIDColumnIndex);
+                    String language = cursor.getString(languageColumnIndex);
+                    int departmentId = cursor.getInt(departmentIdColumnIndex);
+                    boolean isOnline = cursor.getInt(isOnlineColumnIndex) == 1;
+                    boolean isCompulsory = cursor.getInt(isCompulsoryColumnIndex) == 1;
+                    int acts = cursor.getInt(actsColumnIndex);
+                    int credit = cursor.getInt(creditColumnIndex);
+
+                    LectureModel lecture = new LectureModel(id, name, language, acts, credit, isCompulsory, isOnline, departmentId, code, lecturerUUID);
+                    lectureList.add(lecture);
+                }
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
+        return lectureList;
+    }
+
+    public void deleteLecture(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            db.beginTransaction();
+            db.delete(LECTURE_TABLE, COLUMN_LECTURE_ID + " = ?", new String[]{id});
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
     }
 }

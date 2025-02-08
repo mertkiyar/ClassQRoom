@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
@@ -11,14 +12,17 @@ import com.mrtkyr.classqroom.DatabaseHelper;
 import com.mrtkyr.classqroom.R;
 import com.mrtkyr.classqroom.fragment.admin.AddLecturerInfoFragment;
 import com.mrtkyr.classqroom.fragment.admin.AddLecturerPassFragment;
+import com.mrtkyr.classqroom.model.DepartmentModel;
 import com.mrtkyr.classqroom.model.LecturerModel;
 import com.mrtkyr.classqroom.model.UserModel;
 import com.mrtkyr.classqroom.main.RegisterActivity;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.UUID;
 
-public class AddLecturerActivity extends AppCompatActivity implements AddLecturerInfoFragment.OnNextClickListener, AddLecturerPassFragment.OnAddClickListener {
+public class AddLecturerActivity extends AppCompatActivity implements AddLecturerInfoFragment.OnNextClickListener,
+        AddLecturerPassFragment.OnAddClickListener {
     FragmentManager fragmentManager;
     DatabaseHelper databaseHelper;
 
@@ -45,6 +49,19 @@ public class AddLecturerActivity extends AppCompatActivity implements AddLecture
                 }
             }
         });
+
+        List<DepartmentModel> departments = databaseHelper.getAllDepartments();
+        if (departments.isEmpty()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.warning))
+                    .setMessage(getString(R.string.firstdepartment))
+                    .setPositiveButton(getString(R.string.ok), (dialog, which) -> {
+                        finish();
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    })
+                    .setCancelable(false)
+                    .show();
+        }
     }
 
     private void showAddLecturerInfoFragment() {
@@ -81,7 +98,7 @@ public class AddLecturerActivity extends AppCompatActivity implements AddLecture
     @Override
     public void onNextClicked(String name, String surname, String email, String department, String title) {
         UserModel userModel;
-        if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty() && !department.isEmpty()) {
+        if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty()) {
             userModel = new UserModel(email);
             boolean isUserExist = databaseHelper.checkUser(userModel.getEmail());
             if (!isUserExist) {
@@ -93,19 +110,22 @@ public class AddLecturerActivity extends AppCompatActivity implements AddLecture
             Toast.makeText(this, getString(R.string.fillblanks), Toast.LENGTH_SHORT).show();
         }
     }
-
-    public void onAddClicked(String name, String surname, String email, String department, String title, String password, String passwordConf) {
+    @Override
+    public void onAddClicked(String name, String surname, String email, String department, String title,
+                             String password, String passwordConf) {
         UserModel userModel;
         LecturerModel lecturerModel;
         UUID createduuid = RegisterActivity.generateUUID();
         String uuid = createduuid.toString();
         if (databaseHelper != null) {
             try {
-                if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty() && !department.isEmpty() && !password.isEmpty() && !passwordConf.isEmpty()) {
+                if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty() && !department.isEmpty()
+                        && !password.isEmpty() && !passwordConf.isEmpty()) {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                     String dateTimeFormatted = java.time.LocalDateTime.now().format(formatter);
                     if (password.equals(passwordConf)) {
-                        userModel = new UserModel(uuid, name, surname, email, databaseHelper.hashPassword(password), databaseHelper.getDepartmentIdByName(department), "Lecturer", dateTimeFormatted, dateTimeFormatted);
+                        userModel = new UserModel(uuid, name, surname, email, databaseHelper.hashPassword(password),
+                                databaseHelper.getDepartmentIdByName(department), "Lecturer", dateTimeFormatted, dateTimeFormatted);
                         lecturerModel = new LecturerModel(uuid, title, databaseHelper.getDepartmentIdByName(department), false);
                         boolean isUserAdded = databaseHelper.addNewUser(userModel);
                         boolean isLecturerAdded = databaseHelper.addNewLecturer(lecturerModel);

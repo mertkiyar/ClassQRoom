@@ -91,7 +91,7 @@
         android:layout_below="@id/scrollViewLecturers"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="@string/nolecturers"/>
+        android:text="@string/nolecturer"/>
 
     <LinearLayout
         android:id="@+id/lyButtons"

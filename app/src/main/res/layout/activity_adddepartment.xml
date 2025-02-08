@@ -37,11 +37,32 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfDepartmentCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/tfDepartmentName">
+
+        <EditText
+            android:id="@+id/edtDepartmentCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/departmentcode"
+            android:importantForAutofill="no"
+            android:inputType="textCapCharacters"
+            android:maxWidth="400dp"
+            android:maxLength="4"
+            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Spinner
         android:id="@+id/spinDepartmentLanguage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tfDepartmentName"
+        android:layout_below="@id/tfDepartmentCode"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
         android:maxWidth="400dp"

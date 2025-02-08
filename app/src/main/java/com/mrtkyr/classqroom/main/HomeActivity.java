@@ -16,6 +16,7 @@ import com.mrtkyr.classqroom.DatabaseHelper;
 import com.mrtkyr.classqroom.admin.DepartmentsActivity;
 import com.mrtkyr.classqroom.admin.FacultiesActivity;
 import com.mrtkyr.classqroom.admin.LecturersActivity;
+import com.mrtkyr.classqroom.admin.LecturesActivity;
 import com.mrtkyr.classqroom.lecturer.QRCodeCreatorActivity;
 import com.mrtkyr.classqroom.student.QRCodeScannerActivity;
 import com.mrtkyr.classqroom.R;
@@ -103,7 +104,10 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void onBtnProfileClick(View view) {
-        Toast.makeText(this, "Profile Clicked", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, LecturesActivity.class);
+        intent.putExtra("USER_UUID", userUUID);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public void onBtnSettingsClick(View view) {
