@@ -136,4 +136,5 @@
     <string name="totallectures">There are %1$s(s) lectures in total.</string>
     <string name="firstlecturer">Before creating a Lecture, you must create a Lecturer!</string>
     <string name="warning">WARNING</string>
+    <string name="selectlecture">Select Lecture</string>
 </resources>

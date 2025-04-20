@@ -1,13 +1,15 @@
 [versions]
-agp = "8.8.0"
+agp = "8.9.1"
 core = "3.4.1"
+jjwtApi = "0.12.6"
+jjwtImpl = "0.12.6"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
-activity = "1.10.0"
-constraintlayout = "2.2.0"
+activity = "1.10.1"
+constraintlayout = "2.2.1"
 annotation = "1.9.1"
 lifecycleLivedataKtx = "2.8.7"
 lifecycleViewmodelKtx = "2.8.7"
@@ -15,6 +17,9 @@ zxingAndroidEmbedded = "4.3.0"
 
 [libraries]
 core = { module = "com.google.zxing:core", version.ref = "core" }
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwtApi" }
+jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwtImpl" }
+jjwt-orgjson = { module = "io.jsonwebtoken:jjwt-orgjson", version.ref = "jjwtImpl" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

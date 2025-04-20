@@ -111,7 +111,10 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void onBtnSettingsClick(View view) {
-        Toast.makeText(this, "Settings Clicked", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, QRCodeCreatorActivity.class);
+        intent.putExtra("USER_UUID", userUUID);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public void onBtnSupportClick(View view) {

@@ -19,7 +19,16 @@ import android.os.Vibrator;
 import android.os.VibratorManager;
 import android.content.Context;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+
 public class QRCodeScannerActivity extends AppCompatActivity {
+
+    private static final String SECRET_KEY = "QXpK[M9A{^iMI-[BT825fbK0DgG-9-uR";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         String userUUID = getIntent().getStringExtra("USER_UUID");
@@ -78,7 +87,33 @@ public class QRCodeScannerActivity extends AppCompatActivity {
             result -> {
                 if (result.getContents() != null) {
                     vibrate();
-                    Toast.makeText(this, "QR code: " + result.getContents(), Toast.LENGTH_LONG).show();
+                    String jwtToken = result.getContents();
+                    Claims claims = parseJWT(jwtToken);
+
+                    if (claims != null) {
+                        String lectureId = claims.get("lecture_id", String.class);
+                        String lecturerId = claims.get("lecturer_id", String.class);
+
+                        Toast.makeText(this, "Ders ID: " + lectureId + "\nÖğretmen ID: " + lecturerId, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(this, "Geçersiz QR Kodu!", Toast.LENGTH_LONG).show();
+                    }
                 }
             });
+
+    private SecretKey getSigningKey() {
+        return new SecretKeySpec(SECRET_KEY.getBytes(), "HmacSHA256");
+    }
+
+    private Claims parseJWT(String jwt) {
+        try {
+            Jws<Claims> jws = Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(jwt);
+            return jws.getPayload();
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

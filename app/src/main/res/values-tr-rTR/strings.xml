@@ -135,4 +135,5 @@
     <string name="totallectures">Toplam %1$s ders var.</string>
     <string name="firstlecturer">Ders oluşturmadan önce Öğretim Görevlisi oluşturmalısınız!</string>
     <string name="warning">UYARI</string>
+    <string name="selectlecture">Ders Seç</string>
 </resources>
