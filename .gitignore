@@ -78,7 +78,7 @@ captures/
 *.keystore
 
 # Google Services (e.g. APIs or Firebase)
-# google-services.json
+ google-services.json
 
 # Android Patch
 gen-external-apklibs
@@ -155,4 +155,18 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 
+# Firebase
+firebase-debug.log
+
+# Service account keys
+serviceAccountKey.json
+*.json
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Google Services files (for mobile apps)
+GoogleService-Info.plist
 # End of https://www.toptal.com/developers/gitignore/api/androidstudio,java

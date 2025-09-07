@@ -4,23 +4,25 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="50dp"
+    android:padding="30dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.mrtkyr.classqroom.main.LoginActivity">
 
     <ImageView
         android:id="@+id/ivClassQRoom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_logo"
-        android:contentDescription="@string/imgviewlogo" />
+        android:layout_width="350dp"
+        android:layout_height="134dp"
+        android:background="@drawable/logo_classqroom"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/TEXT_IMAGEVIEW_LOGO" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tfEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="70dp"
         android:layout_below="@id/ivClassQRoom">
 
         <EditText
@@ -28,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints="emailAddress"
-            android:hint="@string/stdemail"
+            android:hint="@string/TEXT_STUDENT_EMAIL"
             android:inputType="textEmailAddress"
             android:maxWidth="400dp"
             android:maxLength="48"
@@ -50,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints="no"
-            android:hint="@string/password"
+            android:hint="@string/TEXT_PASSWORD"
             android:inputType="textPassword"
             android:maxWidth="400dp"
             android:maxLength="24"
@@ -58,48 +60,55 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/tvForgotPassword"
+    <LinearLayout
+        android:id="@+id/llbuttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tfPassword"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="15dp"
-        android:text="@string/forgotpassword"
-        android:textColor="@color/blue"
-        android:textSize="14sp"
-        android:textStyle="bold|normal"/>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvForgotPassword"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:layout_centerHorizontal="true">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="50dp"
-            android:background="@drawable/cancelbutton_background"
-            android:text="@string/cancel"
-            android:textColor="@color/white"
-            android:textStyle="bold|normal" />
+            android:id="@+id/btnBack"
+            android:layout_width="120dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="45dp"
+            android:background="@drawable/bg_cancel_button"
+            android:text="@string/BUTTON_BACK"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnLogin"
             android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/loginbutton_background"
-            android:text="@string/login"
-            android:textColor="@color/white"
-            android:textStyle="bold|normal"
-            android:onClick="onClickLogin"/>
+            android:layout_height="45dp"
+            android:background="@drawable/bg_login_button"
+            android:text="@string/BUTTON_LOGIN"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"/>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvForgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/llbuttons"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="15dp"
+        android:text="@string/BUTTON_FORGOT_PASSWORD"
+        android:textColor="@color/blue"
+        android:textSize="14sp"
+        android:textStyle="bold|normal"/>
+
+    <ProgressBar
+        android:id="@+id/pbLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 
 </RelativeLayout>

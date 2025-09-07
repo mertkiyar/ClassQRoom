@@ -1,131 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".main.HomeActivity">
+
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/tvWelcome"
-        android:layout_marginTop="15dp"
-        android:text="@string/welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="20dp"
+        android:maxWidth="300dp"
         android:fontFamily="@font/urbanist"
-        android:layout_marginStart="15dp"
-        android:textSize="20sp"
-        android:textColor="@color/black_white"/>
+        android:text="@string/TEXT_WELCOME"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:ignore="RelativeOverlap" />
 
-    <ImageView
-        android:id="@+id/imgViewWelcome"
-        android:layout_width="400dp"
-        android:layout_height="300dp"
-        android:layout_below="@id/tvWelcome"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="15dp"
+    <ImageButton
+        android:id="@+id/btnToggleDarkMode"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:importantForAccessibility="no"
-        android:src="@drawable/imgview"/>
+        android:padding="8dp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_dark_mode"
+        app:tint="?attr/colorPrimary"
+        android:visibility="gone" />
 
-    <GridLayout
-        android:id="@+id/gridButtons"
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imgViewWelcome"
-        android:layout_marginTop="10dp"
-        android:columnCount="3"
-        android:rowCount="2"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:visibility="visible"/>
 
-        <ImageButton
-            android:id="@+id/btnQRCode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="0"
-            android:layout_column="0"
-            android:background="@drawable/qrcodebutton_background"
-            android:contentDescription="@string/qrcode"
-            android:onClick="onBtnQRCodeClick"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:padding="25dp"
-            android:src="@drawable/qrcode" />
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tvWelcome"
+        android:layout_above="@id/bottom_navigation"
+        android:visibility="gone"/>
 
-        <ImageButton
-            android:id="@+id/btnNFC"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="0"
-            android:layout_column="1"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/nfcbutton_background"
-            android:contentDescription="@string/nfc"
-            android:onClick="onBtnNFCClick"
-            android:padding="25dp"
-            android:src="@drawable/nfc" />
-
-        <ImageButton
-            android:id="@+id/btnClassCode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="0"
-            android:layout_column="2"
-            android:background="@drawable/classcodebutton_background"
-            android:contentDescription="@string/classcode"
-            android:onClick="onBtnClassCodeClick"
-            android:layout_marginBottom="10dp"
-            android:padding="25dp"
-            android:src="@drawable/classcode" />
-
-        <ImageButton
-            android:id="@+id/btnAttendanceHistory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="1"
-            android:layout_column="0"
-            android:background="@drawable/attendhistory_background"
-            android:contentDescription="@string/attendancehistory"
-            android:onClick="onBtnAttendHistoryClick"
-            android:layout_marginEnd="10dp"
-            android:padding="25dp"
-            android:src="@drawable/history" />
-
-        <ImageButton
-            android:id="@+id/btnProfile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="1"
-            android:layout_column="1"
-            android:background="@drawable/profilebutton_background"
-            android:contentDescription="@string/profile"
-            android:onClick="onBtnProfileClick"
-            android:layout_marginEnd="10dp"
-            android:padding="25dp"
-            android:src="@drawable/profile"/>
-
-        <ImageButton
-            android:id="@+id/btnSettings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="1"
-            android:layout_column="2"
-            android:background="@drawable/settingsbutton_background"
-            android:contentDescription="@string/settings"
-            android:onClick="onBtnSettingsClick"
-            android:padding="25dp"
-            android:src="@drawable/settings"/>
-
-    </GridLayout>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnSupport"
-        android:layout_width="wrap_content"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/gridButtons"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/qrcodebutton_background"
-        android:contentDescription="@string/support"
-        android:onClick="onBtnSupportClick"
-        android:padding="10dp"
-        android:text="@string/support"
-        android:textColor="@color/white" />
+        android:layout_alignParentBottom="true"
+        android:background="?android:attr/windowBackground"
+        android:elevation="8dp"
+        app:itemIconTint="@color/blue"
+        app:itemIconSize="25dp"
+        app:labelVisibilityMode="labeled"
+        tools:menu="@menu/menu_navigation"
+        android:visibility="gone"/>
 
 </RelativeLayout>

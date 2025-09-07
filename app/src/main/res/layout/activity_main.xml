@@ -1,45 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home"
     android:layout_width="match_parent"
-    android:padding="50dp"
+    android:padding="30dp"
     android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/ivClassQRoom"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_logo"
-        android:contentDescription="@string/imgviewlogo" />
-
-    <LinearLayout
+        android:layout_height="134dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/logo_classqroom"
+        android:contentDescription="@string/TEXT_IMAGEVIEW_LOGO" />
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical">
+        android:background="@drawable/bg_transparent"
+        android:padding="20dp"
+        android:lineSpacingExtra="4dp"
+        android:text="@string/MSG_MAIN_PAGE"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:textColor="@color/black_white">
+    </TextView>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnLoginMain"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/loginbutton_background"
-            android:onClick="onClickLoginMain"
-            android:text="@string/login"
-            android:textColor="@color/white"
-            tools:ignore="VisualLintButtonSize,TextContrastCheck" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnRegisterMain"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/registerbutton_background"
-            android:onClick="onClickRegisterMain"
-            android:text="@string/register"
-            android:textColor="@color/white"
-            tools:ignore="TextContrastCheck,VisualLintButtonSize" />
-
-    </LinearLayout>
-
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/bg_login_button"
+        android:onClick="onClickLoginMain"
+        android:text="@string/BUTTON_LOGIN"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:textColor="@android:color/white" />
 </RelativeLayout>

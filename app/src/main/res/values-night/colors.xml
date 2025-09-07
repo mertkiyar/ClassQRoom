@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
     <color name="black_white">#FFFFFFFF</color>
-    <color name="white_black">#FF000000</color>
-    <color name="edittext">#454545</color>
-    <color name="hint">#959595</color>
+    <color name="white_black">#FF000000</color>ß
+    <color name="gray_transparent">#CC3E3E3E</color>
+    <color name="dialog_background">#26282A</color>
+    <color name="dialog_radius_background">#26282A</color>
 </resources>

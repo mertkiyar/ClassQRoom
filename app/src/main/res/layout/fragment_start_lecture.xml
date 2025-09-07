@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.lecturer.StartLectureFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/lectureMenuLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/attendanceTypeMenuLayout"
+            android:layout_marginBottom="10dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/lectureAutoCompleteTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/TEXT_SELECT_LECTURE"
+                android:inputType="none"
+                android:labelFor="@+id/lectureMenuLayout"
+                tools:ignore="SpeakableTextPresentCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/attendanceTypeMenuLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/ivQRCode"
+            android:layout_marginBottom="50dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/attendanceTypeAutoCompleteTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/TEXT_ATTENDANCE_TYPE"
+                android:inputType="none"
+                android:labelFor="@+id/lectureTypeMenuLayout"
+                tools:ignore="SpeakableTextPresentCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/ivQRCode"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/UI_QR_CODE"
+            tools:ignore="ImageContrastCheck"
+            android:visibility="invisible"/>
+        <LinearLayout
+            android:id="@+id/llCodeBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_above="@id/btnStartLecture"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="50dp"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/codeBox1"
+                style="@style/CodeBox"
+                android:autofillHints=""
+                android:layout_marginEnd="8dp"
+                android:focusable="false"
+                android:clickable="false"
+                tools:ignore="LabelFor" />
+
+            <EditText
+                android:id="@+id/codeBox2"
+                style="@style/CodeBox"
+                android:autofillHints=""
+                android:layout_marginEnd="8dp"
+                android:focusable="false"
+                android:clickable="false"
+                tools:ignore="LabelFor" />
+
+            <EditText
+                android:id="@+id/codeBox3"
+                style="@style/CodeBox"
+                android:autofillHints=""
+                android:layout_marginEnd="8dp"
+                android:focusable="false"
+                android:clickable="false"
+                tools:ignore="LabelFor" />
+
+            <EditText
+                android:id="@+id/codeBox4"
+                style="@style/CodeBox"
+                android:autofillHints=""
+                android:layout_marginEnd="8dp"
+                android:focusable="false"
+                android:clickable="false"
+                tools:ignore="LabelFor" />
+
+            <EditText
+                android:id="@+id/codeBox5"
+                style="@style/CodeBox"
+                android:autofillHints=""
+                android:layout_marginEnd="8dp"
+                android:focusable="false"
+                android:clickable="false"
+                tools:ignore="LabelFor" />
+
+            <EditText
+                android:id="@+id/codeBox6"
+                style="@style/CodeBox"
+                android:autofillHints=""
+                android:focusable="false"
+                android:clickable="false"
+                tools:ignore="LabelFor" />
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnStartLecture"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivQRCode"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/bg_login_button"
+            android:text="@string/BUTTON_START_LECTURE"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+</FrameLayout>

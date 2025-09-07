@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="codeBoxBackgroundColor" format="color" />
+    <attr name="codeBoxStrokeColor" format="color" />
+    <attr name="codeBoxStrokeColorFocused" format="color" />
+    <attr name="codeBoxTextColor" format="color" />
+</resources>

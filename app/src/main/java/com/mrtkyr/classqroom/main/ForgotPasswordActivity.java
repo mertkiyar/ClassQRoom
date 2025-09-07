@@ -3,39 +3,120 @@ package com.mrtkyr.classqroom.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.ActionCodeSettings;
+import com.google.firebase.auth.FirebaseAuth;
 import com.mrtkyr.classqroom.R;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
-    EditText edtEmail, edtStudentNumber;
-    Button btnCancel;
+    FirebaseAuth auth;
+    private String oobCode;
+    EditText edtEmail, edtStudentNumber, edtNewPassword, edtConfirmPassword;
+    Button btnCancel, btnNext, btnBack, btnResetPassword;
+    TextInputLayout tfEmail, tfStudentNumber, tfNewPassword, tfConfirmPassword;
+    LinearLayout llbuttons, llotherbuttons;
+    ProgressBar pbForgotPassword;
+    Boolean isInPasswordTheme;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgotpassword);
 
+        auth = FirebaseAuth.getInstance();
+
         edtEmail = findViewById(R.id.edtEmail);
         edtStudentNumber = findViewById(R.id.edtStudentNumber);
-        btnCancel= findViewById(R.id.btnCancel);
+        edtNewPassword = findViewById(R.id.edtNewPassword);
+        edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
+        tfEmail = findViewById(R.id.tfEmail);
+        tfStudentNumber = findViewById(R.id.tfStudentNumber);
+        tfNewPassword = findViewById(R.id.tfNewPassword);
+        tfConfirmPassword = findViewById(R.id.tfConfirmPassword);
+        llbuttons = findViewById(R.id.llbuttons);
+        llotherbuttons = findViewById(R.id.llotherbuttons);
+        btnCancel = findViewById(R.id.btnCancel);
+        btnBack = findViewById(R.id.btnBack);
+        btnNext = findViewById(R.id.btnNext);
+        btnResetPassword = findViewById(R.id.btnResetPassword);
+        pbForgotPassword = findViewById(R.id.pbForgotPassword);
+        isInPasswordTheme = false;
+
+        Intent intent = getIntent();
+        if (intent != null && intent.getData() != null && intent.getData().getQueryParameter("oobCode") != null) {
+            oobCode = intent.getData().getQueryParameter("oobCode");
+
+            tfEmail.setVisibility(View.GONE);
+            tfStudentNumber.setVisibility(View.GONE);
+            llbuttons.setVisibility(View.GONE);
+            tfNewPassword.setVisibility(View.VISIBLE);
+            tfConfirmPassword.setVisibility(View.VISIBLE);
+            llotherbuttons.setVisibility(View.VISIBLE);
+            isInPasswordTheme = true;
+
+            auth.verifyPasswordResetCode(oobCode).addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Toast.makeText(this, getString(R.string.MSG_PASSWORD_RESET_LINK_INVALID_OR_EXPIRED), Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            });
+
+            btnResetPassword.setOnClickListener(this::onClickReset);
+
+        } else {
+            tfEmail.setVisibility(View.VISIBLE);
+            tfStudentNumber.setVisibility(View.VISIBLE);
+            llbuttons.setVisibility(View.VISIBLE);
+            tfNewPassword.setVisibility(View.GONE);
+            tfConfirmPassword.setVisibility(View.GONE);
+            llotherbuttons.setVisibility(View.GONE);
+            isInPasswordTheme = false;
+
+            btnNext.setOnClickListener(v -> sendEmail());
+        }
+
         btnCancel.setOnClickListener(v -> {
-            Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
-            startActivity(intent);
             finish();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        });
+
+        btnBack.setOnClickListener(v -> {
+            tfEmail.setVisibility(View.VISIBLE);
+            tfStudentNumber.setVisibility(View.VISIBLE);
+            llbuttons.setVisibility(View.VISIBLE);
+            tfNewPassword.setVisibility(View.GONE);
+            tfConfirmPassword.setVisibility(View.GONE);
+            llotherbuttons.setVisibility(View.GONE);
+            isInPasswordTheme = false;
         });
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                finish();
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                if (isInPasswordTheme) {
+                    tfEmail.setVisibility(View.VISIBLE);
+                    tfStudentNumber.setVisibility(View.VISIBLE);
+                    llbuttons.setVisibility(View.VISIBLE);
+                    tfNewPassword.setVisibility(View.GONE);
+                    tfConfirmPassword.setVisibility(View.GONE);
+                    llotherbuttons.setVisibility(View.GONE);
+                    isInPasswordTheme = false;
+                } else {
+                    finish();
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                }
             }
         });
 
@@ -52,17 +133,128 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     return null;
                 }
         });
+        edtNewPassword.setFilters(new InputFilter[] {
+                new InputFilter.LengthFilter(24),
+                (source, start, end, dest, dstart, dend) -> {
+                    for (int i = start; i < end; i++) {
+                        char character = source.charAt(i);
+                        String allowedLettersOrDigits = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                        String allowedChars = "!@#$%^&*()_-+={}[]'<,>.?";
+                        if (!allowedLettersOrDigits.contains(String.valueOf(character)) && !allowedChars.contains(String.valueOf(character))) {
+                            return "";
+                        }
+                    }
+                    return null;
+                }
+        });
+    }
+
+    public void onClickNext(View view) {
+        String email = edtEmail.getText().toString().trim();
+        String studentNumber = edtStudentNumber.getText().toString().trim();
+        if (!email.isEmpty() && !studentNumber.isEmpty()) {
+            if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                tfEmail.setVisibility(View.GONE);
+                tfStudentNumber.setVisibility(View.GONE);
+                llbuttons.setVisibility(View.GONE);
+                tfNewPassword.setVisibility(View.VISIBLE);
+                tfConfirmPassword.setVisibility(View.VISIBLE);
+                llotherbuttons.setVisibility(View.VISIBLE);
+                isInPasswordTheme = true;
+                edtNewPassword.requestFocus();
+            } else {
+                edtEmail.setError(getString(R.string.ERROR_INVALID_EMAIL));
+                edtEmail.requestFocus();
+            }
+
+        } else {
+            if (edtEmail.getText().toString().trim().isEmpty()) {
+                edtEmail.setError(getString(R.string.ERROR_FILL_BLANKS));
+                edtEmail.requestFocus();
+            }
+            if (edtStudentNumber.getText().toString().trim().isEmpty()) {
+                edtStudentNumber.setError(getString(R.string.ERROR_FILL_BLANKS));
+                edtStudentNumber.requestFocus();
+            }
+        }
+    }
+
+    public void sendEmail() {
+        String email = edtEmail.getText().toString().trim();
+
+        if (email.isEmpty()) {
+            edtEmail.setError(getString(R.string.ERROR_FILL_BLANKS));
+            edtEmail.requestFocus();
+            return;
+        }
+
+        pbForgotPassword.setVisibility(View.VISIBLE);
+        btnNext.setEnabled(false);
+
+        ActionCodeSettings actionCodeSettings =
+                ActionCodeSettings.newBuilder()
+                        .setUrl("https://classqroom.mrtkyr.com")
+                        .setHandleCodeInApp(true)
+                        .setAndroidPackageName(
+                                getPackageName(),
+                                true,
+                                null
+                        )
+                        .build();
+
+        auth.sendPasswordResetEmail(email, actionCodeSettings)
+                .addOnCompleteListener(task -> {
+                    pbForgotPassword.setVisibility(View.GONE);
+                    btnNext.setEnabled(true);
+
+                    if (task.isSuccessful()) {
+                        Toast.makeText(this, getString(R.string.MSG_SENT_RESET_LINK_TO_EMAIL), Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     public void onClickReset(View view) {
-        if (!edtEmail.getText().toString().isEmpty() || !edtStudentNumber.getText().toString().isEmpty()) {
-            Toast.makeText(this,getString(R.string.sentresetcode), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-        } else {
-            Toast.makeText(this, getString(R.string.fillblanks), Toast.LENGTH_SHORT).show();
+        String newPassword = edtNewPassword.getText().toString().trim();
+        String confirmPassword = edtConfirmPassword.getText().toString().trim();
+
+        if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
+            Toast.makeText(this,getString(R.string.ERROR_FILL_BLANKS), Toast.LENGTH_SHORT).show();
+            if (newPassword.isEmpty()) {
+                edtNewPassword.requestFocus();
+            } else {
+                edtConfirmPassword.requestFocus();
+            }
+            return;
         }
+
+        if (newPassword.length() < 6) {
+            Toast.makeText(this,getString(R.string.ERROR_SHORT_PASSWORD), Toast.LENGTH_SHORT).show();
+            edtNewPassword.requestFocus();
+            return;
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            Toast.makeText(this,getString(R.string.ERROR_PASSWORDS_NOT_MATCH), Toast.LENGTH_SHORT).show();
+            edtNewPassword.requestFocus();
+            return;
+        }
+
+        pbForgotPassword.setVisibility(View.VISIBLE);
+        btnResetPassword.setEnabled(false);
+
+        auth.confirmPasswordReset(oobCode, newPassword).addOnCompleteListener(task -> {
+            pbForgotPassword.setVisibility(View.GONE);
+            btnResetPassword.setEnabled(true);
+
+            if (task.isSuccessful()) {
+                Toast.makeText(this, getString(R.string.MSG_SUCCESS_FORGOT_PASSWORD), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(this, getString(R.string.ERROR_NOT_CHANGE_PASSWORD), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

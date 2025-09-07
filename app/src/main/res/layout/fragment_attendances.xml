@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.student.AttendancesFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tvAttendances"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
+            android:text="@string/UI_ATTENDANCES"
+            android:textColor="@color/black_white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:background="#3377BDFF"
+            android:fontFamily="@font/urbanist"
+            android:textAlignment="center"/>
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/tvAttendances">
+
+            <ListView
+                android:id="@+id/lvAttendances"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:nestedScrollingEnabled="true"
+                android:padding="8dp"/>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/rvAttendances"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_below="@id/tvAttendances"-->
+<!--            android:overScrollMode="never"-->
+<!--            android:nestedScrollingEnabled="true"-->
+<!--            tools:listitem="@layout/recyclerview_attendance"/> -->
+
+    </RelativeLayout>
+
+</FrameLayout>

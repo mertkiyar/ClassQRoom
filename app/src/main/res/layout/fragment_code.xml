@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.student.CodeFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
+
+        <TextView
+            android:id="@+id/tvCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="30dp"
+            android:layout_centerInParent="true"
+            android:text="@string/MSG_ENTER_CODE"
+            android:textColor="@color/black_white"
+            android:textSize="25sp"
+            android:textAlignment="center"/>
+
+        <LinearLayout
+            android:id="@+id/llCodeBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_above="@id/tvCode"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="50dp">
+
+            <EditText
+                android:id="@+id/codeBox1"
+                style="@style/CodeBox"
+                android:autofillHints=""
+                android:layout_marginEnd="8dp"
+                tools:ignore="LabelFor" />
+
+            <EditText
+                android:id="@+id/codeBox2"
+                style="@style/CodeBox"
+                android:autofillHints=""
+                android:layout_marginEnd="8dp"
+                tools:ignore="LabelFor" />
+
+            <EditText
+                android:id="@+id/codeBox3"
+                style="@style/CodeBox"
+                android:autofillHints=""
+                android:layout_marginEnd="8dp"
+                tools:ignore="LabelFor" />
+
+            <EditText
+                android:id="@+id/codeBox4"
+                style="@style/CodeBox"
+                android:autofillHints=""
+                android:layout_marginEnd="8dp"
+                tools:ignore="LabelFor" />
+
+            <EditText
+                android:id="@+id/codeBox5"
+                style="@style/CodeBox"
+                android:autofillHints=""
+                android:layout_marginEnd="8dp"
+                tools:ignore="LabelFor" />
+
+            <EditText
+                android:id="@+id/codeBox6"
+                style="@style/CodeBox"
+                android:autofillHints=""
+                tools:ignore="LabelFor" />
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnEnterCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvCode"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="44dp"
+            android:background="@drawable/bg_app"
+            android:maxWidth="20dp"
+            android:text="@string/BUTTON_ENTER_CODE"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
+</FrameLayout>

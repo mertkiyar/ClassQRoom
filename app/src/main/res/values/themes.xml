@@ -1,9 +1,25 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
     <style name="Base.Theme.ClassQRoom" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="codeBoxBackgroundColor">#F1F1F1</item> <item name="codeBoxStrokeColor">#D3D3D3</item> <item name="codeBoxStrokeColorFocused">?attr/colorPrimary</item> <item name="codeBoxTextColor">#121212</item>
+</style>
 
     <style name="Theme.ClassQRoom" parent="Base.Theme.ClassQRoom" />
+
+    <style name="CodeBox" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:background">@drawable/code_box_selector</item>
+        <item name="android:gravity">center</item>
+        <item name="android:inputType">number</item>
+        <item name="android:maxLength">1</item>
+        <item name="android:textColor">?attr/codeBoxTextColor</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">monospace</item>
+    </style>
+    <style name="ShapeAppearance.App.CircleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

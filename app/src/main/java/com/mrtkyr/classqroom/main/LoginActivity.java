@@ -6,35 +6,42 @@ import android.text.InputFilter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.mrtkyr.classqroom.DatabaseHelper;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.mrtkyr.classqroom.R;
-import com.mrtkyr.classqroom.model.UserModel;
+
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
+    private FirebaseAuth auth;
     EditText edtEmail, edtPassword;
     TextView tvForgotPassword;
-    Button btnCancel;
-    private DatabaseHelper databaseHelper;
+    Button btnBack, btnLogin;
+    ProgressBar pbLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        databaseHelper = new DatabaseHelper(this);
-
+        auth = FirebaseAuth.getInstance();
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
         tvForgotPassword = findViewById(R.id.tvForgotPassword);
-        btnCancel = findViewById(R.id.btnCancel);
+        btnBack = findViewById(R.id.btnBack);
+        btnLogin = findViewById(R.id.btnLogin);
+        pbLogin = findViewById(R.id.pbLogin);
 
-        btnCancel.setOnClickListener(v -> {
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
             finish();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
@@ -42,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
@@ -67,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                     for (int i = start; i < end; i++) {
                         char character = source.charAt(i);
                         String allowedLettersOrDigits = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-                        String allowedChars = "~!@#$%^&*()_-+={}[]|:;\"'<,>.?/";
+                        String allowedChars = "!#$%^&*()_-+={}[]'.?";
                         if (!allowedLettersOrDigits.contains(String.valueOf(character)) && !allowedChars.contains(String.valueOf(character))) {
                             return "";
                         }
@@ -79,55 +88,61 @@ public class LoginActivity extends AppCompatActivity {
         tvForgotPassword.setOnClickListener(view -> {
             Intent intent = new Intent(this, ForgotPasswordActivity.class);
             startActivity(intent);
-            finish();
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
+
+        btnLogin.setOnClickListener(this::onClickLogin);
     }
 
     public void onClickLogin(View view) {
-        String email = edtEmail.getText().toString().trim();
-        String password = edtPassword.getText().toString().trim();
-        UserModel userModel;
-        if (databaseHelper != null) {
-            try {
-                if (!email.isEmpty() && !password.isEmpty()) {
-                    userModel = new UserModel(email, password);
-                    boolean isUserExist = databaseHelper.checkUser(userModel.getEmail());
-                    if (isUserExist) {
-                        boolean isCorrect = databaseHelper.authenticateUser(userModel.getEmail(), userModel.getPassword());
-                        if (isCorrect) {
-                            String type = databaseHelper.getUserType(userModel.getEmail());
-                            Intent intent = new Intent(this, HomeActivity.class);
-                            String uuid = databaseHelper.getUuid(email);
-                            boolean isCorrectType = false;
-                            String[] allowedTypes = new String[]{"Student", "Lecturer", "Admin"};
-                            for (String types : allowedTypes) {
-                                if (types.equals(type)) {
-                                    isCorrectType = true;
-                                    intent.putExtra("USER_UUID", uuid);
-                                    intent.putExtra("USER_TYPE", type);
-                                    startActivity(intent);
-                                    finish();
-                                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                                }
-                            }
-                            if (!isCorrectType) {
-                                Toast.makeText(this, getString(R.string.wrongusertype), Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(this, getString(R.string.wrongpassword), Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(this, getString(R.string.notregisteredemail), Toast.LENGTH_SHORT).show();
-                    }
-                } else if (email.isEmpty() && !password.isEmpty()) {
-                    edtEmail.setError(getString(R.string.fillblanks));
-                } else {
-                    Toast.makeText(this, getString(R.string.fillblanks), Toast.LENGTH_SHORT).show();
-                }
-            } catch (Exception e) {
-                Toast.makeText(this, getString(R.string.errorlogin) + ": " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+        String email = edtEmail.getText().toString();
+        String password = edtPassword.getText().toString();
+
+        if(email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, getString(R.string.ERROR_FILL_BLANKS), Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        pbLogin.setVisibility(View.VISIBLE);
+        btnLogin.setEnabled(false);
+
+        auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    pbLogin.setVisibility(View.GONE);
+                    btnLogin.setEnabled(true);
+
+                    if (task.isSuccessful()) {
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        assert auth.getCurrentUser() != null;
+                        intent.putExtra("USER_UID", auth.getCurrentUser().getUid());
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        String errorMessage;
+                        try {
+                            throw Objects.requireNonNull(task.getException());
+                        } catch (FirebaseAuthException e) {
+                            String errorCode = e.getErrorCode();
+                            errorMessage = switch (errorCode) {
+                                case "ERROR_INVALID_EMAIL" ->
+                                        getString(R.string.ERROR_INVALID_EMAIL);
+                                case "ERROR_USER_NOT_FOUND" ->
+                                        getString(R.string.ERROR_USER_NOT_FOUND);
+                                case "ERROR_WRONG_PASSWORD" ->
+                                        getString(R.string.ERROR_WRONG_PASSWORD);
+                                case "ERROR_USER_DISABLED" ->
+                                        getString(R.string.ERROR_USER_DISABLED);
+                                case "ERROR_TOO_MANY_REQUESTS" ->
+                                        getString(R.string.ERROR_TOO_MANY_REQUESTS);
+                                case "ERROR_INVALID_CREDENTIAL" ->
+                                        getString(R.string.ERROR_INVALID_CREDENTIAL);
+                                default -> getString(R.string.ERROR_UNKNOWN) + ": " + errorCode;
+                            };
+                        } catch (Exception e) {
+                            errorMessage = getString(R.string.ERROR_UNEXPECTED) + e.getMessage();
+                        }
+                        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+                    }
+        });
     }
 }

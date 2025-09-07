@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_qr_code"
+        android:icon="@drawable/ic_qr_code"
+        android:title="@string/UI_QR_CODE"/>
+
+    <item
+        android:id="@+id/nav_nfc"
+        android:icon="@drawable/ic_nfc"
+        android:title="@string/UI_NFC"/>
+
+    <item
+        android:id="@+id/nav_code"
+        android:icon="@drawable/ic_code"
+        android:title="@string/UI_CODE"/>
+
+    <item
+        android:id="@+id/nav_history"
+        android:icon="@drawable/ic_history"
+    android:title="@string/UI_ATTENDANCES"/>
+
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/UI_PROFILE"/>
+
+</menu>

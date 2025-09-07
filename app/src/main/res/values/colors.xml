@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="blue">#0277BD</color>
+
+    <!-- For Dark Mode -->
+
     <color name="black_white">#FF000000</color>
     <color name="white_black">#FFFFFFFF</color>
-    <color name="edittext">#E0E0E0</color>
-    <color name="hint">#616161</color>
-    <color name="blue">#0277BD</color>
-    <color name="lightblue">#03A9F4</color>"
-    <color name="transparent">#00000000</color>
-    <color name="gray">#26282A</color>
-    <color name="darkgray">#1C1D1F</color>
+    <color name="gray_transparent">#CCCCCCCC</color>
+    <color name="dialog_background">#FEF6FF</color>
+    <color name="dialog_radius_background">#EFE6F6</color>
 </resources>
