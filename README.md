@@ -20,6 +20,12 @@ The name **ClassQRoom** is a combination of the words **"Classroom"** and **"QR"
 - 6-digit code entry
 - **Combination modes** (QR+code or NFC+code or All) for extra security
 
+<p align="center">
+  <img src="images/cqr-std-1.jpeg" width="25%"/>
+  <img src="images/cqr-std-2.jpeg" width="25%"/>
+  <img src="images/cqr-std-3.jpeg" width="25%"/>
+</p>
+
 ### Advanced Security (Expected)
 
 - **Dynamic QR codes** that:  
@@ -40,6 +46,13 @@ The name **ClassQRoom** is a combination of the words **"Classroom"** and **"QR"
    - Choose between dynamic or static codes
 -  Send notifications to students
 -  "Exempt" status for automatically marked students
+
+-  
+
+<p align="center">
+  <img src="images/cqr-lec-1.jpeg" width="25%"/>
+  <img src="images/cqr-lec-2.jpeg" width="25%"/>
+</p>
 
 ## Technologies Used
 
