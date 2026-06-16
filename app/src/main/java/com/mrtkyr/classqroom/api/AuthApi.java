@@ -1,4 +1,4 @@
-package com.mrtkyr.classqroom;
+package com.mrtkyr.classqroom.api;
 
 import com.mrtkyr.classqroom.model.AuthRequest;
 import com.mrtkyr.classqroom.model.AuthResponse;
