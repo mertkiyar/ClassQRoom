@@ -1,0 +1,14 @@
+package com.mrtkyr.classqroom.enums;
+
+public enum AcademicTitle {
+    PROFESSOR,
+    ASSOCIATE_PROFESSOR,
+    ASSISTANT_PROFESSOR,
+    DOCTOR_LECTURER,
+    LECTURER,
+    RESEARCH_ASSISTANT,
+    TEACHING_ASSISTANT,
+    INSTRUCTOR,
+    SPECIALIST,
+    VISITING_PROFESSOR
+}
