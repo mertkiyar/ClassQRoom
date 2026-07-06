@@ -1,6 +1,6 @@
 package com.mrtkyr.classqroom.main;
 
-import com.google.firebase.Timestamp;
+import java.security.Timestamp;
 
 public class Attendance {
     private String studentName;
