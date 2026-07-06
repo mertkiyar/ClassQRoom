@@ -16,13 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 //import com.google.firebase.auth.FirebaseAuth;
 //import com.google.firebase.auth.FirebaseAuthException;
 import com.mrtkyr.classqroom.ApiClient;
-import com.mrtkyr.classqroom.AuthApi;
+import com.mrtkyr.classqroom.api.AuthApi;
 import com.mrtkyr.classqroom.R;
 import com.mrtkyr.classqroom.SessionManager;
 import com.mrtkyr.classqroom.model.AuthRequest;
 import com.mrtkyr.classqroom.model.AuthResponse;
-
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
