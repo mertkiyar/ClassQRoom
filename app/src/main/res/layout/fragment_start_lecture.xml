@@ -26,6 +26,7 @@
                 android:hint="@string/TEXT_SELECT_LECTURE"
                 android:inputType="none"
                 android:labelFor="@+id/lectureMenuLayout"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 tools:ignore="SpeakableTextPresentCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -45,6 +46,7 @@
                 android:hint="@string/TEXT_ATTENDANCE_TYPE"
                 android:inputType="none"
                 android:labelFor="@+id/lectureTypeMenuLayout"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 tools:ignore="SpeakableTextPresentCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
