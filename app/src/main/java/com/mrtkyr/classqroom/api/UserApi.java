@@ -7,7 +7,10 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface UserApi {
-    @GET("/rest/api/user/me")
+    @GET("rest/api/user/me")
     Call<RootResponse<UserModel>> me();
+
+    @GET("rest/api/user/update")
+    Call<RootResponse<UserModel>> update();
 
 }
