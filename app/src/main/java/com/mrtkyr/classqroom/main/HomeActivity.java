@@ -28,7 +28,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 //import com.google.firebase.firestore.DocumentSnapshot;
 //import com.google.firebase.firestore.FirebaseFirestore;
 import com.mrtkyr.classqroom.ApiClient;
-import com.mrtkyr.classqroom.SessionManager;
 import com.mrtkyr.classqroom.api.UserApi;
 import com.mrtkyr.classqroom.fragment.student.NFCScannerFragment;
 import com.mrtkyr.classqroom.fragment.lecturer.NFCWriterFragment;
@@ -63,8 +62,7 @@ public class HomeActivity extends AppCompatActivity {
 //        }
 //        userUID = currentUser.getUid();
 //        userUID = getIntent().getStringExtra("USER_UID");
-        SessionManager sessionManager = new SessionManager(HomeActivity.this);
-        String authToken = sessionManager.getToken();
+
         UserApi userApi = ApiClient.getClient(HomeActivity.this).create(UserApi.class);
         userApi.me().enqueue(new Callback<RootResponse<UserModel>>() {
             @Override
