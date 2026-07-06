@@ -1,12 +1,24 @@
 package com.mrtkyr.classqroom.model;
 
+import java.util.UUID;
+
 public class UserModel {
+
+    private UUID userId;
     private String firstName;
     private String lastName;
     private String email;
     private String gender;
     private String userType;
     private int departmentId;
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
 
     public String getFirstName() {
         return firstName;
