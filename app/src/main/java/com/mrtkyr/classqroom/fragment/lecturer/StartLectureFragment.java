@@ -9,54 +9,58 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.mrtkyr.classqroom.ApiClient;
 import com.mrtkyr.classqroom.R;
+import com.mrtkyr.classqroom.SessionManager;
+import com.mrtkyr.classqroom.api.AttendanceApi;
+import com.mrtkyr.classqroom.api.LecturerApi;
+import com.mrtkyr.classqroom.api.UserApi;
+import com.mrtkyr.classqroom.enums.AttendanceType;
+import com.mrtkyr.classqroom.model.AttendanceModel;
+import com.mrtkyr.classqroom.model.AttendanceSessionModel;
+import com.mrtkyr.classqroom.model.CourseModel;
+import com.mrtkyr.classqroom.model.RootResponse;
+import com.mrtkyr.classqroom.model.UserModel;
 
-import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class StartLectureFragment extends Fragment {
-    FirebaseFirestore db;
-    private static final String ARG_USER_UID = "userUID";
-    private String mUserUID;
-    private AutoCompleteTextView lectureAutoComplete, attendanceTypeAutoComplete;
+    private static final String TAG = "StartLectureFragment";
+    private static final long QR_POLL_INTERVAL_MS = 3000L;
+
+    private UUID lecturerUUID;
+    private AutoCompleteTextView courseAutoComplete, attendanceTypeAutoComplete;
     private ImageView ivQRCode;
     private LinearLayout llCodeBox;
-    private EditText codeBox1, codeBox2, codeBox3, codeBox4, codeBox5, codeBox6;
-    private final Handler handler = new Handler();
-    private static final SecureRandom RAND = new SecureRandom();
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private CourseModel selectedCourse;
     private final List<String> attendanceTypesList = new ArrayList<>();
     private NfcAdapter nfcAdapter;
-
-    public static StartLectureFragment newInstance(String userUID) {
-        StartLectureFragment fragment = new StartLectureFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_USER_UID, userUID);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private Runnable qrPollingRunnable;
+    private UUID lastSessionId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,7 +70,7 @@ public class StartLectureFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_start_lecture, container, false);
     }
 
@@ -74,192 +78,203 @@ public class StartLectureFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        db = FirebaseFirestore.getInstance();
-        codeBox1 = view.findViewById(R.id.codeBox1);
-        codeBox2 = view.findViewById(R.id.codeBox2);
-        codeBox3 = view.findViewById(R.id.codeBox3);
-        codeBox4 = view.findViewById(R.id.codeBox4);
-        codeBox5 = view.findViewById(R.id.codeBox5);
-        codeBox6 = view.findViewById(R.id.codeBox6);
-
-        lectureAutoComplete = view.findViewById(R.id.lectureAutoCompleteTextView);
-        attendanceTypeAutoComplete = view.findViewById(R.id.attendanceTypeAutoCompleteTextView);
-        ivQRCode = view.findViewById(R.id.ivQRCode);
-        llCodeBox = view.findViewById(R.id.llCodeBox);
-        Button btnStartLecture = view.findViewById(R.id.btnStartLecture);
-        btnStartLecture.setEnabled(false);
-
-        if (getArguments() != null) {
-            mUserUID = getArguments().getString(ARG_USER_UID);
-        }
-
-        if (mUserUID == null || mUserUID.isEmpty()) {
+        SessionManager sessionManager = new SessionManager(getContext());
+        if (sessionManager.getToken() == null || sessionManager.getToken().isEmpty()) {
             Toast.makeText(requireContext(), getString(R.string.MSG_USER_UID_NOT_FOUND), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        db.collection("lectures")
-                .whereEqualTo("lecturerUID", mUserUID)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        List<String> lectureNames = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            String lectureName = document.getString("name");
-                            if (lectureName != null) {
-                                lectureNames.add(lectureName);
-                            }
-                        }
+        UserApi userApi = ApiClient.getClient(getContext()).create(UserApi.class);
+        userApi.me().enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<RootResponse<UserModel>> call,
+                                   @NonNull Response<RootResponse<UserModel>> response) {
+                if (response.body() != null) {
+                    lecturerUUID = response.body().getData().getUserId();
 
-                        if (getContext() != null && !lectureNames.isEmpty()) {
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                                    getContext(),
-                                    android.R.layout.simple_dropdown_item_1line,
-                                    lectureNames
-                            );
-                            lectureAutoComplete.setAdapter(adapter);
-                        }
-                    } else {
-                        Toast.makeText(getContext(), getString(R.string.ERROR_FETCHING_LECTURES), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    courseAutoComplete = view.findViewById(R.id.lectureAutoCompleteTextView);
+                    attendanceTypeAutoComplete = view.findViewById(R.id.attendanceTypeAutoCompleteTextView);
+                    ivQRCode = view.findViewById(R.id.ivQRCode);
+                    llCodeBox = view.findViewById(R.id.llCodeBox);
+                    Button btnStartLecture = view.findViewById(R.id.btnStartLecture);
+                    btnStartLecture.setEnabled(false);
 
-        if (attendanceTypesList.isEmpty()) {
-            attendanceTypesList.add(getString(R.string.TEXT_QR_CODE));
-            attendanceTypesList.add(getString(R.string.TEXT_NFC));
-            attendanceTypesList.add(getString(R.string.TEXT_SIX_DIGIT_CODE));
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                requireContext(),
-                android.R.layout.simple_dropdown_item_1line,
-                attendanceTypesList
-        );
+                    LecturerApi lecturerApi = ApiClient.getClient(getContext()).create(LecturerApi.class);
+                    lecturerApi.getCoursesByLecturer(lecturerUUID)
+                            .enqueue(new Callback<>() {
+                                @Override
+                                public void onResponse(@NonNull Call<RootResponse<List<CourseModel>>> call,
+                                                       @NonNull Response<RootResponse<List<CourseModel>>> response) {
+                                    if (response.body() != null && !response.body().getData().isEmpty()) {
+                                        List<CourseModel> coursesList = new ArrayList<>(response.body().getData());
 
-        attendanceTypeAutoComplete.setAdapter(adapter);
+                                        if (getContext() != null && !coursesList.isEmpty()) {
+                                            ArrayAdapter<CourseModel> adapter = new ArrayAdapter<>(
+                                                    getContext(),
+                                                    android.R.layout.simple_dropdown_item_1line,
+                                                    coursesList);
+                                            courseAutoComplete.setAdapter(adapter);
+                                        }
 
-        if (!attendanceTypesList.isEmpty()) {
-            attendanceTypeAutoComplete.setText(attendanceTypesList.get(0), false);
-        }
+                                        if (attendanceTypesList.isEmpty()) {
+                                            attendanceTypesList.add(getString(R.string.TEXT_QR_CODE));
+                                            attendanceTypesList.add(getString(R.string.TEXT_NFC));
+                                            attendanceTypesList.add(getString(R.string.TEXT_SIX_DIGIT_CODE));
+                                        }
 
-        lectureAutoComplete.setOnItemClickListener((parent, view1, position, id) -> btnStartLecture.setEnabled(true));
-        btnStartLecture.setOnClickListener(v -> startLecture());
+                                        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(
+                                                requireContext(),
+                                                android.R.layout.simple_dropdown_item_1line,
+                                                attendanceTypesList);
+
+                                        attendanceTypeAutoComplete.setAdapter(typeAdapter);
+
+                                        if (!attendanceTypesList.isEmpty()) {
+                                            attendanceTypeAutoComplete.setText(attendanceTypesList.get(0), false);
+                                        }
+
+                                        courseAutoComplete.setOnItemClickListener((parent, view1, position, id) -> {
+                                            selectedCourse = (CourseModel) parent.getItemAtPosition(position);
+                                            btnStartLecture.setEnabled(true);
+                                        });
+                                        btnStartLecture.setOnClickListener(v -> startLecture());
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NonNull Call<RootResponse<List<CourseModel>>> call, @NonNull Throwable t) {
+                                    Log.e(TAG, "getCoursesByLecturer failed", t);
+                                    Toast.makeText(getContext(), getString(R.string.ERROR_FETCHING_COURSES), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<RootResponse<UserModel>> call, @NonNull Throwable t) {
+                Log.e(TAG, "me() failed", t);
+                Toast.makeText(getContext(), getString(R.string.ERROR_FETCHING_USERS), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        stopQRCodeUpdates();
     }
 
     public void startLecture() {
-        String lectureName = lectureAutoComplete.getText().toString();
-        String lectureType = attendanceTypeAutoComplete.getText().toString();
+        if (selectedCourse == null) {
+            Toast.makeText(getContext(), getString(R.string.TEXT_SELECT_COURSE), Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        db.collection("lectures")
-                .whereEqualTo("name", lectureName)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null && !task.getResult().isEmpty()) {
+        String selectedType = attendanceTypeAutoComplete.getText().toString();
 
-                        if (lectureType.equals(getString(R.string.TEXT_QR_CODE))) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String lectureUID = document.getId();
-                                startQRCodeUpdates(lectureUID);
+        AttendanceModel attendanceModel = new AttendanceModel();
+        attendanceModel.setCourse(selectedCourse);
+        attendanceModel.setLatitude(null);
+        attendanceModel.setLongitude(null);
+        attendanceModel.setAllowedRadiusMeters(null);
+
+        if (selectedType.equals(getString(R.string.TEXT_QR_CODE))) {
+            attendanceModel.setAttendanceType(AttendanceType.QR_CODE);
+        } else if (selectedType.equals(getString(R.string.TEXT_NFC))) {
+            attendanceModel.setAttendanceType(AttendanceType.NFC);
+        } else if (selectedType.equals(getString(R.string.TEXT_SIX_DIGIT_CODE))) {
+            attendanceModel.setAttendanceType(AttendanceType.SIX_DIGIT_CODE);
+        }
+
+        attendanceModel.setSessionHours(Short.valueOf("1"));
+        attendanceModel.setStartedAt(LocalDateTime.now());
+        attendanceModel.setExpiresAt(LocalDateTime.now().plusMinutes(10));
+        attendanceModel.setActive(true);
+
+        AttendanceApi attendanceApi = ApiClient.getClient(getContext()).create(AttendanceApi.class);
+        attendanceApi.startAttendance(attendanceModel).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<RootResponse<AttendanceModel>> call,
+                                   @NonNull Response<RootResponse<AttendanceModel>> response) {
+                if (response.body() != null && response.body().getData() != null) {
+                    UUID attendanceId = response.body().getData().getAttendanceId();
+
+                    if (selectedType.equals(getString(R.string.TEXT_QR_CODE))) {
+                        startQRCodeUpdates(attendanceId);
+                    } else if (selectedType.equals(getString(R.string.TEXT_NFC))) {
+                        if (nfcAdapter == null) {
+                            Toast.makeText(requireContext(), getString(R.string.MSG_NFC_NOT_SUPPORTED), Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        if (!nfcAdapter.isEnabled()) {
+                            Toast.makeText(requireContext(), getString(R.string.MSG_NFC_NOT_ENABLED), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                } else {
+                    Toast.makeText(getContext(), getString(R.string.ERROR_SESSION_CREATE), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<RootResponse<AttendanceModel>> call, @NonNull Throwable t) {
+                Log.e(TAG, "startAttendance failed", t);
+                Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_COURSE), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void startQRCodeUpdates(UUID attendanceId) {
+        lastSessionId = null;
+        llCodeBox.setVisibility(View.INVISIBLE);
+        ivQRCode.setVisibility(View.VISIBLE);
+
+        AttendanceApi attendanceApi = ApiClient.getClient(getContext()).create(AttendanceApi.class);
+
+        qrPollingRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (getContext() == null) return;
+
+                attendanceApi.getCurrentSession(attendanceId.toString()).enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(@NonNull Call<RootResponse<AttendanceSessionModel>> call,
+                                           @NonNull Response<RootResponse<AttendanceSessionModel>> response) {
+                        if (response.body() != null && response.body().getData() != null) {
+                            AttendanceSessionModel session = response.body().getData();
+                            UUID sessionId = session.getAttendanceSessionId();
+
+                            if (!sessionId.equals(lastSessionId)) {
+                                lastSessionId = sessionId;
+                                String qrPayload = attendanceId + "_" + sessionId;
+                                Bitmap qrBitmap = generateQRCode(qrPayload);
+                                if (qrBitmap != null && ivQRCode != null) {
+                                    ivQRCode.setImageBitmap(qrBitmap);
+                                }
                             }
                         }
+                    }
 
-                        else if (lectureType.equals(getString(R.string.TEXT_NFC))) {
-                            if (nfcAdapter == null) {
-                                Toast.makeText(requireContext(), getString(R.string.MSG_NFC_NOT_SUPPORTED), Toast.LENGTH_LONG).show();
-                                return;
-                            }
-
-                            if (!nfcAdapter.isEnabled()) {
-                                Toast.makeText(requireContext(), getString(R.string.MSG_NFC_NOT_ENABLED), Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-
-                            String lectureUID = task.getResult().getDocuments().get(0).getId();
-                            NFCWriterFragment dialog = NFCWriterFragment.newInstance(mUserUID, lectureUID);
-                            dialog.show(getParentFragmentManager(), "nfc_writer");
-                        }
-
-                        else if (lectureType.equals(getString(R.string.TEXT_SIX_DIGIT_CODE))) {
-                            String lectureUID = task.getResult().getDocuments().get(0).getId();
-
-                            db.collection("lectures")
-                                    .document(lectureUID)
-                                    .collection("sessions")
-                                    .add(sessionCreator("6-Digit Code"))
-                                    .addOnSuccessListener(sessionRef -> {
-                                        String sessionUID = sessionRef.getId();
-                                        String sixDigitCodeStr = String.valueOf(sixDigitCode());
-
-                                        HashMap<String, Object> codes = new HashMap<>();
-                                        codes.put("lectureUID", lectureUID);
-                                        codes.put("sessionUID", sessionUID);
-                                        db.collection("codes")
-                                                .document(sixDigitCodeStr)
-                                                .set(codes)
-                                                .addOnSuccessListener(documentSnapshot -> {
-                                                    sessionCreator("6-Digit Code");
-                                                    ivQRCode.setVisibility(View.INVISIBLE);
-                                                    llCodeBox.setVisibility(View.VISIBLE);
-                                                    showGeneratedCode(sixDigitCodeStr);
-                                                })
-                                                .addOnFailureListener(Throwable::getMessage);
-
-                                    });
+                    @Override
+                    public void onFailure(@NonNull Call<RootResponse<AttendanceSessionModel>> call, @NonNull Throwable t) {
+                        Log.e(TAG, "getCurrentSession failed", t);
+                        if (getContext() != null) {
+                            Toast.makeText(getContext(), getString(R.string.ERROR_FETCHING_SESSION), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-    }
 
-    public void startQRCodeUpdates(String lectureUID) {
-        Runnable updateQRCodeRunnable =  new Runnable() {
-            String currentSessionUID;
-            @Override
-            public void run() {
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                if (currentSessionUID != null && !currentSessionUID.isEmpty()) {
-                    db.collection("lectures")
-                            .document(lectureUID)
-                            .collection("sessions")
-                            .document(currentSessionUID)
-                            .update("isActive", false)
-                            .addOnSuccessListener(aVoid -> Toast.makeText(requireContext(), getString(R.string.MSG_SESSION_DISABLED), Toast.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Toast.makeText(requireContext(), getString(R.string.ERROR_SESSION_DISABLED), Toast.LENGTH_SHORT).show());
-                }
-
-                db.collection("lectures")
-                        .document(lectureUID)
-                        .collection("sessions")
-                        .add(sessionCreator("QR Code"))
-                        .addOnSuccessListener(sessionRef -> {
-                            currentSessionUID = sessionRef.getId();
-
-                            String token = (lectureUID + "_" + currentSessionUID);
-                            Bitmap qrCodeBitmap = generateQRCode(token);
-
-                            if (qrCodeBitmap != null) {
-                                llCodeBox.setVisibility(View.INVISIBLE);
-                                ivQRCode.setVisibility(View.VISIBLE);
-                                ivQRCode.setImageBitmap(qrCodeBitmap);
-                            }
-                        });
-
-                handler.postDelayed(this, 600000); //TODO will move server-side(as 15 second)
+                handler.postDelayed(this, QR_POLL_INTERVAL_MS);
             }
         };
-        handler.post(updateQRCodeRunnable);
+
+        handler.post(qrPollingRunnable);
     }
 
-    private HashMap<String, Object> sessionCreator(String type) {
-        HashMap<String, Object> session = new HashMap<>();
-        Calendar cal = Calendar.getInstance();
-        Date now = cal.getTime();
-        cal.add(Calendar.MINUTE, 50);
-        Date fiftyMinutesLater = cal.getTime();
-
-        session.put("createdAt", new Timestamp(now));
-        session.put("expiresAt", new Timestamp(fiftyMinutesLater));
-        session.put("isActive", true);
-        session.put("type", type);
-        return session;
+    private void stopQRCodeUpdates() {
+        if (qrPollingRunnable != null) {
+            handler.removeCallbacks(qrPollingRunnable);
+            qrPollingRunnable = null;
+        }
     }
 
     private Bitmap generateQRCode(String token) {
@@ -268,22 +283,8 @@ public class StartLectureFragment extends Fragment {
             BitMatrix bitMatrix = barcodeEncoder.encode(token, BarcodeFormat.QR_CODE, 500, 500);
             return barcodeEncoder.createBitmap(bitMatrix);
         } catch (WriterException e) {
-            System.out.println(e.getMessage());
+            Log.e(TAG, "QR generation failed", e);
             return null;
         }
-    }
-
-    public static int sixDigitCode() {
-        return 100_000 + RAND.nextInt(900_000);
-    }
-
-    private void showGeneratedCode(String code) {
-        if (code.length() != 6) return;
-        codeBox1.setText(String.valueOf(code.charAt(0)));
-        codeBox2.setText(String.valueOf(code.charAt(1)));
-        codeBox3.setText(String.valueOf(code.charAt(2)));
-        codeBox4.setText(String.valueOf(code.charAt(3)));
-        codeBox5.setText(String.valueOf(code.charAt(4)));
-        codeBox6.setText(String.valueOf(code.charAt(5)));
     }
 }

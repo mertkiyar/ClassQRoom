@@ -131,4 +131,5 @@
     <string name="ERROR_ATTEND_COURSE">Yoklamaya katılırken bir sorun oluştu!</string>
     <string name="MSG_SESSION_INVALID">Oturum geçersiz.</string>
     <string name="ERROR_FETCHING_USERS">Kullanıcılar alınırken bir hata oluştu!</string>
+    <string name="ERROR_FETCHING_SESSION">Oturum alınırken bir hata oluştu!</string>
 </resources>
