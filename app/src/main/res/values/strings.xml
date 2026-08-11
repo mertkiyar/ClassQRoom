@@ -132,4 +132,5 @@
     <string name="MSG_PASSWORD_RESET_LINK_INVALID_OR_EXPIRED">The password reset link is invalid or expired.</string>
     <string name="ERROR_ATTEND_COURSE">An error occurred during attending course!</string>
     <string name="MSG_SESSION_INVALID">The session is invaild.</string>
+    <string name="ERROR_FETCHING_USERS">An error occurred during fetching users!</string>
 </resources>

@@ -130,4 +130,5 @@
     <string name="MSG_PASSWORD_RESET_LINK_INVALID_OR_EXPIRED">Şifre sıfırlama linki geçersiz veya süresi dolmuş.</string>
     <string name="ERROR_ATTEND_COURSE">Yoklamaya katılırken bir sorun oluştu!</string>
     <string name="MSG_SESSION_INVALID">Oturum geçersiz.</string>
+    <string name="ERROR_FETCHING_USERS">Kullanıcılar alınırken bir hata oluştu!</string>
 </resources>
