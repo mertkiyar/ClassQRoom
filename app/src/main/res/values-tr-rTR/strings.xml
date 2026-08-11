@@ -31,14 +31,14 @@
     <string name="MSG_SENT_RESET_LINK_TO_EMAIL">Şifre sıfırlama bağlantısı gönderildi! E-Posta\'nı kontrol et.</string>
     <string name="TEXT_COMPULSORY">Zorunlu</string>
     <string name="TEXT_ELECTIVE">Seçmeli</string>
-    <string name="TEXT_LECTURE">Ders</string>
+    <string name="TEXT_COURSE">Ders</string>
     <string name="TEXT_LECTURER">Öğretim Görevlisi</string>
     <string name="TEXT_DEPARTMENT">Bölüm</string>
     <string name="MSG_QR_CODE_SCAN">Lütfen derse katılmak için Karekodu okutun!</string>
     <string name="BUTTON_SCAN_QR_CODE">Karekodu Tara</string>
     <string name="BUTTON_BACK">Geri Dön</string>
     <string name="ERROR_LOGIN">Giriş yaparken bir hata oluştu!</string>
-    <string name="BUTTON_START_LECTURE">Dersi Başlat</string>
+    <string name="BUTTON_START_COURSE">Dersi Başlat</string>
     <string name="BUTTON_ADD">Ekle</string>
     <string name="ERROR_INVALID_FORMAT">Geçersiz Format!</string>
     <string name="BUTTON_SAVE">Kaydet</string>
@@ -67,7 +67,7 @@
     <string name="TEXT_FACULTY">Fakülte</string>
     <string name="BUTTON_OK">Tamam</string>
     <string name="TEXT_SELECT_LECTURER">Öğretim Görevlisi Seç</string>
-    <string name="TEXT_SELECT_LECTURE">Ders Seç</string>
+    <string name="TEXT_SELECT_COURSE">Ders Seç</string>
     <string name="ERROR_INVALID_EMAIL">Geçersiz e-posta formatı.</string>
     <string name="ERROR_USER_NOT_FOUND">Bu e-posta adresine sahip bir kullanıcı bulunamadı.</string>
     <string name="ERROR_WRONG_PASSWORD">Girilen şifre yanlışi, tekrar dene!</string>
@@ -95,7 +95,7 @@
     <string name="TEXT_ATTENDANCE_DATE">Tarih:</string>
     <string name="TEXT_ATTENDANCE_TIME">Zaman:</string>
     <string name="MSG_NFC_NOT_ENABLED">NFC çalışmıyor. Lütfen ayarlardan NFC\'yi aktifleştirin.</string>
-    <string name="MSG_NFC_NOT_SUPPORTED">Cihazınız NFC\'yi desteklemiyor. Lütfen katılmak için karekod veya kod kullanın.</string>
+    <string name="MSG_NFC_NOT_SUPPORTED">Cihazınız NFC\'yi desteklemiyor. Lütfen katılmak için karekod veya 6-haneli kod kullanın.</string>
     <string name="TEXT_NFC_STATUS_PENDING">NFC bekleniyor..</string>
     <string name="TEXT_NFC_STATUS_SCANNING">NFC okunuyor..</string>
     <string name="TEXT_NFC_STATUS_SUCCESS">NFC taraması başarılı.</string>
@@ -122,12 +122,12 @@
     <string name="ERROR_WRITE_NFC">Ders NFC etiketine yazılamadı.</string>
     <string name="ERROR_SESSION_CREATE">Oturum oluşturulurken bir hata oluştu!</string>
     <string name="MSG_NOT_ATTEND">Yoklamaya katılamadın!</string>
-    <string name="ERROR_FETCHING_LECTURES">Dersler alınırken bir hata oluştu!</string>
+    <string name="ERROR_FETCHING_COURSES">Dersler alınırken bir hata oluştu!</string>
     <string name="MSG_SESSION_DISABLED">Önceki oturum devre dışı bırakıldı.</string>
     <string name="ERROR_SESSION_DISABLED">Önceki oturum devre dışı bırakılırken hata oluştu!</string>
     <string name="ERROR_FETCHING_ATTENDANCE_LIST">Yoklama listesi alınırken bir hata oluştu!</string>
     <string name="ERROR_NOT_CHANGE_PASSWORD">Hata: Şifre değiştirilemedi. Linkin süresi dolmuş olabilir.</string>
     <string name="MSG_PASSWORD_RESET_LINK_INVALID_OR_EXPIRED">Şifre sıfırlama linki geçersiz veya süresi dolmuş.</string>
-    <string name="ERROR_ATTEND_LECTURE">Yoklamaya katılırken bir sorun oluştu!</string>
+    <string name="ERROR_ATTEND_COURSE">Yoklamaya katılırken bir sorun oluştu!</string>
     <string name="MSG_SESSION_INVALID">Oturum geçersiz.</string>
 </resources>
