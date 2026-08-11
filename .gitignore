@@ -170,3 +170,4 @@ serviceAccountKey.json
 # Google Services files (for mobile apps)
 GoogleService-Info.plist
 # End of https://www.toptal.com/developers/gitignore/api/androidstudio,java
+.DS_Store
