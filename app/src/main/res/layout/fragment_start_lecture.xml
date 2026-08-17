@@ -23,7 +23,7 @@
                 android:id="@+id/lectureAutoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/TEXT_SELECT_LECTURE"
+                android:hint="@string/TEXT_SELECT_COURSE"
                 android:inputType="none"
                 android:labelFor="@+id/lectureMenuLayout"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -132,7 +132,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
             android:background="@drawable/bg_login_button"
-            android:text="@string/BUTTON_START_LECTURE"
+            android:text="@string/BUTTON_START_COURSE"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
