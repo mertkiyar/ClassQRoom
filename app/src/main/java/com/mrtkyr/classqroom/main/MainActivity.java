@@ -9,13 +9,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
-//import com.google.firebase.auth.FirebaseAuth;
-//import com.google.firebase.auth.FirebaseUser;
 import com.mrtkyr.classqroom.R;
 import com.mrtkyr.classqroom.SessionManager;
 
 public class MainActivity extends AppCompatActivity {
-//    private FirebaseAuth auth;
     SwitchMaterial darkModeSwitch;
     private SharedPreferences.Editor editor;
 
@@ -23,39 +20,29 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        auth = FirebaseAuth.getInstance();
+        
         SharedPreferences sharedPreferences = getSharedPreferences("ThemePrefs", MODE_PRIVATE);
         int nightMode = sharedPreferences.getInt("theme_mode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         AppCompatDelegate.setDefaultNightMode(nightMode);
     }
+    
     @Override
     protected void onStart() {
         super.onStart();
-//        FirebaseUser currentUser = auth.getCurrentUser();
-//        updateUI(currentUser);
         SessionManager sessionManager = new SessionManager(MainActivity.this);
         String token = sessionManager.getToken();
-        if (!token.isEmpty()) {
+
+        if (token != null && !token.isEmpty()) {
             Intent intent = new Intent(MainActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
         }
     }
 
-//    private void updateUI(FirebaseUser user) {
-//        if (user != null) {
-//            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-//            intent.putExtra("USER_UID", user.getUid());
-//            startActivity(intent);
-//            finish();
-//        }
-//    }
-
     public void onClickLoginMain(View v) {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
     }
 }
