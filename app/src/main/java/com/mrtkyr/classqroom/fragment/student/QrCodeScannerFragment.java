@@ -85,19 +85,19 @@ public class QrCodeScannerFragment extends Fragment {
                             : qrContent;
                     AttendanceApi attendanceApi = ApiClient.getClient(getContext()).create(AttendanceApi.class);
                     attendanceApi.getAttendanceSession(sessionId)
-                            .enqueue(new Callback<RootResponse<AttendanceSessionModel>>() {
+                            .enqueue(new Callback<>() {
                                 @Override
-                                public void onResponse(Call<RootResponse<AttendanceSessionModel>> call,
-                                        Response<RootResponse<AttendanceSessionModel>> response) {
+                                public void onResponse(@NonNull Call<RootResponse<AttendanceSessionModel>> call,
+                                                       @NonNull Response<RootResponse<AttendanceSessionModel>> response) {
                                     if (response.isSuccessful() && response.body() != null
                                             && response.body().getData() != null) {
                                         AttendanceSessionModel session = response.body().getData();
 
                                         UserApi userApi = ApiClient.getClient(getContext()).create(UserApi.class);
-                                        userApi.me().enqueue(new Callback<RootResponse<UserModel>>() {
+                                        userApi.me().enqueue(new Callback<>() {
                                             @Override
-                                            public void onResponse(Call<RootResponse<UserModel>> call,
-                                                    Response<RootResponse<UserModel>> response) {
+                                            public void onResponse(@NonNull Call<RootResponse<UserModel>> call,
+                                                                   @NonNull Response<RootResponse<UserModel>> response) {
                                                 if (response.body() == null || response.body().getData() == null)
                                                     return;
 
@@ -115,10 +115,10 @@ public class QrCodeScannerFragment extends Fragment {
                                                 record.setClientIp("0.0.0.0");
 
                                                 attendanceApi.takeAttendance(record)
-                                                        .enqueue(new Callback<RootResponse<Void>>() {
+                                                        .enqueue(new Callback<>() {
                                                             @Override
-                                                            public void onResponse(Call<RootResponse<Void>> call,
-                                                                    Response<RootResponse<Void>> response) {
+                                                            public void onResponse(@NonNull Call<RootResponse<Void>> call,
+                                                                                   @NonNull Response<RootResponse<Void>> response) {
                                                                 if (response.isSuccessful()) {
                                                                     Toast.makeText(getContext(),
                                                                             getString(R.string.MSG_ATTENDANCE_SUCCESS),
@@ -150,8 +150,8 @@ public class QrCodeScannerFragment extends Fragment {
                                                             }
 
                                                             @Override
-                                                            public void onFailure(Call<RootResponse<Void>> call,
-                                                                    Throwable t) {
+                                                            public void onFailure(@NonNull Call<RootResponse<Void>> call,
+                                                                                  @NonNull Throwable t) {
                                                                 Toast.makeText(getContext(),
                                                                         getString(R.string.ERROR_ATTEND_COURSE),
                                                                         Toast.LENGTH_SHORT).show();
@@ -160,7 +160,7 @@ public class QrCodeScannerFragment extends Fragment {
                                             }
 
                                             @Override
-                                            public void onFailure(Call<RootResponse<UserModel>> call, Throwable t) {
+                                            public void onFailure(@NonNull Call<RootResponse<UserModel>> call, @NonNull Throwable t) {
                                                 Toast.makeText(getContext(), getString(R.string.ERROR_FETCHING_USERS),
                                                         Toast.LENGTH_SHORT).show();
                                             }
@@ -169,7 +169,7 @@ public class QrCodeScannerFragment extends Fragment {
                                 }
 
                                 @Override
-                                public void onFailure(Call<RootResponse<AttendanceSessionModel>> call, Throwable t) {
+                                public void onFailure(@NonNull Call<RootResponse<AttendanceSessionModel>> call, @NonNull Throwable t) {
                                     Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
