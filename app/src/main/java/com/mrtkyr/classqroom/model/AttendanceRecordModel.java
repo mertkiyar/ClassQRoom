@@ -7,39 +7,30 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class AttendanceRecordModel {
-    private int attendanceRecordId;
-    private UUID student;
-    private AttendanceSessionModel attendanceSession;
+    private UUID studentId;
+    private UUID attendanceSessionId;
     private AttendanceType attendanceType;
     private BigDecimal currentLat;
     private BigDecimal currentLong;
-    private UUID deviceId;
-    private String clientIp;
     private LocalDateTime attendAt;
     private Boolean late;
+    private UUID deviceId;
+    private String clientIp;
 
-    public int getAttendanceRecordId() {
-        return attendanceRecordId;
+    public UUID getStudentId() {
+        return studentId;
     }
 
-    public void setAttendanceRecordId(int attendanceRecordId) {
-        this.attendanceRecordId = attendanceRecordId;
+    public void setStudentId(UUID studentId) {
+        this.studentId = studentId;
     }
 
-    public UUID getStudent() {
-        return student;
+    public UUID getAttendanceSessionId() {
+        return attendanceSessionId;
     }
 
-    public void setStudent(UUID student) {
-        this.student = student;
-    }
-
-    public AttendanceSessionModel getAttendanceSession() {
-        return attendanceSession;
-    }
-
-    public void setAttendanceSession(AttendanceSessionModel attendanceSession) {
-        this.attendanceSession = attendanceSession;
+    public void setAttendanceSessionId(UUID attendanceSessionId) {
+        this.attendanceSessionId = attendanceSessionId;
     }
 
     public AttendanceType getAttendanceType() {

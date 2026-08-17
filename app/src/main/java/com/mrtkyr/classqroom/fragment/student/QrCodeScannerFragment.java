@@ -17,27 +17,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+import com.mrtkyr.classqroom.ApiClient;
 import com.mrtkyr.classqroom.R;
+import com.mrtkyr.classqroom.api.AttendanceApi;
+import com.mrtkyr.classqroom.api.UserApi;
+import com.mrtkyr.classqroom.enums.AttendanceType;
+import com.mrtkyr.classqroom.model.AttendanceRecordModel;
+import com.mrtkyr.classqroom.model.AttendanceSessionModel;
+import com.mrtkyr.classqroom.model.RootResponse;
+import com.mrtkyr.classqroom.model.UserModel;
 
-import java.util.HashMap;
+import java.time.LocalDateTime;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class QrCodeScannerFragment extends Fragment {
-    private FirebaseFirestore db;
-    private static final String ARG_USER_UID = "userUID";
-    private String mUserUID;
-
-    public static QrCodeScannerFragment newInstance(String userUID) {
-        QrCodeScannerFragment fragment = new QrCodeScannerFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_USER_UID, userUID);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,11 +46,6 @@ public class QrCodeScannerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getArguments() != null) {
-            this.mUserUID = getArguments().getString(ARG_USER_UID);
-        }
-
-        db = FirebaseFirestore.getInstance();
         Button btnScanQRCode = view.findViewById(R.id.btnScanQRCode);
 
         btnScanQRCode.setOnClickListener(v -> startScan());
@@ -75,9 +68,8 @@ public class QrCodeScannerFragment extends Fragment {
             if (vibratorManager != null) {
                 Vibrator vibrator = vibratorManager.getDefaultVibrator();
                 vibrator.vibrate(VibrationEffect.createWaveform(
-                        new long[]{0, 100, 50, 100},
-                        -1
-                ));
+                        new long[] { 0, 100, 50, 100 },
+                        -1));
             }
         }
     }
@@ -87,76 +79,100 @@ public class QrCodeScannerFragment extends Fragment {
             result -> {
                 if (result.getContents() != null) {
                     vibrate();
-                    String token = result.getContents();
-                    if (token.contains("_")) {
-                        String lectureUID = token.substring(0, token.indexOf("_"));
-                        String sessionUID = token.substring(token.indexOf("_") + 1);
-                        if (!lectureUID.isEmpty() && !sessionUID.isEmpty()) {
-                            db.collection("lectures")
-                                    .document(lectureUID)
-                                    .collection("sessions")
-                                    .document(sessionUID)
-                                    .get()
-                                    .addOnSuccessListener(task -> {
-                                        if (Boolean.TRUE.equals(task.get("isActive"))) {
-                                            String attendanceUID =  lectureUID + "_" + sessionUID + "_" + mUserUID;
-                                            DocumentReference userRef = db.collection("users").document(mUserUID);
-                                            DocumentReference lectureRef = db.collection("lectures").document(lectureUID);
+                    String qrContent = result.getContents();
+                    String sessionId = qrContent.contains("_")
+                            ? qrContent.substring(qrContent.indexOf("_") + 1)
+                            : qrContent;
+                    AttendanceApi attendanceApi = ApiClient.getClient(getContext()).create(AttendanceApi.class);
+                    attendanceApi.getAttendanceSession(sessionId)
+                            .enqueue(new Callback<RootResponse<AttendanceSessionModel>>() {
+                                @Override
+                                public void onResponse(Call<RootResponse<AttendanceSessionModel>> call,
+                                        Response<RootResponse<AttendanceSessionModel>> response) {
+                                    if (response.isSuccessful() && response.body() != null
+                                            && response.body().getData() != null) {
+                                        AttendanceSessionModel session = response.body().getData();
 
-                                            userRef.get().addOnSuccessListener(userDocument -> {
-                                                if (userDocument.exists()) {
-                                                    String studentName = userDocument.getString("name") + " " + userDocument.getString("surname");
-                                                    lectureRef.get().addOnSuccessListener(lectureDocument -> {
-                                                        if (lectureDocument.exists()) {
-                                                            String lectureName = lectureDocument.getString("name");
-                                                            String lecturerUID = lectureDocument.getString("lecturerUID");
+                                        UserApi userApi = ApiClient.getClient(getContext()).create(UserApi.class);
+                                        userApi.me().enqueue(new Callback<RootResponse<UserModel>>() {
+                                            @Override
+                                            public void onResponse(Call<RootResponse<UserModel>> call,
+                                                    Response<RootResponse<UserModel>> response) {
+                                                if (response.body() == null || response.body().getData() == null)
+                                                    return;
 
-                                                            HashMap<String, Object> attendance = new HashMap<>();
-                                                            attendance.put("studentName", studentName);
-                                                            attendance.put("lectureName", lectureName);
-                                                            attendance.put("lecturerUID", lecturerUID);
-                                                            attendance.put("lectureUID", lectureUID);
-                                                            attendance.put("sessionUID", sessionUID);
-                                                            attendance.put("studentUID", mUserUID);
-                                                            attendance.put("scannedAt", Timestamp.now());
-                                                            attendance.put("status", "Present");
-                                                            attendance.put("type", "QR Code");
+                                                AttendanceRecordModel record = new AttendanceRecordModel();
+                                                record.setStudentId(response.body().getData().getUserId());
+                                                record.setAttendanceSessionId(session.getAttendanceSessionId());
+                                                record.setAttendanceType(AttendanceType.QR_CODE);
+                                                record.setCurrentLat(null);
+                                                record.setCurrentLong(null);
+                                                record.setAttendAt(LocalDateTime.now());
+                                                record.setLate(false);
 
-                                                            db.collection("attendances")
-                                                                    .document(attendanceUID)
-                                                                    .set(attendance)
-                                                                    .addOnSuccessListener(aVoid -> {
-                                                                        if (getContext() != null) {
-                                                                            Toast.makeText(getContext(), getString(R.string.MSG_ATTENDANCE_SUCCESS), Toast.LENGTH_LONG).show();
+                                                // todo implement actual device ID and client IP fetching
+                                                record.setDeviceId(java.util.UUID.randomUUID());
+                                                record.setClientIp("0.0.0.0");
+
+                                                attendanceApi.takeAttendance(record)
+                                                        .enqueue(new Callback<RootResponse<Void>>() {
+                                                            @Override
+                                                            public void onResponse(Call<RootResponse<Void>> call,
+                                                                    Response<RootResponse<Void>> response) {
+                                                                if (response.isSuccessful()) {
+                                                                    Toast.makeText(getContext(),
+                                                                            getString(R.string.MSG_ATTENDANCE_SUCCESS),
+                                                                            Toast.LENGTH_LONG).show();
+                                                                } else {
+                                                                    String errorMsg = getString(
+                                                                            R.string.MSG_ALREADY_ATTENDED);
+                                                                    try {
+                                                                        if (response.errorBody() != null) {
+                                                                            String errorJson = response.errorBody()
+                                                                                    .string();
+                                                                            org.json.JSONObject jsonObject = new org.json.JSONObject(
+                                                                                    errorJson);
+                                                                            if (jsonObject.has("exception")) {
+                                                                                org.json.JSONObject exceptionObj = jsonObject
+                                                                                        .getJSONObject("exception");
+                                                                                if (exceptionObj.has("message")) {
+                                                                                    errorMsg = exceptionObj
+                                                                                            .getString("message");
+                                                                                }
+                                                                            }
                                                                         }
-                                                                    })
-                                                                    .addOnFailureListener(e -> {
-                                                                        if (getContext() != null) {
-                                                                            Toast.makeText(getContext(), getString(R.string.MSG_ALREADY_ATTENDED), Toast.LENGTH_LONG).show();
-                                                                        }
-                                                                    });
-                                                        } else {
-                                                            if (getContext() != null) Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_LECTURE), Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    }).addOnFailureListener(lectureError -> {
-                                                        if (getContext() != null) Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_LECTURE), Toast.LENGTH_SHORT).show();
-                                                    });
-                                                } else {
-                                                    if (getContext() != null) Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_LECTURE), Toast.LENGTH_SHORT).show();
-                                                }
-                                            }).addOnFailureListener(userError -> {
-                                                if (getContext() != null) Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_LECTURE), Toast.LENGTH_SHORT).show();
-                                            });
-                                        } else {
-                                            Toast.makeText(getContext(), getString(R.string.MSG_QR_CODE_INVALID), Toast.LENGTH_LONG).show();
-                                        }
-                                    });
-                        } else {
-                            Toast.makeText(getContext(), getString(R.string.MSG_QR_CODE_INVALID), Toast.LENGTH_LONG).show();
-                        }
-                    } else {
-                        Toast.makeText(getContext(), getString(R.string.MSG_QR_CODE_INVALID), Toast.LENGTH_LONG).show();
-                    }
+                                                                    } catch (Exception e) {
+                                                                        e.printStackTrace();
+                                                                    }
+                                                                    Toast.makeText(getContext(), errorMsg,
+                                                                            Toast.LENGTH_LONG).show();
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(Call<RootResponse<Void>> call,
+                                                                    Throwable t) {
+                                                                Toast.makeText(getContext(),
+                                                                        getString(R.string.ERROR_ATTEND_COURSE),
+                                                                        Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<RootResponse<UserModel>> call, Throwable t) {
+                                                Toast.makeText(getContext(), getString(R.string.ERROR_FETCHING_USERS),
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<RootResponse<AttendanceSessionModel>> call, Throwable t) {
+                                    Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                 }
             });
 

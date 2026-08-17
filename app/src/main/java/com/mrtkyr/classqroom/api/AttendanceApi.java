@@ -17,7 +17,7 @@ public interface AttendanceApi {
     Call<RootResponse<AttendanceSessionModel>> getAttendanceSession(@Path("id") String uuid);
 
     @POST("rest/api/attendance/record/save")
-    Call<RootResponse<Void>> takeAttendance(@Query("sessionId") AttendanceRecordModel record);
+    Call<RootResponse<Void>> takeAttendance(@Body AttendanceRecordModel record);
 
     @POST("rest/api/attendance/start")
     Call<RootResponse<AttendanceModel>> startAttendance(@Body AttendanceModel attendance);
