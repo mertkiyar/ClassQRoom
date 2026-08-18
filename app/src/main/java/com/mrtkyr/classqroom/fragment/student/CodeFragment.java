@@ -16,34 +16,27 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.mrtkyr.classqroom.ApiClient;
 import com.mrtkyr.classqroom.R;
+import com.mrtkyr.classqroom.api.AttendanceApi;
+import com.mrtkyr.classqroom.api.UserApi;
+import com.mrtkyr.classqroom.model.AttendanceRecordModel;
+import com.mrtkyr.classqroom.model.AttendanceSessionModel;
+import com.mrtkyr.classqroom.model.RootResponse;
+import com.mrtkyr.classqroom.model.UserModel;
+import com.mrtkyr.classqroom.enums.AttendanceType;
+import java.time.LocalDateTime;
 
-import java.util.HashMap;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CodeFragment extends Fragment {
-    private FirebaseFirestore db;
-    private static final String ARG_USER_UID = "userUID";
-    private String mUserUID;
     private EditText[] codeBoxes;
-
-    public static CodeFragment newInstance(String userUID) {
-        CodeFragment fragment = new CodeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_USER_UID, userUID);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mUserUID = getArguments().getString(ARG_USER_UID);
-        }
     }
 
     @Override
@@ -57,7 +50,6 @@ public class CodeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        db = FirebaseFirestore.getInstance();
         Button btnEnterCode = view.findViewById(R.id.btnEnterCode);
         codeBoxes = new EditText[]{
                 view.findViewById(R.id.codeBox1),
@@ -105,80 +97,79 @@ public class CodeFragment extends Fragment {
             return;
         }
 
-        db.collection("codes")
-                        .document(enteredCode)
-                                .get()
-                                        .addOnCompleteListener(codesTask -> {
-                                            DocumentSnapshot codeDoc = codesTask.getResult();
-                                            if (!codesTask.isSuccessful() || !codeDoc.exists()) {
-                                                Toast.makeText(getContext(), getString(R.string.MSG_CODE_INVALID), Toast.LENGTH_LONG).show();
-                                                return;
+        AttendanceApi attendanceApi = ApiClient.getClient(getContext()).create(AttendanceApi.class);
+        attendanceApi.getAttendanceSessionByCode(enteredCode).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<RootResponse<AttendanceSessionModel>> call,
+                                   @NonNull Response<RootResponse<AttendanceSessionModel>> response) {
+                if (response.body() != null && response.body().getData() != null) {
+                    AttendanceSessionModel session = response.body().getData();
+
+                    UserApi userApi = ApiClient.getClient(getContext()).create(UserApi.class);
+                    userApi.me().enqueue(new Callback<>() {
+                        @Override
+                        public void onResponse(@NonNull Call<RootResponse<UserModel>> userCall,
+                                               @NonNull Response<RootResponse<UserModel>> userResponse) {
+                            if (userResponse.body() != null && userResponse.body().getData() != null) {
+                                String userIp = "127.0.0.1"; // Default or dynamic if implemented later
+
+                                AttendanceRecordModel record = new AttendanceRecordModel();
+                                record.setStudentId(userResponse.body().getData().getUserId());
+                                record.setAttendanceSessionId(session.getAttendanceSessionId());
+                                record.setAttendanceType(AttendanceType.SIX_DIGIT_CODE);
+                                record.setCurrentLat(null);
+                                record.setCurrentLong(null);
+                                record.setAttendAt(LocalDateTime.now());
+                                record.setLate(false);
+                                record.setDeviceId(null); //todo will be implemented later
+                                record.setClientIp(userIp);
+
+                                attendanceApi.takeAttendance(record).enqueue(new Callback<>() {
+                                    @Override
+                                    public void onResponse(@NonNull Call<RootResponse<Void>> takeCall,
+                                                           @NonNull Response<RootResponse<Void>> takeResponse) {
+                                        if (takeResponse.isSuccessful()) {
+                                            if (getContext() != null) {
+                                                Toast.makeText(getContext(), getString(R.string.MSG_ATTENDANCE_SUCCESS), Toast.LENGTH_LONG).show();
                                             }
-                                            String lectureUID = codeDoc.getString("lectureUID");
-                                            String sessionUID = codeDoc.getString("sessionUID");
-                                            if (lectureUID == null || sessionUID == null) return;
-                                            if (!lectureUID.isEmpty() && !sessionUID.isEmpty()) {
-                                                db.collection("lectures")
-                                                        .document(lectureUID)
-                                                        .collection("sessions")
-                                                        .document(sessionUID)
-                                                        .get()
-                                                        .addOnSuccessListener(task -> {
-                                                            if (Boolean.TRUE.equals(task.get("isActive"))) {
-                                                                String attendanceUID =  lectureUID + "_" + sessionUID + "_" + mUserUID;
-                                                                DocumentReference userRef = db.collection("users").document(mUserUID);
-                                                                DocumentReference lectureRef = db.collection("lectures").document(lectureUID);
-
-                                                                userRef.get().addOnSuccessListener(userDocument -> {
-                                                                    if (userDocument.exists()) {
-                                                                        String studentName = userDocument.getString("name") + " " + userDocument.getString("surname");
-                                                                        lectureRef.get().addOnSuccessListener(lectureDocument -> {
-                                                                            if (lectureDocument.exists()) {
-                                                                                String lectureName = lectureDocument.getString("name");
-                                                                                String lecturerUID = lectureDocument.getString("lecturerUID");
-
-                                                                                HashMap<String, Object> attendance = new HashMap<>();
-                                                                                attendance.put("studentName", studentName);
-                                                                                attendance.put("lectureName", lectureName);
-                                                                                attendance.put("lecturerUID", lecturerUID);
-                                                                                attendance.put("lectureUID", lectureUID);
-                                                                                attendance.put("sessionUID", sessionUID);
-                                                                                attendance.put("studentUID", mUserUID);
-                                                                                attendance.put("scannedAt", Timestamp.now());
-                                                                                attendance.put("status", "Present");
-                                                                                attendance.put("type", "6-Digit Code");
-
-                                                                                db.collection("attendances")
-                                                                                        .document(attendanceUID)
-                                                                                        .set(attendance)
-                                                                                        .addOnSuccessListener(aVoid -> {
-                                                                                            if (getContext() != null) {
-                                                                                                Toast.makeText(getContext(), getString(R.string.MSG_ATTENDANCE_SUCCESS), Toast.LENGTH_LONG).show();
-                                                                                            }
-                                                                                        })
-                                                                                        .addOnFailureListener(e -> {
-                                                                                            if (getContext() != null) {
-                                                                                                Toast.makeText(getContext(), getString(R.string.MSG_ALREADY_ATTENDED), Toast.LENGTH_LONG).show();
-                                                                                            }
-                                                                                        });
-                                                                            } else {
-                                                                                if (getContext() != null) Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_LECTURE), Toast.LENGTH_SHORT).show();
-                                                                            }
-                                                                        }).addOnFailureListener(lectureError -> {
-                                                                            if (getContext() != null) Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_LECTURE), Toast.LENGTH_SHORT).show();
-                                                                        });
-                                                                    } else {
-                                                                        if (getContext() != null) Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_LECTURE), Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                }).addOnFailureListener(userError -> {
-                                                                    if (getContext() != null) Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_LECTURE), Toast.LENGTH_SHORT).show();
-                                                                });
-                                                            } else {
-                                                                Toast.makeText(getContext(), getString(R.string.MSG_CODE_INVALID), Toast.LENGTH_LONG).show();
-                                                            }
-                                                        });
+                                        } else {
+                                            if (getContext() != null) {
+                                                Toast.makeText(getContext(), getString(R.string.MSG_ALREADY_ATTENDED), Toast.LENGTH_LONG).show();
                                             }
-                                        });
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(@NonNull Call<RootResponse<Void>> takeCall, @NonNull Throwable t) {
+                                        if (getContext() != null) {
+                                            Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_COURSE), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<RootResponse<UserModel>> userCall, @NonNull Throwable t) {
+                            if (getContext() != null) {
+                                Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_COURSE), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                } else {
+                    if (getContext() != null) {
+                        Toast.makeText(getContext(), getString(R.string.MSG_CODE_INVALID), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<RootResponse<AttendanceSessionModel>> call, @NonNull Throwable t) {
+                if (getContext() != null) {
+                    Toast.makeText(getContext(), getString(R.string.MSG_CODE_INVALID), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private String getEnteredCode() {

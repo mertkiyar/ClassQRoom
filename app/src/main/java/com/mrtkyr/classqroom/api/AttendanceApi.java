@@ -27,5 +27,7 @@ public interface AttendanceApi {
 
     @GET("rest/api/attendance/session/get-nfc/{nfcPath}")
     Call<RootResponse<AttendanceSessionModel>> getAttendanceSessionByNfcPath(@Path("nfcPath") String nfcPath);
-}
 
+    @GET("rest/api/attendance/session/get-code/{code}")
+    Call<RootResponse<AttendanceSessionModel>> getAttendanceSessionByCode(@Path("code") String code);
+}

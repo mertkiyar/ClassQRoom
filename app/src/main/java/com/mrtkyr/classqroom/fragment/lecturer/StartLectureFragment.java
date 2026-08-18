@@ -10,13 +10,13 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -54,6 +54,7 @@ public class StartLectureFragment extends Fragment {
     private AutoCompleteTextView courseAutoComplete, attendanceTypeAutoComplete;
     private ImageView ivQRCode;
     private LinearLayout llCodeBox;
+    private EditText[] codeBoxes;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private CourseModel selectedCourse;
     private final List<String> attendanceTypesList = new ArrayList<>();
@@ -95,6 +96,14 @@ public class StartLectureFragment extends Fragment {
                     attendanceTypeAutoComplete = view.findViewById(R.id.attendanceTypeAutoCompleteTextView);
                     ivQRCode = view.findViewById(R.id.ivQRCode);
                     llCodeBox = view.findViewById(R.id.llCodeBox);
+                    codeBoxes = new EditText[]{
+                            view.findViewById(R.id.codeBox1),
+                            view.findViewById(R.id.codeBox2),
+                            view.findViewById(R.id.codeBox3),
+                            view.findViewById(R.id.codeBox4),
+                            view.findViewById(R.id.codeBox5),
+                            view.findViewById(R.id.codeBox6)
+                    };
                     Button btnStartLecture = view.findViewById(R.id.btnStartLecture);
                     btnStartLecture.setEnabled(false);
 
@@ -215,6 +224,8 @@ public class StartLectureFragment extends Fragment {
                         } else {
                             Toast.makeText(requireContext(), getString(R.string.ERROR_SESSION_CREATE), Toast.LENGTH_SHORT).show();
                         }
+                    } else if (selectedType.equals(getString(R.string.TEXT_SIX_DIGIT_CODE))) {
+                        startSixDigitCodeUpdates(attendanceId);
                     }
                 } else {
                     Toast.makeText(getContext(), getString(R.string.ERROR_SESSION_CREATE), Toast.LENGTH_SHORT).show();
@@ -279,6 +290,51 @@ public class StartLectureFragment extends Fragment {
             handler.removeCallbacks(qrPollingRunnable);
             qrPollingRunnable = null;
         }
+    }
+
+    private void startSixDigitCodeUpdates(UUID attendanceId) {
+        lastSessionId = null;
+        ivQRCode.setVisibility(View.INVISIBLE);
+        llCodeBox.setVisibility(View.VISIBLE);
+
+        AttendanceApi attendanceApi = ApiClient.getClient(getContext()).create(AttendanceApi.class);
+
+        qrPollingRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (getContext() == null) return;
+
+                attendanceApi.getCurrentSession(attendanceId.toString()).enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(@NonNull Call<RootResponse<AttendanceSessionModel>> call,
+                                           @NonNull Response<RootResponse<AttendanceSessionModel>> response) {
+                        if (response.body() != null && response.body().getData() != null) {
+                            AttendanceSessionModel session = response.body().getData();
+                            UUID sessionId = session.getAttendanceSessionId();
+                            String code = session.getSixDigitCode();
+
+                            if (!sessionId.equals(lastSessionId) && code != null && code.length() == 6) {
+                                lastSessionId = sessionId;
+                                for (int i = 0; i < 6; i++) {
+                                    codeBoxes[i].setText(String.valueOf(code.charAt(i)));
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<RootResponse<AttendanceSessionModel>> call, @NonNull Throwable t) {
+                        if (getContext() != null) {
+                            Toast.makeText(getContext(), getString(R.string.ERROR_FETCHING_SESSION), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                handler.postDelayed(this, QR_POLL_INTERVAL_MS);
+            }
+        };
+
+        handler.post(qrPollingRunnable);
     }
 
     private Bitmap generateQRCode(String token) {
