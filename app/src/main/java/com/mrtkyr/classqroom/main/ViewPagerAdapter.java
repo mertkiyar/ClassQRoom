@@ -23,7 +23,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         return switch (position) {
-            case 1 -> NFCFragment.newInstance(userUID);
+            case 1 -> new NFCFragment();
             case 2 -> CodeFragment.newInstance(userUID);
             case 3 -> AttendancesFragment.newInstance(userUID);
             case 4 -> ProfileFragment.newInstance(userUID);

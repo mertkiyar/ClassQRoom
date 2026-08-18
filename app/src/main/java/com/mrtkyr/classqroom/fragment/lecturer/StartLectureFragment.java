@@ -205,6 +205,15 @@ public class StartLectureFragment extends Fragment {
                         }
                         if (!nfcAdapter.isEnabled()) {
                             Toast.makeText(requireContext(), getString(R.string.MSG_NFC_NOT_ENABLED), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        UUID nfcPath = response.body().getData().getNfcPath();
+                        if (nfcPath != null) {
+                            NFCWriterFragment nfcWriterFragment = NFCWriterFragment.newInstance(nfcPath.toString());
+                            nfcWriterFragment.show(requireActivity().getSupportFragmentManager(), "nfc_writer");
+                        } else {
+                            Toast.makeText(requireContext(), getString(R.string.ERROR_SESSION_CREATE), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } else {
