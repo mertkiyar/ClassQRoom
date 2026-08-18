@@ -27,34 +27,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.mrtkyr.classqroom.R;
+import com.mrtkyr.classqroom.SessionManager;
 
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 
 public class NFCWriterFragment extends DialogFragment {
-    private static final String ARG_USER_UID = "userUID";
-    private String mUserUID;
     private TextView tvNFCStatus;
     private Button btnBackNFCScanner;
     private NfcAdapter nfcAdapter;
     private PendingIntent pendingIntent;
     private IntentFilter[] intentFilters;
     private boolean isNfcScanEnabled = false;
-    private static final String ARG_LECTURE_UID = "lectureUID";
-    private String mLectureUID;
+    private String nfcPath;
 
-    FirebaseFirestore db;
-
-    public static NFCWriterFragment newInstance(String userUID, String lectureUID) {
+    public static NFCWriterFragment newInstance(String nfcPath) {
         NFCWriterFragment fragment = new NFCWriterFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_USER_UID, userUID);
-        args.putString(ARG_LECTURE_UID, lectureUID);
+        args.putString("NFC_PATH", nfcPath);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,6 +52,9 @@ public class NFCWriterFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            nfcPath = getArguments().getString("NFC_PATH");
+        }
         nfcAdapter = NfcAdapter.getDefaultAdapter(requireActivity());
         setCancelable(false);
     }
@@ -94,12 +87,13 @@ public class NFCWriterFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getArguments() != null) {
-            this.mUserUID = getArguments().getString(ARG_USER_UID);
-            this.mLectureUID = getArguments().getString(ARG_LECTURE_UID);
+
+        SessionManager sessionManager = new SessionManager(getContext());
+        if (sessionManager.getToken() == null || sessionManager.getToken().isEmpty()) {
+            Toast.makeText(requireContext(), getString(R.string.MSG_USER_UID_NOT_FOUND), Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        db = FirebaseFirestore.getInstance();
         prepareNfcForegroundDispatch();
 
         isNfcScanEnabled = true;
@@ -114,26 +108,20 @@ public class NFCWriterFragment extends DialogFragment {
     }
 
     public void onNfcTagReceived(Tag tag) {
-        db.collection("lectures")
-                .document(mLectureUID)
-                .collection("sessions")
-                .add(sessionCreator())
-                .addOnSuccessListener(sessionRef -> {
-                    String sessionUID = sessionRef.getId();
-                    String dataToWrite = mLectureUID + "_" + sessionUID;
+        if (nfcPath == null || nfcPath.isEmpty()) {
+            Toast.makeText(getContext(), getString(R.string.ERROR_SESSION_CREATE), Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                    try {
-                        writeToNfcTag(tag, dataToWrite);
-                        Toast.makeText(getContext(), getString(R.string.MSG_WRITE_SUCCESS), Toast.LENGTH_SHORT).show();
-                        dismiss();
-                    } catch (IOException | FormatException e) {
-                        if (getContext() != null) {
-                            Toast.makeText(getContext(), getString(R.string.ERROR_WRITE_NFC), Toast.LENGTH_LONG).show();
-                        }
-                        sessionRef.delete().addOnSuccessListener(aVoid -> Toast.makeText(getContext(), getString(R.string.MSG_SESSION_DELETE), Toast.LENGTH_SHORT).show()).addOnFailureListener(deleteError -> Toast.makeText(getContext(), getString(R.string.ERROR_SESSION_DELETE), Toast.LENGTH_SHORT).show());
-                    }
-                })
-                .addOnFailureListener(e -> Toast.makeText(getContext(), getString(R.string.ERROR_SESSION_CREATE), Toast.LENGTH_SHORT).show());
+        try {
+            writeToNfcTag(tag, nfcPath);
+            Toast.makeText(getContext(), getString(R.string.MSG_WRITE_SUCCESS), Toast.LENGTH_SHORT).show();
+            dismiss();
+        } catch (IOException | FormatException e) {
+            if (getContext() != null) {
+                Toast.makeText(getContext(), getString(R.string.ERROR_WRITE_NFC), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void writeToNfcTag(Tag tag, String data) throws IOException, FormatException {
@@ -206,18 +194,5 @@ public class NFCWriterFragment extends DialogFragment {
     public void onPause() {
         super.onPause();
         disableNfcDispatch();
-    }
-    private HashMap<String, Object> sessionCreator() {
-        HashMap<String, Object> session = new HashMap<>();
-        Calendar cal = Calendar.getInstance();
-        Date now = cal.getTime();
-        cal.add(Calendar.MINUTE, 50);
-        Date fiftyMinutesLater = cal.getTime();
-
-        session.put("createdAt", new Timestamp(now));
-        session.put("expiresAt", new Timestamp(fiftyMinutesLater));
-        session.put("isActive", true);
-        session.put("type", "NFC");
-        return session;
     }
 }
