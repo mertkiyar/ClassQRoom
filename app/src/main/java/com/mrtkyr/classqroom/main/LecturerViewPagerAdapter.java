@@ -23,7 +23,7 @@ public class LecturerViewPagerAdapter extends FragmentStateAdapter{
         return switch (position) {
             case 1 -> AttendancesFragment.newInstance(userUID);
             case 2 -> ProfileFragment.newInstance(userUID);
-            default -> StartLectureFragment.newInstance(userUID);
+            default -> new StartLectureFragment();
         };
     }
 
