@@ -24,33 +24,33 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.mrtkyr.classqroom.ApiClient;
 import com.mrtkyr.classqroom.R;
+import com.mrtkyr.classqroom.SessionManager;
+import com.mrtkyr.classqroom.api.AttendanceApi;
+import com.mrtkyr.classqroom.api.UserApi;
+import com.mrtkyr.classqroom.enums.AttendanceType;
+import com.mrtkyr.classqroom.model.AttendanceRecordModel;
+import com.mrtkyr.classqroom.model.AttendanceSessionModel;
+import com.mrtkyr.classqroom.model.RootResponse;
+import com.mrtkyr.classqroom.model.UserModel;
+
+import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
+import java.time.LocalDateTime;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NFCScannerFragment extends DialogFragment {
-    private static final String ARG_USER_UID = "userUID";
-    private String mUserUID;
     private TextView tvNFCStatus;
     private Button btnBackNFCScanner;
     private NfcAdapter nfcAdapter;
     private PendingIntent pendingIntent;
     private IntentFilter[] intentFilters;
     private boolean isNfcScanEnabled = false;
-
-    FirebaseFirestore db;
-
-    public static NFCScannerFragment newInstance(String userUID) {
-        NFCScannerFragment fragment = new NFCScannerFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_USER_UID, userUID);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,11 +87,13 @@ public class NFCScannerFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getArguments() != null) {
-            this.mUserUID = getArguments().getString(ARG_USER_UID);
+
+        SessionManager sessionManager = new SessionManager(getContext());
+        if (sessionManager.getToken() == null || sessionManager.getToken().isEmpty()) {
+            Toast.makeText(requireContext(), getString(R.string.MSG_USER_UID_NOT_FOUND), Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        db = FirebaseFirestore.getInstance();
         prepareNfcForegroundDispatch();
 
         isNfcScanEnabled = true;
@@ -166,83 +168,92 @@ public class NFCScannerFragment extends DialogFragment {
     }
 
     private void sendAttendanceToDatabase(String token) {
-        if (!token.contains("_")) {
+        if (token == null || token.isEmpty()) {
             if (isAdded() && getContext() != null) {
                 Toast.makeText(getContext(), getString(R.string.MSG_NFC_INVALID), Toast.LENGTH_SHORT).show();
             }
             return;
         }
-        String lectureUID = token.substring(0, token.indexOf("_"));
-        String sessionUID = token.substring(token.indexOf("_") + 1);
-        if (!lectureUID.isEmpty() && !sessionUID.isEmpty()) {
-            db.collection("lectures")
-                    .document(lectureUID)
-                    .collection("sessions")
-                    .document(sessionUID)
-                    .get()
-                    .addOnSuccessListener(task -> {
-                        if (Boolean.TRUE.equals(task.get("isActive"))) {
-                            String attendanceUID =  lectureUID + "_" + sessionUID + "_" + mUserUID;
-                            DocumentReference userRef = db.collection("users").document(mUserUID);
-                            DocumentReference lectureRef = db.collection("lectures").document(lectureUID);
 
-                            userRef.get().addOnSuccessListener(userDocument -> {
-                                if (userDocument.exists()) {
-                                    String studentName = userDocument.getString("name") + " " + userDocument.getString("surname");
-                                    lectureRef.get().addOnSuccessListener(lectureDocument -> {
-                                        if (lectureDocument.exists()) {
-                                            String lectureName = lectureDocument.getString("name");
-                                            String lecturerUID = lectureDocument.getString("lecturerUID");
+        AttendanceApi attendanceApi = ApiClient.getClient(getContext()).create(AttendanceApi.class);
+        attendanceApi.getAttendanceSessionByNfcPath(token).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<RootResponse<AttendanceSessionModel>> call,
+                                   @NonNull Response<RootResponse<AttendanceSessionModel>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                    AttendanceSessionModel session = response.body().getData();
 
-                                            HashMap<String, Object> attendance = new HashMap<>();
-                                            attendance.put("studentName", studentName);
-                                            attendance.put("lectureName", lectureName);
-                                            attendance.put("lecturerUID", lecturerUID);
-                                            attendance.put("lectureUID", lectureUID);
-                                            attendance.put("sessionUID", sessionUID);
-                                            attendance.put("studentUID", mUserUID);
-                                            attendance.put("scannedAt", Timestamp.now());
-                                            attendance.put("status", "Present");
-                                            attendance.put("type", "NFC");
+                    UserApi userApi = ApiClient.getClient(getContext()).create(UserApi.class);
+                    userApi.me().enqueue(new Callback<>() {
+                        @Override
+                        public void onResponse(@NonNull Call<RootResponse<UserModel>> call,
+                                               @NonNull Response<RootResponse<UserModel>> response) {
+                            if (response.body() == null || response.body().getData() == null) return;
 
-                                            db.collection("attendances")
-                                                    .document(attendanceUID)
-                                                    .set(attendance)
-                                                    .addOnSuccessListener(aVoid -> {
-                                                        if (getContext() != null) {
-                                                            Toast.makeText(getContext(), getString(R.string.MSG_ATTENDANCE_SUCCESS), Toast.LENGTH_LONG).show();
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(e -> {
-                                                        if (getContext() != null) {
-                                                            Toast.makeText(getContext(), getString(R.string.MSG_ALREADY_ATTENDED), Toast.LENGTH_LONG).show();
-                                                            dismiss();
-                                                        }
-                                                    });
-                                        } else {
-                                            if (getContext() != null) Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_LECTURE), Toast.LENGTH_SHORT).show();
-                                            dismiss();
-                                        }
-                                    }).addOnFailureListener(lectureError -> {
-                                        if (getContext() != null) Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_LECTURE), Toast.LENGTH_SHORT).show();
+                            AttendanceRecordModel record = new AttendanceRecordModel();
+                            record.setStudentId(response.body().getData().getUserId());
+                            record.setAttendanceSessionId(session.getAttendanceSessionId());
+                            record.setAttendanceType(AttendanceType.NFC);
+                            record.setCurrentLat(null); //todo to be implemented location and ip fields
+                            record.setCurrentLong(null);
+                            record.setAttendAt(LocalDateTime.now());
+                            record.setLate(false); //todo update with this condition: currentTime - startedTime > 15mins is true
+                            record.setDeviceId(null);
+                            record.setClientIp("0.0.0.0");
+
+                            attendanceApi.takeAttendance(record).enqueue(new Callback<>() {
+                                @Override
+                                public void onResponse(@NonNull Call<RootResponse<Void>> call,
+                                                       @NonNull Response<RootResponse<Void>> response) {
+                                    if (response.isSuccessful()) {
+                                        Toast.makeText(getContext(), getString(R.string.MSG_ATTENDANCE_SUCCESS), Toast.LENGTH_LONG).show();
                                         dismiss();
-                                    });
-                                } else {
-                                    if (getContext() != null) Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_LECTURE), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        String errorMsg = getString(R.string.MSG_ALREADY_ATTENDED);
+                                        try {
+                                            if (response.errorBody() != null) {
+                                                String errorJson = response.errorBody().string();
+                                                JSONObject jsonObject = new JSONObject(errorJson);
+                                                if (jsonObject.has("exception")) {
+                                                    JSONObject exceptionObj = jsonObject.getJSONObject("exception");
+                                                    if (exceptionObj.has("message")) {
+                                                        errorMsg = exceptionObj.getString("message");
+                                                    }
+                                                }
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                        Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
+                                        dismiss();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NonNull Call<RootResponse<Void>> call, @NonNull Throwable t) {
+                                    Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_COURSE), Toast.LENGTH_SHORT).show();
                                     dismiss();
                                 }
-                            }).addOnFailureListener(userError -> {
-                                if (getContext() != null) Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_LECTURE), Toast.LENGTH_SHORT).show();
-                                dismiss();
                             });
-                        } else {
-                            Toast.makeText(getContext(), getString(R.string.MSG_QR_CODE_INVALID), Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<RootResponse<UserModel>> call, @NonNull Throwable t) {
+                            Toast.makeText(getContext(), getString(R.string.ERROR_FETCHING_USERS), Toast.LENGTH_SHORT).show();
                             dismiss();
                         }
                     });
-        } else {
-            Toast.makeText(getContext(), getString(R.string.MSG_QR_CODE_INVALID), Toast.LENGTH_LONG).show();
-            dismiss();
-        }
+                } else {
+                    Toast.makeText(getContext(), getString(R.string.MSG_NFC_INVALID), Toast.LENGTH_LONG).show();
+                    dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<RootResponse<AttendanceSessionModel>> call, @NonNull Throwable t) {
+                Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_COURSE), Toast.LENGTH_SHORT).show();
+                dismiss();
+            }
+        });
     }
 }
