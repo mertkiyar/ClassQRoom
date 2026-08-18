@@ -48,7 +48,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class StartLectureFragment extends Fragment {
-    private static final String TAG = "StartLectureFragment";
     private static final long QR_POLL_INTERVAL_MS = 3000L;
 
     private UUID lecturerUUID;
@@ -143,7 +142,6 @@ public class StartLectureFragment extends Fragment {
 
                                 @Override
                                 public void onFailure(@NonNull Call<RootResponse<List<CourseModel>>> call, @NonNull Throwable t) {
-                                    Log.e(TAG, "getCoursesByLecturer failed", t);
                                     Toast.makeText(getContext(), getString(R.string.ERROR_FETCHING_COURSES), Toast.LENGTH_LONG).show();
                                 }
                             });
@@ -152,7 +150,6 @@ public class StartLectureFragment extends Fragment {
 
             @Override
             public void onFailure(@NonNull Call<RootResponse<UserModel>> call, @NonNull Throwable t) {
-                Log.e(TAG, "me() failed", t);
                 Toast.makeText(getContext(), getString(R.string.ERROR_FETCHING_USERS), Toast.LENGTH_LONG).show();
             }
         });
@@ -217,7 +214,6 @@ public class StartLectureFragment extends Fragment {
 
             @Override
             public void onFailure(@NonNull Call<RootResponse<AttendanceModel>> call, @NonNull Throwable t) {
-                Log.e(TAG, "startAttendance failed", t);
                 Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_COURSE), Toast.LENGTH_SHORT).show();
             }
         });
@@ -256,7 +252,6 @@ public class StartLectureFragment extends Fragment {
 
                     @Override
                     public void onFailure(@NonNull Call<RootResponse<AttendanceSessionModel>> call, @NonNull Throwable t) {
-                        Log.e(TAG, "getCurrentSession failed", t);
                         if (getContext() != null) {
                             Toast.makeText(getContext(), getString(R.string.ERROR_FETCHING_SESSION), Toast.LENGTH_SHORT).show();
                         }
@@ -283,7 +278,6 @@ public class StartLectureFragment extends Fragment {
             BitMatrix bitMatrix = barcodeEncoder.encode(token, BarcodeFormat.QR_CODE, 500, 500);
             return barcodeEncoder.createBitmap(bitMatrix);
         } catch (WriterException e) {
-            Log.e(TAG, "QR generation failed", e);
             return null;
         }
     }
