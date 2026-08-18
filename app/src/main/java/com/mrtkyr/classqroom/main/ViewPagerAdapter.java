@@ -27,7 +27,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
             case 2 -> CodeFragment.newInstance(userUID);
             case 3 -> AttendancesFragment.newInstance(userUID);
             case 4 -> ProfileFragment.newInstance(userUID);
-            default -> QrCodeScannerFragment.newInstance(userUID);
+            default -> new QrCodeScannerFragment();
         };
     }
 
