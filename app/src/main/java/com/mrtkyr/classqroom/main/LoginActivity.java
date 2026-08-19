@@ -16,8 +16,6 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-//import com.google.firebase.auth.FirebaseAuth;
-//import com.google.firebase.auth.FirebaseAuthException;
 import com.mrtkyr.classqroom.ApiClient;
 import com.mrtkyr.classqroom.api.AuthApi;
 import com.mrtkyr.classqroom.R;
