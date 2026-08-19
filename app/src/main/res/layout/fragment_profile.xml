@@ -25,9 +25,12 @@
 
     <TextView
         android:id="@+id/tvFullName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="16dp"
+        android:gravity="center"
+        android:textAlignment="center"
         android:text="@string/TEXT_NAME"
         android:textColor="@color/black_white"
         android:textSize="24sp"
