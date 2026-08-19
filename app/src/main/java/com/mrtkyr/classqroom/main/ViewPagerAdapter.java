@@ -12,11 +12,9 @@ import com.mrtkyr.classqroom.fragment.student.ProfileFragment;
 import com.mrtkyr.classqroom.fragment.student.QrCodeScannerFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
-    private final String userUID;
 
-    public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, String userUID) {
+    public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
-        this.userUID = userUID;
     }
 
     @NonNull

@@ -10,11 +10,9 @@ import com.mrtkyr.classqroom.fragment.student.AttendancesFragment;
 import com.mrtkyr.classqroom.fragment.student.ProfileFragment;
 
 public class LecturerViewPagerAdapter extends FragmentStateAdapter {
-    private final String userUID;
 
-    public LecturerViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, String userUID) {
+    public LecturerViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
-        this.userUID = userUID;
     }
 
     @NonNull

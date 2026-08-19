@@ -22,11 +22,6 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-//import com.google.firebase.auth.FirebaseAuth;
-//import com.google.firebase.auth.FirebaseUser;
-//import com.google.firebase.firestore.DocumentReference;
-//import com.google.firebase.firestore.DocumentSnapshot;
-//import com.google.firebase.firestore.FirebaseFirestore;
 import com.mrtkyr.classqroom.ApiClient;
 import com.mrtkyr.classqroom.api.UserApi;
 import com.mrtkyr.classqroom.fragment.student.NFCScannerFragment;
@@ -40,10 +35,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity {
-//    FirebaseFirestore db;
-
-    private String userType;
-    private String userUID;
     ImageButton btnToggleDarkMode;
     ProgressBar progressBar;
     TextView tvWelcome;
@@ -55,20 +46,13 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-//        if (currentUser == null) {
-//            handleDataError();
-//            return;
-//        }
-//        userUID = currentUser.getUid();
-//        userUID = getIntent().getStringExtra("USER_UID");
 
         UserApi userApi = ApiClient.getClient(HomeActivity.this).create(UserApi.class);
-        userApi.me().enqueue(new Callback<RootResponse<UserModel>>() {
+        userApi.me().enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<RootResponse<UserModel>> call, Response<RootResponse<UserModel>> response) {
+            public void onResponse(@NonNull Call<RootResponse<UserModel>> call, @NonNull Response<RootResponse<UserModel>> response) {
                 if (response.body() != null) {
-                    userType = response.body().getData().getUserType();
+                    String userType = response.body().getData().getUserType();
                     btnToggleDarkMode = findViewById(R.id.btnToggleDarkMode);
                     progressBar = findViewById(R.id.progressBar);
                     tvWelcome = findViewById(R.id.tvWelcome);
@@ -77,7 +61,7 @@ public class HomeActivity extends AppCompatActivity {
                     switch (userType) {
                         case "ADMIN":
                         case "LECTURER":
-                            lecturerViewPagerAdapter = new LecturerViewPagerAdapter(HomeActivity.this, userUID);
+                            lecturerViewPagerAdapter = new LecturerViewPagerAdapter(HomeActivity.this);
                             viewPager.setAdapter(lecturerViewPagerAdapter);
                             bottomNavigationView.getMenu().clear();
                             bottomNavigationView.inflateMenu(R.menu.lecturer_menu_navigation);
@@ -85,7 +69,7 @@ public class HomeActivity extends AppCompatActivity {
                             break;
                         case "STUDENT":
                         default:
-                            viewPagerAdapter = new ViewPagerAdapter(HomeActivity.this, userUID);
+                            viewPagerAdapter = new ViewPagerAdapter(HomeActivity.this);
                             viewPager.setAdapter(viewPagerAdapter);
                             bottomNavigationView.getMenu().clear();
                             bottomNavigationView.inflateMenu(R.menu.menu_navigation);
@@ -106,7 +90,7 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<RootResponse<UserModel>> call, Throwable t) {
+            public void onFailure(@NonNull Call<RootResponse<UserModel>> call, @NonNull Throwable t) {
                 Toast.makeText(HomeActivity.this, getString(R.string.ERROR_NOT_TAKEN_USER_INFO), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                 startActivity(intent);
@@ -127,55 +111,6 @@ public class HomeActivity extends AppCompatActivity {
                         .show();
             }
         });
-//        db = FirebaseFirestore.getInstance();
-//        DocumentReference userRef = db.collection("users").document(userUID);
-//        userRef.get().addOnCompleteListener(task -> {
-//            if (task.isSuccessful() && task.getResult() != null) {
-//                DocumentSnapshot document = task.getResult();
-//                if (document.exists()) {
-//                    userType = document.getString("userType");
-//                    if (userType == null) {
-//                        userType = "student";
-//                    }
-//                    btnToggleDarkMode = findViewById(R.id.btnToggleDarkMode);
-//                    progressBar = findViewById(R.id.progressBar);
-//                    tvWelcome = findViewById(R.id.tvWelcome);
-//                    viewPager = findViewById(R.id.view_pager);
-//                    bottomNavigationView = findViewById(R.id.bottom_navigation);
-//                    switch (userType) {
-//                        case "admin":
-//                        case "lecturer":
-//                            lecturerViewPagerAdapter = new LecturerViewPagerAdapter(this, userUID);
-//                            viewPager.setAdapter(lecturerViewPagerAdapter);
-//                            bottomNavigationView.getMenu().clear();
-//                            bottomNavigationView.inflateMenu(R.menu.lecturer_menu_navigation);
-//                            setupLecturerNavigationListener();
-//                            break;
-//                        case "student":
-//                        default:
-//                            viewPagerAdapter = new ViewPagerAdapter(this, userUID);
-//                            viewPager.setAdapter(viewPagerAdapter);
-//                            bottomNavigationView.getMenu().clear();
-//                            bottomNavigationView.inflateMenu(R.menu.menu_navigation);
-//                            setupNavigationListener();
-//                            break;
-//                    }
-//                    tvWelcome.setText(getString(R.string.TEXT_WELCOME, document.getString("name")));
-//                    progressBar.setVisibility(View.GONE);
-//                    btnToggleDarkMode.setVisibility(View.VISIBLE);
-//                    tvWelcome.setVisibility(View.VISIBLE);
-//                    viewPager.setVisibility(View.VISIBLE);
-//                    bottomNavigationView.setVisibility(View.VISIBLE);
-//
-//                    btnToggleDarkMode.setOnClickListener(v -> toggleDarkMode());
-//
-//                } else {
-//                    handleDataError();
-//                }
-//            } else {
-//                handleDataError();
-//            }
-//        });
     }
 
     @Override
