@@ -1,6 +1,8 @@
 package com.mrtkyr.classqroom.fragment.student;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -74,7 +76,16 @@ public class ProfileFragment extends Fragment {
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         if (getActivity() != null) {
-                            getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                                getActivity().overrideActivityTransition(
+                                        Activity.OVERRIDE_TRANSITION_OPEN,
+                                        R.anim.slide_in_right,
+                                        R.anim.slide_out_left
+                                );
+                            } else {
+                                //noinspection deprecation
+                                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            }
                         }
                     })
                     .setNegativeButton(getString(R.string.BUTTON_NO), null)
