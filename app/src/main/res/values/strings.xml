@@ -78,6 +78,7 @@
     <string name="ERROR_UNEXPECTED">An unexpected error occurred:</string>
     <string name="ERROR_INVALID_CREDENTIAL">Email or password is incorrect!</string>
     <string name="MSG_MAIN_PAGE">Don\'t have an account yet?\n\nPlease contact Student Affairs and request your account information!</string>
+    <string name="MSG_FORGOT_PASSWORD_DISABLED">Forgot your password?\n\nPlease contact Student Affairs to reset your password!</string>
     <string name="ERROR_PASSWORDS_NOT_MATCH">The passwords don\'t match each other!</string>
     <string name="ERROR_SHORT_PASSWORD">The password must be at least 6 characters.</string>
     <string name="MSG_SUCCESS_FORGOT_PASSWORD">The password was changed successfully!</string>
