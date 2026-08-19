@@ -1,6 +1,7 @@
 package com.mrtkyr.classqroom.api;
 
 import com.mrtkyr.classqroom.model.CourseModel;
+import com.mrtkyr.classqroom.model.LecturerModel;
 import com.mrtkyr.classqroom.model.RootResponse;
 
 import java.util.List;
@@ -14,4 +15,7 @@ public interface LecturerApi {
 
     @GET("/rest/api/lecturerCourse/lecturer/{id}/courses")
     Call<RootResponse<List<CourseModel>>> getCoursesByLecturer(@Path("id") UUID lecturerId);
+
+    @GET("/rest/api/lecturer/get/{id}")
+    Call<RootResponse<LecturerModel>> getLecturerById(@Path("id") UUID lecturerId);
 }
