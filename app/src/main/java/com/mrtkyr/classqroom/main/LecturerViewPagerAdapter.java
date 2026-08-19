@@ -22,7 +22,7 @@ public class LecturerViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         return switch (position) {
             case 1 -> new AttendancesFragment();
-            case 2 -> ProfileFragment.newInstance(userUID);
+            case 2 -> new ProfileFragment();
             default -> new StartCourseFragment();
         };
     }

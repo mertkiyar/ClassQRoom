@@ -15,47 +15,44 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.mrtkyr.classqroom.ApiClient;
 import com.mrtkyr.classqroom.R;
+import com.mrtkyr.classqroom.api.LecturerApi;
+import com.mrtkyr.classqroom.api.StudentApi;
+import com.mrtkyr.classqroom.api.UserApi;
 import com.mrtkyr.classqroom.main.LoginActivity;
+import com.mrtkyr.classqroom.model.LecturerModel;
+import com.mrtkyr.classqroom.model.RootResponse;
+import com.mrtkyr.classqroom.model.StudentModel;
+import com.mrtkyr.classqroom.model.UserModel;
 
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import java.util.Objects;
+import java.util.UUID;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileFragment extends Fragment {
-    private static final String ARG_USER_UID = "userUID";
-    private String mUserUID;
-    private FirebaseFirestore db;
     private TextView tvFullName;
     private TextView tvStudentNumber;
     private TextView tvDepartment;
     private TextView tvGrade;
     private ImageView ivProfile;
 
-    public static ProfileFragment newInstance(String userUID) {
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_USER_UID, userUID);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getArguments() != null) {
-            this.mUserUID = getArguments().getString(ARG_USER_UID);
-        }
-        db = FirebaseFirestore.getInstance();
+
         tvFullName = view.findViewById(R.id.tvFullName);
         tvStudentNumber = view.findViewById(R.id.tvStudentNumber);
         tvDepartment = view.findViewById(R.id.tvDepartment);
@@ -69,7 +66,6 @@ public class ProfileFragment extends Fragment {
                     .setTitle(getString(R.string.BUTTON_CONFIRM))
                     .setMessage(getString(R.string.MSG_LOGOUT))
                     .setPositiveButton(getString(R.string.BUTTON_YES), (dialog, which) -> {
-                        FirebaseAuth.getInstance().signOut();
                         Intent intent = new Intent(getActivity(), LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
@@ -82,65 +78,117 @@ public class ProfileFragment extends Fragment {
     }
 
     private void getData() {
-        db.collection("users")
-                .document(mUserUID)
-                .get()
-                .addOnSuccessListener(task -> {
-                    if (Objects.equals(task.getString("userType"), "student")) {
-                        if (Objects.equals(task.getString("gender"), "male")) {
+        if (getContext() == null) return;
+        
+        UserApi userApi = ApiClient.getClient(getContext()).create(UserApi.class);
+        userApi.me().enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<RootResponse<UserModel>> call,
+                                   @NonNull Response<RootResponse<UserModel>> response) {
+                if (response.body() != null && response.body().getData() != null) {
+                    UserModel user = response.body().getData();
+                    String fullName = user.getFirstName() + " " + user.getLastName();
+                    tvFullName.setText(fullName);
+
+                    String userType = user.getUserType().toLowerCase();
+                    UUID userId = user.getUserId();
+
+                    if (userType.equals("student")) {
+                        if ("male".equalsIgnoreCase(user.getGender()) || "MALE".equalsIgnoreCase(user.getGender())) {
                             ivProfile.setImageResource(R.drawable.img_male_student);
-                        } else if (Objects.equals(task.getString("gender"), "female")) {
+                        } else {
                             ivProfile.setImageResource(R.drawable.img_female_student);
                         }
-
-                        db.collection("students")
-                                .document(mUserUID)
-                                .get()
-                                .addOnSuccessListener(studentTask -> {
-                                    Long number = studentTask.getLong("number");
-                                    tvStudentNumber.setText(String.valueOf(number));
-                                    Long grade = studentTask.getLong("grade");
-                                    tvGrade.setText(String.valueOf(grade));
-                                });
-                        String fullName = task.getString("name") + " " + task.getString("surname");
-                        tvFullName.setText(fullName);
-                    }
-
-                    else if (Objects.equals(task.getString("userType"), "lecturer")) {
-                        if (Objects.equals(task.getString("gender"), "male")) {
+                        fetchStudentProfile(userId);
+                    } else if (userType.equals("lecturer") || userType.equals("admin")) {
+                        if ("male".equalsIgnoreCase(user.getGender()) || "MALE".equalsIgnoreCase(user.getGender())) {
                             ivProfile.setImageResource(R.drawable.img_male_lecturer);
-                        } else if (Objects.equals(task.getString("gender"), "female")) {
+                        } else {
                             ivProfile.setImageResource(R.drawable.img_female_lecturer);
                         }
-
-                        db.collection("lecturers")
-                                .document(mUserUID)
-                                .get()
-                                .addOnSuccessListener(lecturerTask -> {
-                                    String title = lecturerTask.getString("title");
-
-                                    String fullName = title + " " + task.getString("name") + " " + task.getString("surname");
-                                    tvFullName.setText(fullName);
-                                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", new Locale("tr"));
-                                    String formattedDate = sdf.format(Objects.requireNonNull(lecturerTask.getTimestamp("employmentStartDate")).toDate());
-                                    tvGrade.setText(formattedDate);
-
-                                    tvStudentNumber.setText(String.valueOf(lecturerTask.getLong("lecturerNumber")));
-                                });
+                        fetchLecturerProfile(userId);
                     }
-                    try {
-                        db.collection("departments")
-                                .document(Objects.requireNonNull(task.getString("departmentUID")))
-                                .get()
-                                .addOnCompleteListener(departmentTask -> {
-                                    if (departmentTask.isSuccessful()) {
-                                        tvDepartment.setText(departmentTask.getResult().getString("name"));
-                                    }
-                                });
-                    } catch (Exception e){
-                        Log.e("ProfileFragment", Objects.requireNonNull(e.getMessage()));
-                    }
+                } else {
+                    Toast.makeText(getContext(), getString(R.string.ERROR_NOT_TAKEN_USER_INFO), Toast.LENGTH_SHORT).show();
+                }
+            }
 
-                });
+            @Override
+            public void onFailure(@NonNull Call<RootResponse<UserModel>> call, @NonNull Throwable t) {
+                Toast.makeText(getContext(), getString(R.string.ERROR_NOT_TAKEN_USER_INFO) + ": " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void fetchStudentProfile(UUID userId) {
+        StudentApi studentApi = ApiClient.getClient(getContext()).create(StudentApi.class);
+        studentApi.getStudentById(userId).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<RootResponse<StudentModel>> call,
+                                   @NonNull Response<RootResponse<StudentModel>> response) {
+                if (response.body() != null && response.body().getData() != null) {
+                    StudentModel student = response.body().getData();
+                    tvStudentNumber.setText(student.getStudentNumber() != null ? student.getStudentNumber() : "");
+                    tvGrade.setText(student.getYearOfStudy() != null ? String.valueOf(student.getYearOfStudy()) : "");
+                    if (student.getDepartment() != null) {
+                        tvDepartment.setText(student.getDepartment().getDepartmentName());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<RootResponse<StudentModel>> call, @NonNull Throwable t) {
+                Log.e("ProfileFragment", "Failed to fetch student details", t);
+            }
+        });
+    }
+
+    private void fetchLecturerProfile(UUID userId) {
+        LecturerApi lecturerApi = ApiClient.getClient(getContext()).create(LecturerApi.class);
+        lecturerApi.getLecturerById(userId).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<RootResponse<LecturerModel>> call,
+                                   @NonNull Response<RootResponse<LecturerModel>> response) {
+                if (response.body() != null && response.body().getData() != null) {
+                    LecturerModel lecturer = response.body().getData();
+                    
+                    String prefix = "";
+                    if (lecturer.getLecturerTitle() != null) {
+                        int titleResId = -1;
+                        switch (lecturer.getLecturerTitle()) {
+                            case PROFESSOR: titleResId = R.string.TITLE_PROF_DR; break;
+                            case ASSOCIATE_PROFESSOR: titleResId = R.string.TITLE_ASSOC_PROF; break;
+                            case ASSISTANT_PROFESSOR: titleResId = R.string.TITLE_ASST_PROF; break;
+                            case DOCTOR_LECTURER: titleResId = R.string.TITLE_DR; break;
+                            case INSTRUCTOR: titleResId = R.string.TITLE_INSTRUCTOR; break;
+                            case RESEARCH_ASSISTANT: titleResId = R.string.TITLE_RESEARCH_ASST; break;
+                            default: break;
+                        }
+                        if (titleResId != -1) {
+                            prefix = getString(titleResId) + " ";
+                        }
+                    }
+                    
+                    String fullName = prefix + tvFullName.getText().toString();
+                    tvFullName.setText(fullName);
+
+                    tvStudentNumber.setText(lecturer.getExtPhone() != null ? lecturer.getExtPhone() : "");
+                    
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("tr"));
+                    if (lecturer.getCreatedAt() != null) {
+                        tvGrade.setText(lecturer.getCreatedAt().format(dtf));
+                    }
+                    
+                    if (lecturer.getDepartment() != null) {
+                        tvDepartment.setText(lecturer.getDepartment().getDepartmentName());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<RootResponse<LecturerModel>> call, @NonNull Throwable t) {
+                Log.e("ProfileFragment", "Failed to fetch lecturer details", t);
+            }
+        });
     }
 }
