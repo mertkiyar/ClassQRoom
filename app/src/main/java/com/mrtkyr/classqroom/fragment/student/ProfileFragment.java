@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.mrtkyr.classqroom.ApiClient;
 import com.mrtkyr.classqroom.R;
+import com.mrtkyr.classqroom.SessionManager;
 import com.mrtkyr.classqroom.api.LecturerApi;
 import com.mrtkyr.classqroom.api.StudentApi;
 import com.mrtkyr.classqroom.api.UserApi;
@@ -66,10 +67,15 @@ public class ProfileFragment extends Fragment {
                     .setTitle(getString(R.string.BUTTON_CONFIRM))
                     .setMessage(getString(R.string.MSG_LOGOUT))
                     .setPositiveButton(getString(R.string.BUTTON_YES), (dialog, which) -> {
+                        SessionManager sessionManager = new SessionManager(getContext());
+                        sessionManager.removeToken();
+                        
                         Intent intent = new Intent(getActivity(), LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
-                        getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                        if (getActivity() != null) {
+                            getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                        }
                     })
                     .setNegativeButton(getString(R.string.BUTTON_NO), null)
                     .show();
