@@ -1,15 +1,14 @@
-
 ![Logo](https://www.mrtkyr.com/images/logo-cover.png)
 
-# ClassQRoom 📚 (CQR)
+# ClassQRoom (CQR)
 
-*A Modern, Secure Classroom Attendance Solution*
+*An experimental and evolving approach to classroom attendance. This project is a personal journey of combining different ideas and technologies to build an alternative solution. It's not perfect and is constantly being improved, serving primarily as a learning experience and a playground for new concepts.*
 
 ## Inspiration
 
-ClassQRoom was born out of a simple question: "If I were to build my university's attendance application, how would I make it better?" This project is an effort to create a more intuitive, modern, and, most importantly, **secure** attendance system.
+ClassQRoom was born out of a simple question: "If I were to build my university's attendance application, how would I make it better?" This project is an effort to create a more intuitive, modern, and secure attendance system.
 
-The name **ClassQRoom** is a combination of the words **"Classroom"** and **"QR"**. Instead of collecting attendance with signatures on paper, this system provides a faster and more efficient way for students to attend, while giving lecturers better data and control.
+Instead of collecting attendance with signatures on paper, ClassQRoom provides a faster and more efficient way for students to attend, while giving lecturers better data and control.
 
 ## Key Features (Current & Upcoming)
 
@@ -18,7 +17,7 @@ The name **ClassQRoom** is a combination of the words **"Classroom"** and **"QR"
 - QR code scanning
 - NFC tap-to-attend
 - 6-digit code entry
-- **Combination modes** (QR+code or NFC+code or All) for extra security
+- Simultaneous support for all methods on a single screen
 
 <p align="center">
   <img src="images/cqr-std-1.jpeg" width="25%"/>
@@ -26,48 +25,34 @@ The name **ClassQRoom** is a combination of the words **"Classroom"** and **"QR"
   <img src="images/cqr-std-3.jpeg" width="25%"/>
 </p>
 
-### Advanced Security (Expected)
+### Advanced Security Constraints (In Progress)
 
-- **Dynamic QR codes** that:  
-  - Change every 10 seconds (Editable)
-  - Allow only 10 scans per QR Code (Editable)
-- **Device-based restrictions** (1 student per device)
-- **Location protection** (Toggleable)
-- **Use Only Campus WIFI** (Toggleable)
+- Dynamic QR codes (time-based and scan-limit rotation)
+- Device-based restrictions (1 student per device)
+- Location protection via GPS
+- Network constraints (Campus Wi-Fi only)
   
-### Powerful Instructor Tools
+### Instructor Dashboard
 
-- Detailed student analytics:  
-   Separate lists for:
-    - Just in Time (first 30 mins)
-    - Latecomers (last 15-20 mins)
-- Flexible attendance management:  
-   - Reset entire attendance sessions  
-   - Choose between dynamic or static codes
--  Send notifications to students
--  "Exempt" status for automatically marked students
-
--  
+- Detailed student analytics (Just-in-time vs Latecomers)
+- Flexible attendance management and session resets
+- Direct notifications to students
+- "Exempt" status controls
 
 <p align="center">
   <img src="images/cqr-lec-1.jpeg" width="25%"/>
   <img src="images/cqr-lec-2.jpeg" width="25%"/>
 </p>
 
-## Technologies Used
+## Architecture & Technologies
 
-* **Language:** Java
-* **Platform:** Android Studio
-* **Backend & Database:** Firebase (with plans for a custom backend in the future)
+- **Client:** Native Android (Java)
+- **Backend Architecture:** Spring Boot REST API
+- **Database:** PostgreSQL
 
-## Future Improvements
+*Note: The project was initially prototyped with a local database and Firebase, but has since been migrated to a fully custom, scalable backend architecture.*
 
-- Custom backend for better scalability & security
-- More flexible attendance rules for special cases
-- Admin dashboard for managing lectures and students
-- and more..
+## Planned Improvements
 
-#### 
-
-**📝 Note:** This project is actively developing - new features coming soon!  
-**💡 Suggestions welcome!** (You could add contribution guidelines here when open-sourcing)
+- Complete UI/UX overhaul to utilize the new expansive database structure
+- Completing the remaining core functionalities and refining session-handling edge cases
