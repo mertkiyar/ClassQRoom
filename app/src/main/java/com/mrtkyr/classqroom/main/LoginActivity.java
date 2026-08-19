@@ -1,6 +1,7 @@
 package com.mrtkyr.classqroom.main;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,36 +48,27 @@ public class LoginActivity extends AppCompatActivity {
 
         btnBack.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
+            Bundle options = ActivityOptions.makeCustomAnimation(
+                    LoginActivity.this, 
+                    R.anim.slide_in_left, 
+                    R.anim.slide_out_right
+            ).toBundle();
+            startActivity(intent, options);
             finish();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                overrideActivityTransition(
-                        Activity.OVERRIDE_TRANSITION_OPEN,
-                        R.anim.slide_out_left,
-                        R.anim.slide_in_right
-                );
-            } else {
-                //noinspection deprecation
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-            }
         });
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
+                Bundle options = ActivityOptions.makeCustomAnimation(
+                        LoginActivity.this, 
+                        R.anim.slide_in_left, 
+                        R.anim.slide_out_right
+                ).toBundle();
+                startActivity(intent, options);
                 finish();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                    overrideActivityTransition(
-                            Activity.OVERRIDE_TRANSITION_OPEN,
-                            R.anim.slide_out_left,
-                            R.anim.slide_in_right
-                    );
-                } else {
-                    //noinspection deprecation
-                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                }            }
+            }
         });
 
         edtEmail.setFilters(new InputFilter[] {
