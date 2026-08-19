@@ -29,8 +29,11 @@ import com.mrtkyr.classqroom.model.AttendanceSessionModel;
 import com.mrtkyr.classqroom.model.RootResponse;
 import com.mrtkyr.classqroom.model.UserModel;
 
+import org.json.JSONObject;
+
 import java.time.LocalDateTime;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -126,14 +129,13 @@ public class QrCodeScannerFragment extends Fragment {
                                                                 } else {
                                                                     String errorMsg = getString(
                                                                             R.string.MSG_ALREADY_ATTENDED);
-                                                                    try {
-                                                                        if (response.errorBody() != null) {
-                                                                            String errorJson = response.errorBody()
-                                                                                    .string();
-                                                                            org.json.JSONObject jsonObject = new org.json.JSONObject(
+                                                                    try (ResponseBody errorBody = response.errorBody()) {
+                                                                        if (errorBody != null) {
+                                                                            String errorJson = errorBody.string();
+                                                                            JSONObject jsonObject = new JSONObject(
                                                                                     errorJson);
                                                                             if (jsonObject.has("exception")) {
-                                                                                org.json.JSONObject exceptionObj = jsonObject
+                                                                                JSONObject exceptionObj = jsonObject
                                                                                         .getJSONObject("exception");
                                                                                 if (exceptionObj.has("message")) {
                                                                                     errorMsg = exceptionObj
@@ -142,7 +144,7 @@ public class QrCodeScannerFragment extends Fragment {
                                                                             }
                                                                         }
                                                                     } catch (Exception e) {
-                                                                        e.printStackTrace();
+                                                                        android.util.Log.e("QrCodeScanner", "Error parsing error response", e);
                                                                     }
                                                                     Toast.makeText(getContext(), errorMsg,
                                                                             Toast.LENGTH_LONG).show();

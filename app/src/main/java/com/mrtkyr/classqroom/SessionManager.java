@@ -2,6 +2,7 @@ package com.mrtkyr.classqroom;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
@@ -9,6 +10,7 @@ import androidx.security.crypto.MasterKey;
 public class SessionManager {
     private SharedPreferences sharedPreferences;
 
+    @SuppressWarnings("deprecation")
     public SessionManager(Context context) {
         try {
             MasterKey masterKey = new MasterKey.Builder(context)
@@ -22,7 +24,7 @@ public class SessionManager {
                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
             );
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("SessionManager", "Error initializing EncryptedSharedPreferences", e);
         }
     }
 

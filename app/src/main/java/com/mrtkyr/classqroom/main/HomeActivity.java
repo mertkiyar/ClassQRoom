@@ -136,7 +136,13 @@ public class HomeActivity extends AppCompatActivity {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag("nfc_writer");
 
             if (fragment instanceof NFCWriterFragment) {
-                Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+                Tag tag;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                    tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag.class);
+                } else {
+                    //noinspection deprecation
+                    tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+                }
                 if (tag != null) {
                     ((NFCWriterFragment) fragment).onNfcTagReceived(tag);
                 }

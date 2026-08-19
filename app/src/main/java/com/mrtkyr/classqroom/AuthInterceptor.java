@@ -11,7 +11,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class AuthInterceptor implements Interceptor {
-    private SessionManager sessionManager;
+    private final SessionManager sessionManager;
     public AuthInterceptor(Context context) {
         this.sessionManager = new SessionManager(context);
     }

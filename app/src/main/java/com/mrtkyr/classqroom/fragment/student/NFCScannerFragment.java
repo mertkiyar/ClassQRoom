@@ -151,7 +151,13 @@ public class NFCScannerFragment extends DialogFragment {
             return;
         }
 
-        Parcelable[] rawMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+        Parcelable[] rawMessages;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            rawMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES, Parcelable.class);
+        } else {
+            //noinspection deprecation
+            rawMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+        }
         if (rawMessages != null) {
             NdefMessage[] messages = new NdefMessage[rawMessages.length];
             for (int i = 0; i < rawMessages.length; i++) {
@@ -211,18 +217,20 @@ public class NFCScannerFragment extends DialogFragment {
                                     } else {
                                         String errorMsg = getString(R.string.MSG_ALREADY_ATTENDED);
                                         try {
-                                            if (response.errorBody() != null) {
-                                                String errorJson = response.errorBody().string();
-                                                JSONObject jsonObject = new JSONObject(errorJson);
-                                                if (jsonObject.has("exception")) {
-                                                    JSONObject exceptionObj = jsonObject.getJSONObject("exception");
-                                                    if (exceptionObj.has("message")) {
-                                                        errorMsg = exceptionObj.getString("message");
+                                            try (okhttp3.ResponseBody errorBody = response.errorBody()) {
+                                                if (errorBody != null) {
+                                                    String errorJson = errorBody.string();
+                                                    JSONObject jsonObject = new JSONObject(errorJson);
+                                                    if (jsonObject.has("exception")) {
+                                                        JSONObject exceptionObj = jsonObject.getJSONObject("exception");
+                                                        if (exceptionObj.has("message")) {
+                                                            errorMsg = exceptionObj.getString("message");
+                                                        }
                                                     }
                                                 }
                                             }
                                         } catch (Exception e) {
-                                            e.printStackTrace();
+                                            android.util.Log.e("NFCScannerFragment", "Error parsing error response", e);
                                         }
                                         Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
                                         dismiss();
