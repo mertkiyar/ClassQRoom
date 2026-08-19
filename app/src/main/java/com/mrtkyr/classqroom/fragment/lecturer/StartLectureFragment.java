@@ -176,6 +176,11 @@ public class StartLectureFragment extends Fragment {
             return;
         }
 
+        if (getView() != null) {
+            Button btnStartLecture = getView().findViewById(R.id.btnStartLecture);
+            if (btnStartLecture != null) btnStartLecture.setEnabled(false);
+        }
+
         String selectedType = attendanceTypeAutoComplete.getText().toString();
 
         AttendanceModel attendanceModel = new AttendanceModel();
@@ -229,17 +234,26 @@ public class StartLectureFragment extends Fragment {
                     }
                 } else {
                     Toast.makeText(getContext(), getString(R.string.ERROR_SESSION_CREATE), Toast.LENGTH_SHORT).show();
+                    if (getView() != null) {
+                        Button btn = getView().findViewById(R.id.btnStartLecture);
+                        if (btn != null) btn.setEnabled(true);
+                    }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<RootResponse<AttendanceModel>> call, @NonNull Throwable t) {
                 Toast.makeText(getContext(), getString(R.string.ERROR_ATTEND_COURSE), Toast.LENGTH_SHORT).show();
+                if (getView() != null) {
+                    Button btn = getView().findViewById(R.id.btnStartLecture);
+                    if (btn != null) btn.setEnabled(true);
+                }
             }
         });
     }
 
     private void startQRCodeUpdates(UUID attendanceId) {
+        stopQRCodeUpdates();
         lastSessionId = null;
         llCodeBox.setVisibility(View.INVISIBLE);
         ivQRCode.setVisibility(View.VISIBLE);
@@ -293,6 +307,7 @@ public class StartLectureFragment extends Fragment {
     }
 
     private void startSixDigitCodeUpdates(UUID attendanceId) {
+        stopQRCodeUpdates();
         lastSessionId = null;
         ivQRCode.setVisibility(View.INVISIBLE);
         llCodeBox.setVisibility(View.VISIBLE);
