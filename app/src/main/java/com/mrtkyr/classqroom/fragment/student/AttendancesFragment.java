@@ -121,10 +121,8 @@ public class AttendancesFragment extends Fragment {
                                             .getCourse().getCourseName();
                                 }
 
-                                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMMM yyyy, HH:mm",
-                                        new Locale("tr"));
-                                String formattedDate = record.getAttendAt() != null ? record.getAttendAt().format(dtf)
-                                        : "";
+                                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMMM yyyy, HH:mm", Locale.forLanguageTag("tr"));
+                                String formattedDate = record.getAttendAt() != null ? record.getAttendAt().format(dtf) : "";
                                 boolean isLate = record.getLate() != null && record.getLate();
                                 String displayText = courseName;
                                 if (isLate) {
@@ -175,9 +173,8 @@ public class AttendancesFragment extends Fragment {
                                             .getCourseName();
                                 }
 
-                                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMMM, HH:mm", new Locale("tr"));
-                                String formattedDate = record.getAttendAt() != null ? record.getAttendAt().format(dtf)
-                                        : "";
+                                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMMM, HH:mm", Locale.forLanguageTag("tr"));
+                                String formattedDate = record.getAttendAt() != null ? record.getAttendAt().format(dtf) : "";
                                 boolean isLate = record.getLate() != null && record.getLate();
                                 String displayText = studentName;
                                 if (isLate) {

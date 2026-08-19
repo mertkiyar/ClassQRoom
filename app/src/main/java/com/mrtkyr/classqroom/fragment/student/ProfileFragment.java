@@ -180,7 +180,7 @@ public class ProfileFragment extends Fragment {
 
                     tvStudentNumber.setText(lecturer.getExtPhone() != null ? lecturer.getExtPhone() : "");
                     
-                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("tr"));
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.forLanguageTag("tr"));
                     if (lecturer.getCreatedAt() != null) {
                         tvGrade.setText(lecturer.getCreatedAt().format(dtf));
                     }
