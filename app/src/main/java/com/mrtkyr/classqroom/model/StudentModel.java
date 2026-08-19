@@ -16,8 +16,16 @@ public class StudentModel {
     private Boolean inCampus;
     private LocalDateTime createdAt;
 
+    public String getFirstName() {
+        return firstName;
+    }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public void setLastName(String lastName) {
