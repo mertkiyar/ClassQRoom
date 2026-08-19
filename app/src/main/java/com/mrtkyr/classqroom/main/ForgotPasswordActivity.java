@@ -1,6 +1,8 @@
 package com.mrtkyr.classqroom.main;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Patterns;
@@ -86,7 +88,16 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
         btnCancel.setOnClickListener(v -> {
             finish();
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                overrideActivityTransition(
+                        Activity.OVERRIDE_TRANSITION_OPEN,
+                        R.anim.slide_out_left,
+                        R.anim.slide_in_right
+                );
+            } else {
+                //noinspection deprecation
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
         });
 
         btnBack.setOnClickListener(v -> {
@@ -112,7 +123,16 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     isInPasswordTheme = false;
                 } else {
                     finish();
-                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                        overrideActivityTransition(
+                                Activity.OVERRIDE_TRANSITION_OPEN,
+                                R.anim.slide_out_left,
+                                R.anim.slide_in_right
+                        );
+                    } else {
+                        //noinspection deprecation
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    }
                 }
             }
         });
