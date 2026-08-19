@@ -105,6 +105,8 @@
     <string name="MSG_SESSION_INACTIVE">Bu oturum aktif değil, yeni bir oturumla katılın.</string>
     <string name="MSG_NO_ATTENDANCES">Yoklama kaydınız bulunmuyor.</string>
     <string name="TEXT_STATUS">Durum:</string>
+    <string name="TEXT_LATE">Geç</string>
+    <string name="TEXT_ON_TIME">Zamanında</string>
     <string name="TEXT_GRADE">Sınıf</string>
     <string name="BUTTON_LOGOUT">Çıkış Yap</string>
     <string name="MSG_QUIT">Çıkmak istediğinden emin misin?</string>

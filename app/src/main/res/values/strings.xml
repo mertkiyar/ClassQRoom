@@ -106,6 +106,8 @@
     <string name="MSG_SESSION_INACTIVE">This session is inactive, attend with a new session.</string>
     <string name="MSG_NO_ATTENDANCES">You don\'t have an attendance record.</string>
     <string name="TEXT_STATUS">Status:</string>
+    <string name="TEXT_LATE">Late</string>
+    <string name="TEXT_ON_TIME">On Time</string>
     <string name="TEXT_IMAGEVIEW_PROFILE" translatable="false">Profile</string>
     <string name="TEXT_GRADE">Grade</string>
     <string name="BUTTON_LOGOUT">Logout</string>

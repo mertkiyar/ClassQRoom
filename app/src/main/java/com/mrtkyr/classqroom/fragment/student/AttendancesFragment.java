@@ -15,64 +15,54 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.mrtkyr.classqroom.main.Attendance;
+import com.mrtkyr.classqroom.ApiClient;
 import com.mrtkyr.classqroom.R;
+import com.mrtkyr.classqroom.api.AttendanceApi;
+import com.mrtkyr.classqroom.api.UserApi;
+import com.mrtkyr.classqroom.model.AttendanceRecordModel;
+import com.mrtkyr.classqroom.model.RootResponse;
+import com.mrtkyr.classqroom.model.UserModel;
 
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AttendancesFragment extends Fragment {
-    private FirebaseFirestore db;
     private SwipeRefreshLayout swipeRefreshLayout;
-
-    //    private RecyclerView rvAttendances;
+    // private RecyclerView rvAttendances;
     private ListView lvAttendances;
-    private static final String ARG_USER_UID = "userUID";
-    private String mUserUID;
     private ArrayList<String> attendances;
     private ArrayAdapter<String> adapter;
-    public static AttendancesFragment newInstance(String userUID) {
-        AttendancesFragment fragment = new AttendancesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_USER_UID, userUID);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_attendances, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getArguments() != null) {
-            this.mUserUID = getArguments().getString(ARG_USER_UID);
-        }
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-//        rvAttendances = view.findViewById(R.id.rvAttendances);
-        lvAttendances = view.findViewById(R.id.lvAttendances);
-        db = FirebaseFirestore.getInstance();
 
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        // rvAttendances = view.findViewById(R.id.rvAttendances);
+        lvAttendances = view.findViewById(R.id.lvAttendances);
         attendances = new ArrayList<>();
-//        adapter = new ArrayAdapter<>(
-//                requireContext(),
-//                R.layout.recyclerview_attendance,
-//                R.id.textView_line,
-//                attendances
-//        );
+        // adapter = new ArrayAdapter<>(
+        // requireContext(),
+        // R.layout.recyclerview_attendance,
+        // R.id.textView_line,
+        // attendances
+        // );
         adapter = new ArrayAdapter<>(
                 requireContext(),
                 android.R.layout.simple_list_item_1,
-                attendances
-        );
+                attendances);
         swipeRefreshLayout.setOnRefreshListener(this::fetchAttendances);
 
         lvAttendances.setAdapter(adapter);
@@ -80,70 +70,137 @@ public class AttendancesFragment extends Fragment {
     }
 
     private void fetchAttendances() {
-        db.collection("users")
-                .document(mUserUID)
-                .get()
-                .addOnSuccessListener(task -> {
-                    if (Objects.equals(task.getString("userType"), "student")) {
-                        db.collection("attendances")
-                                .whereEqualTo("studentUID", mUserUID)
-                                .orderBy("scannedAt", Query.Direction.DESCENDING)
-                                .get()
-                                .addOnCompleteListener(studentTask -> {
-                                    if (studentTask.isSuccessful()) {
-                                        attendances.clear();
-                                        if (studentTask.getResult().isEmpty()) {
-                                            Toast.makeText(getContext(), getString(R.string.MSG_NO_ATTENDANCES), Toast.LENGTH_LONG).show();
-                                        } else {
-                                            for (DocumentSnapshot document : studentTask.getResult()) {
-                                                Attendance attendance = document.toObject(Attendance.class);
+        UserApi userApi = ApiClient.getClient(getContext()).create(UserApi.class);
+        userApi.me().enqueue(new Callback<>() {
+            @Override
+            public void onResponse(
+                    @NonNull Call<RootResponse<UserModel>> call,
+                    @NonNull Response<RootResponse<UserModel>> response) {
+                if (response.body() != null && response.body().getData() != null) {
+                    String userType = response.body().getData().getUserType();
+                    String userUUID = response.body().getData().getUserId().toString();
+                    fetchHistoryForUser(userType, userUUID);
+                } else {
+                    swipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getContext(), getString(R.string.ERROR_NOT_TAKEN_USER_INFO), Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
 
-                                                SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy, HH:mm", new Locale("tr"));
-                                                assert attendance != null;
-                                                String formattedDate = sdf.format(attendance.getScannedAt().toDate());
+            @Override
+            public void onFailure(
+                    @NonNull Call<RootResponse<UserModel>> call,
+                    @NonNull Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
 
-                                                String displayText = attendance.getLectureName()  + " (" + attendance.getStatus() + ")\n   "
-                                                        + getString(R.string.TEXT_ATTENDANCE_DATE) + " " + formattedDate + "\n";
-                                                attendances.add(displayText);
-                                            }
-                                        }
-                                        adapter.notifyDataSetChanged();
-                                    } else {
-                                        Toast.makeText(getContext(), getString(R.string.ERROR_FETCHING_ATTENDANCE_LIST), Toast.LENGTH_SHORT).show();
-                                    }
+    private void fetchHistoryForUser(String userType, String userUUID) {
+        AttendanceApi attendanceApi = ApiClient.getClient(getContext()).create(AttendanceApi.class);
 
-                                    swipeRefreshLayout.setRefreshing(false);
-                                });
-                    } else if(Objects.equals(task.getString("userType"), "lecturer")) {
-                        db.collection("attendances")
-                                .whereEqualTo("lecturerUID", mUserUID)
-                                .orderBy("scannedAt", Query.Direction.DESCENDING)
-                                .get()
-                                .addOnCompleteListener(lecturerTask -> {
-                                    if (lecturerTask.isSuccessful()) {
-                                        attendances.clear();
-                                        if (lecturerTask.getResult().isEmpty()) {
-                                            Toast.makeText(getContext(), getString(R.string.MSG_NO_ATTENDANCES), Toast.LENGTH_LONG).show();
-                                        } else {
-                                            for (DocumentSnapshot document : lecturerTask.getResult()) {
-                                                Attendance attendance = document.toObject(Attendance.class);
-                                                if (attendance == null) break;
-                                                SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM, HH:mm", new Locale("tr"));
-                                                String formattedDate = sdf.format(attendance.getScannedAt().toDate());
+        if (userType.equals("student") || userType.equals("STUDENT")) {
+            attendanceApi.getAttendanceRecordsByStudent(userUUID).enqueue(new Callback<>() {
+                @Override
+                public void onResponse(
+                        @NonNull Call<RootResponse<List<AttendanceRecordModel>>> call,
+                        @NonNull Response<RootResponse<List<AttendanceRecordModel>>> response) {
+                    swipeRefreshLayout.setRefreshing(false);
+                    attendances.clear();
+                    if (response.body() != null && response.body().getData() != null) {
+                        if (response.body().getData().isEmpty()) {
+                            Toast.makeText(getContext(), getString(R.string.MSG_NO_ATTENDANCES), Toast.LENGTH_LONG)
+                                    .show();
+                        } else {
+                            for (AttendanceRecordModel record : response.body().getData()) {
+                                String courseName = "Unknown Course";
+                                if (record.getAttendanceSession() != null
+                                        && record.getAttendanceSession().getAttendance() != null
+                                        && record.getAttendanceSession().getAttendance().getCourse() != null) {
+                                    courseName = record.getAttendanceSession().getAttendance()
+                                            .getCourse().getCourseName();
+                                }
 
-                                                String displayText = attendance.getStudentName()  + " (" + attendance.getStatus() + ")\n   "
-                                                        + getString(R.string.TEXT_ATTENDANCE_DATE) + " " + formattedDate + "\n   " + attendance.getLectureName() + "\n";
-                                                attendances.add(displayText);
-                                            }
-                                        }
-                                        adapter.notifyDataSetChanged();
-                                    } else {
-                                        Toast.makeText(getContext(), getString(R.string.ERROR_FETCHING_ATTENDANCE_LIST), Toast.LENGTH_SHORT).show();
-                                    }
-
-                                    swipeRefreshLayout.setRefreshing(false);
-                                });
+                                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMMM yyyy, HH:mm",
+                                        new Locale("tr"));
+                                String formattedDate = record.getAttendAt() != null ? record.getAttendAt().format(dtf)
+                                        : "";
+                                boolean isLate = record.getLate() != null && record.getLate();
+                                String displayText = courseName;
+                                if (isLate) {
+                                    displayText += " (" + getString(R.string.TEXT_LATE) + ")";
+                                }
+                                displayText += "\n   " + getString(R.string.TEXT_ATTENDANCE_DATE) + " " + formattedDate + "\n";
+                                attendances.add(displayText);
+                            }
+                        }
                     }
-                });
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onFailure(
+                        @NonNull Call<RootResponse<List<AttendanceRecordModel>>> call,
+                        @NonNull Throwable t) {
+                    swipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getContext(), getString(R.string.ERROR_FETCHING_ATTENDANCE_LIST), Toast.LENGTH_SHORT)
+                            .show();
+                }
+            });
+        } else if (userType.equals("lecturer") || userType.equals("LECTURER")) {
+            attendanceApi.getAttendanceRecordsByLecturer(userUUID).enqueue(new Callback<>() {
+                @Override
+                public void onResponse(
+                        @NonNull Call<RootResponse<List<AttendanceRecordModel>>> call,
+                        @NonNull Response<RootResponse<List<AttendanceRecordModel>>> response) {
+                    swipeRefreshLayout.setRefreshing(false);
+                    attendances.clear();
+                    if (response.body() != null && response.body().getData() != null) {
+                        if (response.body().getData().isEmpty()) {
+                            Toast.makeText(getContext(), getString(R.string.MSG_NO_ATTENDANCES), Toast.LENGTH_LONG)
+                                    .show();
+                        } else {
+                            for (AttendanceRecordModel record : response.body().getData()) {
+                                String studentName = "Unknown Student";
+                                if (record.getStudent() != null) {
+                                    studentName = record.getStudent().getFirstName() + " "
+                                            + record.getStudent().getLastName();
+                                }
+
+                                String courseName = "Unknown Course";
+                                if (record.getAttendanceSession() != null
+                                        && record.getAttendanceSession().getAttendance() != null
+                                        && record.getAttendanceSession().getAttendance().getCourse() != null) {
+                                    courseName = record.getAttendanceSession().getAttendance().getCourse()
+                                            .getCourseName();
+                                }
+
+                                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMMM, HH:mm", new Locale("tr"));
+                                String formattedDate = record.getAttendAt() != null ? record.getAttendAt().format(dtf)
+                                        : "";
+                                boolean isLate = record.getLate() != null && record.getLate();
+                                String displayText = studentName;
+                                if (isLate) {
+                                    displayText += " (" + getString(R.string.TEXT_LATE) + ")";
+                                }
+                                displayText += "\n   " + getString(R.string.TEXT_ATTENDANCE_DATE) + " " + formattedDate + "\n   "
+                                        + courseName + "\n";
+                                attendances.add(displayText);
+                            }
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onFailure(
+                        @NonNull Call<RootResponse<List<AttendanceRecordModel>>> call,
+                        @NonNull Throwable t) {
+                    swipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getContext(), getString(R.string.ERROR_FETCHING_ATTENDANCE_LIST), Toast.LENGTH_SHORT)
+                            .show();
+                }
+            });
+        }
     }
 }

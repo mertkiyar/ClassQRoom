@@ -25,7 +25,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
         return switch (position) {
             case 1 -> new NFCFragment();
             case 2 -> new CodeFragment();
-            case 3 -> AttendancesFragment.newInstance(userUID);
+            case 3 -> new AttendancesFragment();
             case 4 -> ProfileFragment.newInstance(userUID);
             default -> new QrCodeScannerFragment();
         };

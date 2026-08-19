@@ -9,7 +9,7 @@ import com.mrtkyr.classqroom.fragment.lecturer.StartCourseFragment;
 import com.mrtkyr.classqroom.fragment.student.AttendancesFragment;
 import com.mrtkyr.classqroom.fragment.student.ProfileFragment;
 
-public class LecturerViewPagerAdapter extends FragmentStateAdapter{
+public class LecturerViewPagerAdapter extends FragmentStateAdapter {
     private final String userUID;
 
     public LecturerViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, String userUID) {
@@ -21,7 +21,7 @@ public class LecturerViewPagerAdapter extends FragmentStateAdapter{
     @Override
     public Fragment createFragment(int position) {
         return switch (position) {
-            case 1 -> AttendancesFragment.newInstance(userUID);
+            case 1 -> new AttendancesFragment();
             case 2 -> ProfileFragment.newInstance(userUID);
             default -> new StartCourseFragment();
         };
