@@ -8,7 +8,9 @@ import java.util.UUID;
 
 public class AttendanceRecordModel {
     private UUID studentId;
+    private StudentModel student;
     private UUID attendanceSessionId;
+    private AttendanceSessionModel attendanceSession;
     private AttendanceType attendanceType;
     private BigDecimal currentLat;
     private BigDecimal currentLong;
@@ -16,6 +18,22 @@ public class AttendanceRecordModel {
     private Boolean late;
     private UUID deviceId;
     private String clientIp;
+
+    public StudentModel getStudent() {
+        return student;
+    }
+
+    public void setStudent(StudentModel student) {
+        this.student = student;
+    }
+
+    public AttendanceSessionModel getAttendanceSession() {
+        return attendanceSession;
+    }
+
+    public void setAttendanceSession(AttendanceSessionModel attendanceSession) {
+        this.attendanceSession = attendanceSession;
+    }
 
     public UUID getStudentId() {
         return studentId;
