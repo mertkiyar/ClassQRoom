@@ -30,4 +30,10 @@ public interface AttendanceApi {
 
     @GET("rest/api/attendance/session/get-code/{code}")
     Call<RootResponse<AttendanceSessionModel>> getAttendanceSessionByCode(@Path("code") String code);
+
+    @GET("rest/api/attendance/record/student/{studentId}")
+    Call<RootResponse<java.util.List<AttendanceRecordModel>>> getAttendanceRecordsByStudent(@Path("studentId") String studentId);
+
+    @GET("rest/api/attendance/record/lecturer/{lecturerId}")
+    Call<RootResponse<java.util.List<AttendanceRecordModel>>> getAttendanceRecordsByLecturer(@Path("lecturerId") String lecturerId);
 }
