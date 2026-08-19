@@ -47,7 +47,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class StartLectureFragment extends Fragment {
+public class StartCourseFragment extends Fragment {
     private static final long QR_POLL_INTERVAL_MS = 3000L;
 
     private UUID lecturerUUID;
@@ -71,7 +71,7 @@ public class StartLectureFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_start_lecture, container, false);
+        return inflater.inflate(R.layout.fragment_start_course, container, false);
     }
 
     @Override
