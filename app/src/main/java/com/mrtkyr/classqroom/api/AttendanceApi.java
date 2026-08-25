@@ -13,27 +13,27 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface AttendanceApi {
-    @GET("rest/api/attendance/session/get/{id}")
+    @GET("attendance-sessions/{id}")
     Call<RootResponse<AttendanceSessionModel>> getAttendanceSession(@Path("id") String uuid);
 
-    @POST("rest/api/attendance/record/save")
+    @POST("attendance-records")
     Call<RootResponse<Void>> takeAttendance(@Body AttendanceRecordModel record);
 
-    @POST("rest/api/attendance/start")
+    @POST("attendances")
     Call<RootResponse<AttendanceModel>> startAttendance(@Body AttendanceModel attendance);
 
-    @GET("rest/api/attendance/session/current/{attendanceId}")
+    @GET("attendance-sessions/current/{attendanceId}")
     Call<RootResponse<AttendanceSessionModel>> getCurrentSession(@Path("attendanceId") String attendanceId);
 
-    @GET("rest/api/attendance/session/get-nfc/{nfcPath}")
+    @GET("attendance-sessions/nfc/{nfcPath}")
     Call<RootResponse<AttendanceSessionModel>> getAttendanceSessionByNfcPath(@Path("nfcPath") String nfcPath);
 
-    @GET("rest/api/attendance/session/get-code/{code}")
+    @GET("attendance-sessions/code/{code}")
     Call<RootResponse<AttendanceSessionModel>> getAttendanceSessionByCode(@Path("code") String code);
 
-    @GET("rest/api/attendance/record/student/{studentId}")
+    @GET("attendance-records/students/{studentId}")
     Call<RootResponse<java.util.List<AttendanceRecordModel>>> getAttendanceRecordsByStudent(@Path("studentId") String studentId);
 
-    @GET("rest/api/attendance/record/lecturer/{lecturerId}")
+    @GET("attendance-records/lecturers/{lecturerId}")
     Call<RootResponse<java.util.List<AttendanceRecordModel>>> getAttendanceRecordsByLecturer(@Path("lecturerId") String lecturerId);
 }

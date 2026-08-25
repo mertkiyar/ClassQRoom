@@ -13,9 +13,9 @@ import retrofit2.http.Path;
 
 public interface LecturerApi {
 
-    @GET("/rest/api/lecturerCourse/lecturer/{id}/courses")
+    @GET("lecturer-courses/lecturers/{id}/courses")
     Call<RootResponse<List<CourseModel>>> getCoursesByLecturer(@Path("id") UUID lecturerId);
 
-    @GET("/rest/api/lecturer/get/{id}")
+    @GET("lecturers/{id}")
     Call<RootResponse<LecturerModel>> getLecturerById(@Path("id") UUID lecturerId);
 }

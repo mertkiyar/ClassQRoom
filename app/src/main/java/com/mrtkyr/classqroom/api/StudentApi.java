@@ -11,6 +11,6 @@ import retrofit2.http.Path;
 
 public interface StudentApi {
 
-    @GET("/rest/api/student/get/{id}")
+    @GET("students/{id}")
     Call<RootResponse<StudentModel>> getStudentById(@Path("id") UUID studentId);
 }
