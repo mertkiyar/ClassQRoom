@@ -48,12 +48,66 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_home);
+        loadCurrentUser();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                new AlertDialog.Builder(HomeActivity.this)
+                        .setTitle(getString(R.string.BUTTON_CONFIRM))
+                        .setMessage(getString(R.string.MSG_QUIT))
+                        .setPositiveButton(getString(R.string.BUTTON_YES), (dialog, which) -> finish())
+                        .setNegativeButton(getString(R.string.BUTTON_NO), null)
+                        .show();
+            }
+        });
+    }
+
+    @Override
+    protected void onNewIntent(@NonNull Intent intent) {
+        super.onNewIntent(intent);
+        if (!NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+            return;
+        }
+        int currentItemPosition = viewPager.getCurrentItem();
+
+        if (currentItemPosition == 1) {
+            for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+                if (fragment instanceof NFCScannerFragment && fragment.isVisible()) {
+                    ((NFCScannerFragment) fragment).handleNfcIntent(intent);
+                    break;
+                }
+            }
+        }
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())
+                || NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())
+                || NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
+
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag("nfc_writer");
+
+            if (fragment instanceof NFCWriterFragment) {
+                Tag tag;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                    tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag.class);
+                } else {
+                    //noinspection deprecation
+                    tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+                }
+                if (tag != null) {
+                    ((NFCWriterFragment) fragment).onNfcTagReceived(tag);
+                }
+            }
+        }
+    }
+
+    private void loadCurrentUser() {
         UserApi userApi = ApiClient.getClient(HomeActivity.this).create(UserApi.class);
         userApi.me().enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<RootResponse<UserModel>> call, @NonNull Response<RootResponse<UserModel>> response) {
                 if (response.body() != null && response.body().isResult()
-                    && response.body().getData() != null && response.isSuccessful()) {
+                        && response.body().getData() != null && response.isSuccessful()) {
                     String userType = response.body().getData().getUserType();
                     btnToggleDarkMode = findViewById(R.id.btnToggleDarkMode);
                     progressBar = findViewById(R.id.progressBar);
@@ -106,57 +160,6 @@ public class HomeActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        setContentView(R.layout.activity_home);
-
-        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                new AlertDialog.Builder(HomeActivity.this)
-                        .setTitle(getString(R.string.BUTTON_CONFIRM))
-                        .setMessage(getString(R.string.MSG_QUIT))
-                        .setPositiveButton(getString(R.string.BUTTON_YES), (dialog, which) -> finish())
-                        .setNegativeButton(getString(R.string.BUTTON_NO), null)
-                        .show();
-            }
-        });
-    }
-
-    @Override
-    protected void onNewIntent(@NonNull Intent intent) {
-        super.onNewIntent(intent);
-        if (!NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
-            return;
-        }
-        int currentItemPosition = viewPager.getCurrentItem();
-
-        if (currentItemPosition == 1) {
-            for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-                if (fragment instanceof NFCScannerFragment && fragment.isVisible()) {
-                    ((NFCScannerFragment) fragment).handleNfcIntent(intent);
-                    break;
-                }
-            }
-        }
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())
-                || NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())
-                || NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
-
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag("nfc_writer");
-
-            if (fragment instanceof NFCWriterFragment) {
-                Tag tag;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-                    tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag.class);
-                } else {
-                    //noinspection deprecation
-                    tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-                }
-                if (tag != null) {
-                    ((NFCWriterFragment) fragment).onNfcTagReceived(tag);
-                }
-            }
-        }
     }
 
 
