@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints="emailAddress"
-            android:hint="@string/TEXT_STUDENT_EMAIL"
+            android:hint="@string/TEXT_EMAIL"
             android:inputType="textEmailAddress"
             android:maxWidth="400dp"
             android:maxLength="48"
