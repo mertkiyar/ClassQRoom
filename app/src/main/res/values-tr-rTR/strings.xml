@@ -135,4 +135,8 @@
     <string name="MSG_SESSION_INVALID">Oturum geçersiz.</string>
     <string name="ERROR_FETCHING_USERS">Kullanıcılar alınırken bir hata oluştu!</string>
     <string name="ERROR_FETCHING_SESSION">Oturum alınırken bir hata oluştu!</string>
+    <string name="ERROR_CONNECTION_TITLE">Bağlantı sorunu</string>
+    <string name="ERROR_LOADING_USER_RETRY">Bilgilerin yüklenemedi. Lütfen tekrar dene.</string>
+    <string name="BUTTON_RETRY">Tekrar dene</string>
+    <string name="BUTTON_CLOSE">Kapat</string>
 </resources>

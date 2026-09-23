@@ -137,4 +137,8 @@
     <string name="MSG_SESSION_INVALID">The session is invaild.</string>
     <string name="ERROR_FETCHING_USERS">An error occurred during fetching users!</string>
     <string name="ERROR_FETCHING_SESSION">An error occurred during fetching session!</string>
+    <string name="ERROR_CONNECTION_TITLE">Connection problem</string>
+    <string name="ERROR_LOADING_USER_RETRY">Could not load your information. Please try again.</string>
+    <string name="BUTTON_RETRY">Retry</string>
+    <string name="BUTTON_CLOSE">Close</string>
 </resources>

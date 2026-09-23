@@ -148,26 +148,30 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    handleDataError();
+                    showLoadError();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<RootResponse<UserModel>> call, @NonNull Throwable t) {
-                Toast.makeText(HomeActivity.this, getString(R.string.ERROR_NOT_TAKEN_USER_INFO), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                showLoadError();
             }
         });
     }
 
 
-    private void handleDataError() {
-        Toast.makeText(HomeActivity.this, getString(R.string.ERROR_NOT_TAKEN_USER_INFO), Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+    private void showLoadError() {
+        if (isFinishing() || isDestroyed()) return;
+
+        new AlertDialog.Builder(HomeActivity.this)
+                .setTitle(R.string.ERROR_CONNECTION_TITLE)
+                .setMessage(R.string.ERROR_LOADING_USER_RETRY)
+                .setCancelable(false)
+                .setPositiveButton(R.string.BUTTON_RETRY,
+                        (dialog, which) -> loadCurrentUser())
+                .setNegativeButton(R.string.BUTTON_CLOSE,
+                        (dialog, which) -> finishAffinity())
+                .show();
     }
 
     private void setupNavigationListener() {
