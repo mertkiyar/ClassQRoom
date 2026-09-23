@@ -23,6 +23,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mrtkyr.classqroom.ApiClient;
+import com.mrtkyr.classqroom.SessionManager;
 import com.mrtkyr.classqroom.api.UserApi;
 import com.mrtkyr.classqroom.fragment.student.NFCScannerFragment;
 import com.mrtkyr.classqroom.fragment.lecturer.NFCWriterFragment;
@@ -51,7 +52,8 @@ public class HomeActivity extends AppCompatActivity {
         userApi.me().enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<RootResponse<UserModel>> call, @NonNull Response<RootResponse<UserModel>> response) {
-                if (response.body() != null) {
+                if (response.body() != null && response.body().isResult()
+                    && response.body().getData() != null && response.isSuccessful()) {
                     String userType = response.body().getData().getUserType();
                     btnToggleDarkMode = findViewById(R.id.btnToggleDarkMode);
                     progressBar = findViewById(R.id.progressBar);
@@ -84,6 +86,13 @@ public class HomeActivity extends AppCompatActivity {
                     bottomNavigationView.setVisibility(View.VISIBLE);
 
                     btnToggleDarkMode.setOnClickListener(v -> toggleDarkMode());
+                } else if (response.code() == 401 || response.code() == 403) {
+                    Toast.makeText(HomeActivity.this, getString(R.string.ERROR_NOT_TAKEN_USER_INFO), Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                    SessionManager sessionManager = new SessionManager(HomeActivity.this);
+                    sessionManager.removeToken();
+                    startActivity(intent);
+                    finish();
                 } else {
                     handleDataError();
                 }
