@@ -26,6 +26,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.mrtkyr.classqroom.ApiClient;
+import com.mrtkyr.classqroom.ApiErrorReader;
 import com.mrtkyr.classqroom.R;
 import com.mrtkyr.classqroom.SessionManager;
 import com.mrtkyr.classqroom.api.AttendanceApi;
@@ -113,7 +114,9 @@ public class StartCourseFragment extends Fragment {
                                 @Override
                                 public void onResponse(@NonNull Call<RootResponse<List<CourseModel>>> call,
                                                        @NonNull Response<RootResponse<List<CourseModel>>> response) {
-                                    if (response.body() != null && !response.body().getData().isEmpty()) {
+                                    if (response.isSuccessful() && response.body() != null
+                                            && response.body().isResult() && response.body().getData() != null
+                                            && !response.body().getData().isEmpty()) {
                                         List<CourseModel> coursesList = new ArrayList<>(response.body().getData());
 
                                         if (getContext() != null && !coursesList.isEmpty()) {
@@ -146,6 +149,10 @@ public class StartCourseFragment extends Fragment {
                                             btnStartLecture.setEnabled(true);
                                         });
                                         btnStartLecture.setOnClickListener(v -> startLecture());
+                                    } else if (!response.isSuccessful()) {
+                                        Toast.makeText(getContext(),
+                                                ApiErrorReader.message(response, getString(R.string.ERROR_FETCHING_COURSES)),
+                                                Toast.LENGTH_LONG).show();
                                     }
                                 }
 
@@ -207,7 +214,8 @@ public class StartCourseFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<RootResponse<AttendanceModel>> call,
                                    @NonNull Response<RootResponse<AttendanceModel>> response) {
-                if (response.body() != null && response.body().getData() != null) {
+                if (response.isSuccessful() && response.body() != null
+                        && response.body().isResult() && response.body().getData() != null) {
                     UUID attendanceId = response.body().getData().getAttendanceId();
 
                     if (selectedType.equals(getString(R.string.TEXT_QR_CODE))) {
@@ -233,7 +241,9 @@ public class StartCourseFragment extends Fragment {
                         startSixDigitCodeUpdates(attendanceId);
                     }
                 } else {
-                    Toast.makeText(getContext(), getString(R.string.ERROR_SESSION_CREATE), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),
+                            ApiErrorReader.message(response, getString(R.string.ERROR_SESSION_CREATE)),
+                            Toast.LENGTH_SHORT).show();
                     if (getView() != null) {
                         Button btn = getView().findViewById(R.id.btnStartLecture);
                         if (btn != null) btn.setEnabled(true);

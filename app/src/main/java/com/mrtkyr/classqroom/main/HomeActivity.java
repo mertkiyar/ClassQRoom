@@ -23,6 +23,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mrtkyr.classqroom.ApiClient;
+import com.mrtkyr.classqroom.ApiErrorReader;
 import com.mrtkyr.classqroom.SessionManager;
 import com.mrtkyr.classqroom.api.UserApi;
 import com.mrtkyr.classqroom.fragment.student.NFCScannerFragment;
@@ -140,14 +141,21 @@ public class HomeActivity extends AppCompatActivity {
                     bottomNavigationView.setVisibility(View.VISIBLE);
 
                     btnToggleDarkMode.setOnClickListener(v -> toggleDarkMode());
-                } else if (response.code() == 401 || response.code() == 403) {
-                    Toast.makeText(HomeActivity.this, getString(R.string.ERROR_NOT_TAKEN_USER_INFO), Toast.LENGTH_LONG).show();
+                } else if (response.code() == 401) {
+                    Toast.makeText(HomeActivity.this,
+                            ApiErrorReader.message(response, getString(R.string.ERROR_NOT_TAKEN_USER_INFO)),
+                            Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                     SessionManager sessionManager = new SessionManager(HomeActivity.this);
                     sessionManager.removeToken();
                     startActivity(intent);
                     finish();
                 } else {
+                    if (response.code() == 403) {
+                        Toast.makeText(HomeActivity.this,
+                                ApiErrorReader.message(response, getString(R.string.ERROR_NOT_TAKEN_USER_INFO)),
+                                Toast.LENGTH_LONG).show();
+                    }
                     showLoadError();
                 }
             }

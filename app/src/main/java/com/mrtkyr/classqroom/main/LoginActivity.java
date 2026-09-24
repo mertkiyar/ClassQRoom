@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mrtkyr.classqroom.ApiClient;
+import com.mrtkyr.classqroom.ApiErrorReader;
 import com.mrtkyr.classqroom.api.AuthApi;
 import com.mrtkyr.classqroom.R;
 import com.mrtkyr.classqroom.SessionManager;
@@ -140,13 +141,15 @@ public class LoginActivity extends AppCompatActivity {
                 pbLogin.setVisibility(View.GONE);
                 btnLogin.setEnabled(true);
 
-                if (response.isSuccessful() && response.body() != null) {
-                    sessionManager.saveToken(response.body().getToken());
+                String token = response.body() == null ? null : response.body().getToken();
+                if (response.isSuccessful() && token != null && !token.trim().isEmpty()) {
+                    sessionManager.saveToken(token);
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(LoginActivity.this, getString(R.string.ERROR_INVALID_CREDENTIAL), Toast.LENGTH_LONG).show();
+                    String message = ApiErrorReader.message(response, getString(R.string.ERROR_INVALID_CREDENTIAL));
+                    Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
                 }
             }
 
